@@ -5,7 +5,7 @@ import { THREE } from "./mall.js";
 namespace renderer {
 	const ad_hoc = 0
 
-	var renderer, scene, camera, clock
+	export var renderer, scene, camera, clock, ambient
 
 	function resize() {
 		camera.aspect = window.innerWidth / window.innerHeight;
@@ -14,11 +14,22 @@ namespace renderer {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 
+	function test_sphere() {
+		let geometry = new THREE.SphereGeometry(1, 32, 16);
+		let material = new THREE.MeshLambertMaterial({ wireframe: true, color: 'white' })
+		let sphere = new THREE.Mesh(geometry, material);
+
+		scene.add(sphere);
+	}
+
 	export function boot(word: string) {
 		console.log(' boot renderer ');
 
+		ambient = new THREE.AmbientLight(0xffffff);
+
 		clock = new THREE.Clock();
 		scene = new THREE.Scene();
+		scene.add(ambient);
 		camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
 		camera.position.z = 10;
 
@@ -28,20 +39,12 @@ namespace renderer {
 
 		document.getElementById('webgl')!.append(renderer.domElement);
 
-		let geometry = new THREE.SphereGeometry(1, 32, 16);
-		let material = new THREE.MeshLambertMaterial({ wireframe: true, color: 'white' })
-		let sphere = new THREE.Mesh(geometry, material);
-
-		scene.add(sphere);
-
 		window.addEventListener('resize', resize);
+
 		resize();
 	}
 
 	export function render() {
-		requestAnimationFrame(render);
-		const delta = clock.getDelta();
-		glob.delta = delta;
 		renderer.render(scene, camera);
 	}
 

@@ -1,6 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var glob = {};
 
 var _a = require('electron'), app = _a.app, BrowserWindow = _a.BrowserWindow;
 var createWindow = function () {
@@ -12,10 +10,6 @@ var createWindow = function () {
 		}
 	});
 	win.webContents.openDevTools();
-	glob.win = win;
-	console.log(' app ', !!app);
-	console.log(' BrowserWindow ', !!BrowserWindow);
-	win.glob = glob;
 	win.loadFile('index.html');
 };
 app.whenReady().then(function () {

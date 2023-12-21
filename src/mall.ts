@@ -4,14 +4,30 @@ export { THREE as THREE }; // just perfect (:)
 
 import glob from "./lib/glob.js";
 import renderer from "./renderer.js";
+import startup from './views/startup.js';
+import { hooks } from './lib/hooks.js';
+import page from './page.js';
+
 
 namespace mall {
 	const constant = 1
 
 	export function boot() {
+		glob.salt = '';
 		console.log(' boot mall ');
+		page.listen();
 		renderer.boot('');
-		requestAnimationFrame(renderer.render);
+		startup.boot();
+		requestAnimationFrame(animate);
+	}
+
+	let last
+	function animate(time) {
+		glob.delta = (time - (last || time)) / 1000;
+		last = time;
+		requestAnimationFrame(animate);
+		hooks.call('mallAnimate', 0);
+		renderer.render();
 	}
 
 }

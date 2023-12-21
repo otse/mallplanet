@@ -4,7 +4,8 @@
 <head>
 	<meta charset="UTF-8" />
 	<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-	<meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
 	<title>Mall Planet</title>
 
 	<script type="importmap">
@@ -16,11 +17,17 @@
 		}
 	  </script>
 
+	<style>
+		body {
+			margin: 0;
+		}
+	</style>
+
 </head>
 
 <body>
-	<h1>Mall Planet lol</h1>
-	<p>👋</p>
+	<!--<h1>Mall Planet lol</h1>
+	<p>👋</p> -->
 
 	<div id="webgl"></div>
 
