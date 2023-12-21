@@ -14,11 +14,26 @@ namespace renderer {
 	export function dom_ready(word: string) {
 		console.log(' dom_ready renderer ');
 
+		scene = new THREE.Scene();
+		camera = new THREE.PerspectiveCamera(45, 1024 / 768, 1, 1000);
+		camera.position.z = 10;
+
 		renderer = new THREE.WebGLRenderer({ antialias: false });
 		renderer.setSize(1024, 768);
 
-		//glob.ipc.send('asynchronous-append', ['webgl', renderer.domElement]);
 		document.getElementById('webgl')!.append(renderer.domElement);
+
+		renderer.setClearColor('grey');
+
+		let geometry = new THREE.SphereGeometry(1, 32, 16);
+		let material = new THREE.MeshLambertMaterial({ wireframe: true, color: 'white' })
+		let sphere = new THREE.Mesh(geometry, material);
+
+		scene.add(sphere);
+	}
+
+	export function render() {
+		renderer.render(scene, camera);
 	}
 
 }

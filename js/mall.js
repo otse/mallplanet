@@ -1,5 +1,5 @@
 import * as THREE from './../node_modules/three/build/three.module.js';
-export { THREE as THREE }; // haha
+export { THREE as THREE }; // just perfect (:)
 import glob from "./glob.js";
 import renderer from "./renderer.js";
 var mall;
@@ -16,6 +16,7 @@ var mall;
     function dom_ready(word) {
         console.log(' dom_ready mall ');
         renderer.dom_ready(word);
+        requestAnimationFrame(renderer.render);
     }
 })(mall || (mall = {}));
 console.log(' mall outside ');

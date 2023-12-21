@@ -1,6 +1,6 @@
 import * as THREE from './../node_modules/three/build/three.module.js';
 
-export { THREE as THREE }; // haha
+export { THREE as THREE }; // just perfect (:)
 
 import glob from "./glob.js";
 import renderer from "./renderer.js";
@@ -23,6 +23,8 @@ namespace mall {
 		console.log(' dom_ready mall ');
 
 		renderer.dom_ready(word);
+
+		requestAnimationFrame(renderer.render);
 	}
 
 }
