@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"sourceMap": false,
-		"module": "es2022",
-		"target": "es2022",
+		"sourceMap": true,
+		"module": "commonjs",
+		"target": "es5",
 		"esModuleInterop": false,
 		"jsx": "preserve",
 		"lib": [
@@ -12,6 +12,7 @@
 		"outDir": "js",
 		"allowSyntheticDefaultImports": true,
 		"moduleResolution": "Node",
+		"removeComments": false,
 		"strictNullChecks": true
 	},
 	"files": [
