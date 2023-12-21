@@ -1,9 +1,12 @@
 // a simple timer i wrote for mall planet
 
-class timer {
+function clamp(val, min, max) {
+	return val > max ? max : val < min ? min : val;
+}
+
+export class timer {
 	protected readonly begin
 	constructor(protected end = 1) {
-		this.end *= 1000;
 		this.begin = performance.now();
 	}
 	dif() {
@@ -12,11 +15,14 @@ class timer {
 	elapsed() {
 		return this.dif() / 1000;
 	}
-	factor() { // 0 - 1
-		return this.dif() / this.end;
+	factor(override = 0) { // 0 - 1
+		return this.dif() / ((override || this.end) * 1000);
 	}
-	done() {
-		return this.dif() >= this.end
+	factorc(override = 0) {
+		return clamp(this.factor(override), 0, 1);
+	}
+	done(override = 0) {
+		return this.dif() >= ((override || this.end) * 1000)
 	}
 }
 

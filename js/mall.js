@@ -8,6 +8,14 @@ import mkb from './mkb.js';
 var mall;
 (function (mall) {
     const constant = 1;
+    function sample(a) {
+        return a[Math.floor(Math.random() * a.length)];
+    }
+    mall.sample = sample;
+    function clamp(val, min, max) {
+        return val > max ? max : val < min ? min : val;
+    }
+    mall.clamp = clamp;
     function boot() {
         glob.salt = '';
         console.log(' boot mall ');

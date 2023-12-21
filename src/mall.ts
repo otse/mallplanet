@@ -12,6 +12,14 @@ import mkb from './mkb.js';
 namespace mall {
 	const constant = 1
 
+	export function sample(a) {
+		return a[Math.floor(Math.random() * a.length)];
+	}
+
+	export function clamp(val, min, max) {
+		return val > max ? max : val < min ? min : val;
+	}
+
 	export function boot() {
 		glob.salt = '';
 		console.log(' boot mall ');

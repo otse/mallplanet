@@ -1,5 +1,4 @@
 // as you guessed this is the intro 
-import glob from "../lib/glob.js";
 import hooks from "../lib/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
@@ -17,7 +16,7 @@ var startup;
             map: renderer.load_image('./img/boomb.png'),
             color: 'white',
             specular: 'blue',
-            shininess: 50,
+            shininess: 150,
             transparent: true
         });
         plane = new THREE.Mesh(geometry, material);
@@ -29,6 +28,8 @@ var startup;
         renderer.scene.add(plane);
         renderer.scene.add(lamp);
         hooks.register('mallAnimate', animate);
+        timer = time(5);
+        timer.begin -= 2000;
     }
     startup.boot = boot;
     function cleanup() {
@@ -38,17 +39,16 @@ var startup;
         renderer.scene.remove(lamp);
     }
     startup.cleanup = cleanup;
-    let timer = time(5);
+    let timer;
     let zoom = 0;
     let rotation = 0;
     function animate() {
-        console.log('startup animate');
-        const turns_per_second = 0.6;
-        rotation += glob.delta * turns_per_second;
-        plane.rotation.x = Math.sin(rotation) / 2;
-        plane.rotation.y = Math.sin(rotation);
-        //plane.rotation.z = Math.cos(rotation) / 50;
-        zoom = easings.easeInOutCubic(timer.factor()) * 2;
+        let pitch = easings.easeOutQuad(timer.factorc());
+        let yaw = easings.easeInOutQuart(timer.factorc());
+        plane.rotation.x = -(1 - pitch) * 1.0;
+        plane.rotation.y = (1 - yaw) * Math.PI / 2;
+        plane.material.needsUpdate = true;
+        let zoom = easings.easeInOutBack(timer.factorc()) * 2;
         plane.scale.set(zoom, zoom, zoom);
         if (mkb.key('escape') || timer.done()) {
             hooks.unregister('mallAnimate', animate); // todo we're removing a hook while iterating
