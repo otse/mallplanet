@@ -11,6 +11,7 @@
 		],
 		"outDir": "js",
 		"allowSyntheticDefaultImports": true,
+		"noImplicitAny": false,
 		"moduleResolution": "Node",
 		"removeComments": false,
 		"strictNullChecks": true

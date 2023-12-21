@@ -1,3 +1,4 @@
+import glob from "./glob.js"
 import mall from "./mall.js"
 
 const { app, BrowserWindow } = require('electron')
@@ -8,7 +9,12 @@ const createWindow = () => {
 		height: 768
 	})
 
+	glob.win = win;
+
+	win.glob = glob;
+
 	win.loadFile('index.html')
+	win.webContents.on('dom-ready', mall.dom_ready);
 }
 
 app.whenReady().then(() => {
@@ -18,7 +24,7 @@ app.whenReady().then(() => {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow()
 	})
 
-    mall.start();
+    mall.boot();
 })
 
 app.on('window-all-closed', () => {
