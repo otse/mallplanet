@@ -1,4 +1,4 @@
-import * as THREE from './../node_modules/three/build/three.module.js';
+import * as THREE from 'three';
 export { THREE as THREE }; // just perfect (:)
 import glob from "./glob.js";
 import renderer from "./renderer.js";

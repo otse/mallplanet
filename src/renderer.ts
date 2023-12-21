@@ -20,10 +20,9 @@ namespace renderer {
 
 		renderer = new THREE.WebGLRenderer({ antialias: false });
 		renderer.setSize(1024, 768);
+		renderer.setClearColor('grey');
 
 		document.getElementById('webgl')!.append(renderer.domElement);
-
-		renderer.setClearColor('grey');
 
 		let geometry = new THREE.SphereGeometry(1, 32, 16);
 		let material = new THREE.MeshLambertMaterial({ wireframe: true, color: 'white' })

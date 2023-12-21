@@ -4,21 +4,28 @@
 <head>
 	<meta charset="UTF-8" />
 	<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' ; script-src 'self' 'unsafe-inline'" />
-	<meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'" />
-
+	<meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
 	<title>Mall Planet</title>
+
+	<script type="importmap">
+		{
+		  "imports": {
+			"three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+			"three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+		  }
+		}
+	  </script>
 
 </head>
 
 <body>
 	<h1>Mall Planet lol</h1>
 	<p>👋</p>
-	
+
 	<div id="webgl"></div>
-	
+
 	<script src="./js/mall.js" type="module"></script>
-	
+
 </body>
 
 </html>
