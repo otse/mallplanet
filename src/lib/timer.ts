@@ -1,21 +1,22 @@
 // a simple timer i wrote for mall planet
 
 class timer {
-	protected readonly time
-	protected elapsed = 0
-	constructor(public readonly end = 1) {
-		this.time = performance.now();
+	protected readonly begin
+	constructor(protected end = 1) {
+		this.end *= 1000;
+		this.begin = performance.now();
 	}
-	check() {
-		this.elapsed = performance.now() - this.time;
+	dif() {
+		return performance.now() - this.begin;
 	}
-	done(override: number = 0) {
-		this.check();
-		return (performance.now() - this.time) >= (this.end || override) * 1000
+	elapsed() {
+		return this.dif() / 1000;
 	}
-	factor(override: number = 0) {
-		this.check();
-		return (performance.now() - this.time) / ((this.end || override) * 1000);
+	factor() { // 0 - 1
+		return this.dif() / this.end;
+	}
+	done() {
+		return this.dif() >= this.end
 	}
 }
 

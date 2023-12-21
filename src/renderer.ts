@@ -44,6 +44,14 @@ namespace renderer {
 		resize();
 	}
 
+	export function load_image(file: string) {
+        let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`, () => 0);
+		texture.generateMipmaps = false;
+		//texture.center.set(0, 1);
+		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        return texture;
+    }
+
 	export function render() {
 		renderer.render(scene, camera);
 	}

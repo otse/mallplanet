@@ -1,4 +1,6 @@
-namespace page {
+/// mouse keyboard
+
+namespace mkb {
 	export enum KEY {
 		OFF = 0,
 		PRESS,
@@ -40,13 +42,14 @@ namespace page {
 		if (event.keyCode == 114)
 			event.preventDefault();
 	}
-	export function listen() {
+	export function attach_listeners() {
 		document.onkeydown = document.onkeyup = onkeys;
 		document.onmousemove = onmousemove;
 		document.onmousedown = onmousedown;
 		document.onmouseup = onmouseup;
 		document.onwheel = onwheel;
 	}
+	// api functions for consoomers:
 	export function key(k: string) {
 		return keys[k];
 	}
@@ -58,4 +61,4 @@ namespace page {
 	}
 }
 
-export default page;
+export default mkb;

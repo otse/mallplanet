@@ -1,5 +1,6 @@
 var mkb;
 (function (mkb) {
+    // mouse keyboard
     let KEY;
     (function (KEY) {
         KEY[KEY["OFF"] = 0] = "OFF";

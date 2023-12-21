@@ -1,3 +1,4 @@
+/// mouse keyboard
 var mkb;
 (function (mkb) {
     let KEY;
@@ -45,14 +46,15 @@ var mkb;
         if (event.keyCode == 114)
             event.preventDefault();
     }
-    function listen() {
+    function attach_listeners() {
         document.onkeydown = document.onkeyup = onkeys;
         document.onmousemove = onmousemove;
         document.onmousedown = onmousedown;
         document.onmouseup = onmouseup;
         document.onwheel = onwheel;
     }
-    mkb.listen = listen;
+    mkb.attach_listeners = attach_listeners;
+    // api functions for consoomers:
     function key(k) {
         return keys[k];
     }

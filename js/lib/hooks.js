@@ -1,8 +1,7 @@
 // inspired by gmod lua !
 export class hooks {
-    constructor() {
-        this.list = [];
-    }
+    static hooks;
+    list = [];
     static register(name, f) {
         if (!hooks[name])
             hooks[name] = [];

@@ -1,3 +1,4 @@
+import glob from "./lib/glob.js";
 import { THREE } from "./mall.js";
 var renderer;
 (function (renderer_1) {
@@ -29,6 +30,14 @@ var renderer;
         resize();
     }
     renderer_1.boot = boot;
+    function load_image(file) {
+        let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`, () => 0);
+        texture.generateMipmaps = false;
+        //texture.center.set(0, 1);
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        return texture;
+    }
+    renderer_1.load_image = load_image;
     function render() {
         renderer_1.renderer.render(renderer_1.scene, renderer_1.camera);
     }

@@ -4,14 +4,14 @@ import glob from "./lib/glob.js";
 import renderer from "./renderer.js";
 import startup from './views/startup.js';
 import { hooks } from './lib/hooks.js';
-import page from './page.js';
+import mkb from './mkb.js';
 var mall;
 (function (mall) {
     const constant = 1;
     function boot() {
         glob.salt = '';
         console.log(' boot mall ');
-        page.listen();
+        mkb.attach_listeners();
         renderer.boot('');
         startup.boot();
         requestAnimationFrame(animate);

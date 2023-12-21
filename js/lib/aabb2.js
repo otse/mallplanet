@@ -8,6 +8,9 @@ var TEST;
     TEST[TEST["Overlap"] = 2] = "Overlap";
 })(TEST || (TEST = {}));
 class aabb2 {
+    static TEST = TEST;
+    min;
+    max;
     static dupe(bb) {
         return new aabb2(bb.min, bb.max);
     }
@@ -79,5 +82,4 @@ class aabb2 {
         return true;
     }
 }
-aabb2.TEST = TEST;
 export default aabb2;
