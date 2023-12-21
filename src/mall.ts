@@ -1,3 +1,7 @@
+import * as THREE from './../node_modules/three/build/three.module.js';
+
+export { THREE as THREE }; // haha
+
 import glob from "./glob.js";
 import renderer from "./renderer.js";
 
@@ -5,25 +9,28 @@ namespace mall {
 	const constant = 1
 
 	export function boot() {
-		console.log(' mall start ');
+		console.log(' mall boot ');
 
 		renderer.boot();
+
+		glob.mall = mall;
+		glob.t = THREE;
+
+		dom_ready('');
 	}
 
-	export function dom_ready() {
-		console.log(' mall dom ready ');
-		
-	}
+	function dom_ready(word: string) {
+		console.log(' dom_ready mall ');
 
-	function ready(word: string) {
-		console.log(' making mall ready ');
-
-		renderer.ready(word);
-
+		renderer.dom_ready(word);
 	}
 
 }
 
+console.log(' mall outside ');
+
 glob.mall = mall;
+
+mall.boot();
 
 export default mall;

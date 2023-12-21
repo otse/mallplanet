@@ -1,3 +1,3 @@
-var glob: any = {}
+var glob: any = glob || {}
 
 export default glob;

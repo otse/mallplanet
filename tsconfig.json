@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"sourceMap": true,
-		"module": "commonjs",
-		"target": "es5",
+		"sourceMap": false,
+		"module": "ES6",
+		"target": "ES6",
 		"esModuleInterop": false,
 		"jsx": "preserve",
 		"lib": [
