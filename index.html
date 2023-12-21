@@ -8,6 +8,12 @@
 		content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
 	<title>Mall Planet</title>
 
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Nabla&family=Silkscreen&display=swap');
+	</style>
+
+	<link rel="stylesheet" href="styles.css" />
+
 	<script type="importmap">
 		{
 		  "imports": {
@@ -21,6 +27,15 @@
 		body {
 			margin: 0;
 		}
+
+		#page {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			color: white;
+		}
 	</style>
 
 </head>
@@ -29,6 +44,7 @@
 	<!--<h1>Mall Planet lol</h1>
 	<p>👋</p> -->
 
+	<div id="page"></div>
 	<div id="webgl"></div>
 
 	<script src="./js/mall.js" type="module"></script>

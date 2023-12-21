@@ -15,7 +15,7 @@ var startup;
         let material = new THREE.MeshPhongMaterial({
             map: renderer.load_image('./img/boomb.png'),
             color: 'white',
-            specular: 'blue',
+            specular: 'cyan',
             shininess: 150,
             transparent: true
         });
@@ -37,16 +37,20 @@ var startup;
         renderer.scene.remove(plane);
         renderer.scene.remove(ambient);
         renderer.scene.remove(lamp);
+        startup.next?.boot();
     }
     startup.cleanup = cleanup;
     let timer;
     let zoom = 0;
     let rotation = 0;
     function animate() {
-        let pitch = easings.easeOutQuad(timer.factorc());
+        let pitch = 1 - easings.easeOutQuad(timer.factorc());
         let yaw = easings.easeInOutQuart(timer.factorc());
-        plane.rotation.x = -(1 - pitch) * 1.0;
+        let emissive = 1 - easings.easeInSine(timer.factorc());
+        plane.rotation.x = -pitch * 1.0;
         plane.rotation.y = (1 - yaw) * Math.PI / 2;
+        plane.material.color.copy(new THREE.Color(yaw, yaw, yaw));
+        //plane.material.emissive.copy(new THREE.Color(0, emissive / 20, 0));
         plane.material.needsUpdate = true;
         let zoom = easings.easeInOutBack(timer.factorc()) * 2;
         plane.scale.set(zoom, zoom, zoom);

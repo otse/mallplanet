@@ -7,10 +7,13 @@ import renderer from "./renderer.js";
 import startup from './views/startup.js';
 import { hooks } from './lib/hooks.js';
 import mkb from './mkb.js';
+import main_menu from './views/mainmenu.js';
 
 
 namespace mall {
 	const constant = 1
+
+	export var page
 
 	export function sample(a) {
 		return a[Math.floor(Math.random() * a.length)];
@@ -23,9 +26,11 @@ namespace mall {
 	export function boot() {
 		glob.salt = '';
 		console.log(' boot mall ');
+		page = document.getElementById('page');
 		mkb.attach_listeners();
 		renderer.boot('');
 		startup.boot();
+		startup.next = main_menu;
 		requestAnimationFrame(animate);
 	}
 

@@ -5,6 +5,7 @@ import renderer from "./renderer.js";
 import startup from './views/startup.js';
 import { hooks } from './lib/hooks.js';
 import mkb from './mkb.js';
+import main_menu from './views/mainmenu.js';
 var mall;
 (function (mall) {
     const constant = 1;
@@ -19,9 +20,11 @@ var mall;
     function boot() {
         glob.salt = '';
         console.log(' boot mall ');
+        mall.page = document.getElementById('page');
         mkb.attach_listeners();
         renderer.boot('');
         startup.boot();
+        startup.next = main_menu;
         requestAnimationFrame(animate);
     }
     mall.boot = boot;
