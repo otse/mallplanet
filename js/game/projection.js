@@ -7,16 +7,13 @@ var projection;
     function resize() {
         let width = window.innerWidth;
         let height = window.innerHeight;
-        projection.camera.left = width / -2;
-        projection.camera.right = width / 2;
-        projection.camera.top = height / 2;
-        projection.camera.bottom = height / -2;
+        renderer.camera.left = width / -2;
+        renderer.camera.right = width / 2;
+        renderer.camera.top = height / 2;
+        renderer.camera.bottom = height / -2;
     }
     function setup() {
-        projection.camera = new THREE.OrthographicCamera(0, 0, 0, 0, 0.01, 1000);
-        projection.camera.position.y = -100;
-        projection.camera.zoom = 20;
-        renderer.camera = projection.camera;
+        renderer.camera = new THREE.OrthographicCamera(0, 0, 0, 0, 0.01, 1000);
         resize();
         hooks.register('rendererResize', resize);
         renderer.renderer.setClearColor('cyan');

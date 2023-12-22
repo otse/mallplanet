@@ -25,7 +25,6 @@ var game_manager;
         if (!game_manager.active)
             return;
         game_manager.gview.tick();
-        lod.gworld.update(wpos);
         projection.loop();
     }
     game_manager.loop = loop;

@@ -38,7 +38,7 @@ namespace lod {
 
 	export const size = 1;
 
-	const chunk_coloration = false;
+	const chunk_coloration = true;
 
 	const fog_of_war = false;
 
@@ -47,7 +47,7 @@ namespace lod {
 	export var gworld: world;
 	export var ggrid: grid;
 
-	export var SectorSpan = 2;
+	export var SectorSpan = 4;
 
 	export var stamp = 0; // used only by server slod
 
@@ -60,11 +60,11 @@ namespace lod {
 	}
 
 	export function project(unit: vec2): vec2 {
-		return pts2.mult(unit, 1);
+		return pts2.mult(pts2.project(unit), lod.size);
 	}
 
 	export function unproject(pixel: vec2): vec2 {
-		return pts2.divide(pixel, 1);
+		return pts2.divide(pts2.unproject(pixel), lod.size);
 	}
 
 	export function add(obj: obj) {
@@ -80,10 +80,12 @@ namespace lod {
 		readonly arrays: sector[][] = []
 		constructor(span) {
 			gworld = this;
-			new grid(10, 10);
+			new grid(4, 4);
 		}
 		update(wpos: vec2) {
+			
 			ggrid.big = lod.world.big(wpos);
+			console.log('big', ggrid.big);
 			ggrid.ons();
 			ggrid.offs();
 		}
@@ -109,7 +111,7 @@ namespace lod {
 
 	export class sector extends toggle {
 		group
-		color?
+		color = 'white'
 		fog_of_war = false
 		readonly small: aabb2;
 		readonly objs: obj[] = [];
@@ -309,13 +311,13 @@ namespace lod {
 				return;
 			this.counts[0]++;
 			this.create();
-			this.obj_manual_update();
 			//this.shape?.show();
 		}
 		hide() {
 			if (this.off())
 				return;
 			this.counts[0]--;
+			this.vanish();
 			//this.delete();
 			//this.shape?.hide();
 			// console.log(' obj.hide ');
@@ -325,7 +327,6 @@ namespace lod {
 			this.bound.translate(this.wpos);
 		}
 		wtorpos() {
-			this.rpos = lod.project(this.wpos);
 		}
 		rtospos() {
 			this.wtorpos();
@@ -336,25 +337,11 @@ namespace lod {
 		}
 		create() {
 			// implement me
-			// typically used to create a sprite
 			console.warn(' (lod) obj.create ');
 		}
 		vanish() {
 			// implement me
 			console.warn(' (lod) obj.vanish ');
-		}
-		// delete is never used
-		delete() {
-			// implement me
-			// console.warn(' (lod) obj.delete ');
-		}
-		obj_manual_update() {
-			// implement me
-			this.wtorpos();
-			//this.shape?.shape_manual_update();
-		}
-		is_type(types: string[]) {
-			return types.indexOf(this.type) != -1;
 		}
 	}
 }

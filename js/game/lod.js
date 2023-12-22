@@ -34,10 +34,10 @@ class toggle {
 var lod;
 (function (lod) {
     lod.size = 1;
-    const chunk_coloration = false;
+    const chunk_coloration = true;
     const fog_of_war = false;
     const grid_crawl_makes_sectors = true;
-    lod.SectorSpan = 2;
+    lod.SectorSpan = 4;
     lod.stamp = 0; // used only by server slod
     function register() {
         // hooks.create('sectorCreate')
@@ -47,11 +47,11 @@ var lod;
     }
     lod.register = register;
     function project(unit) {
-        return pts2.mult(unit, 1);
+        return pts2.mult(pts2.project(unit), lod.size);
     }
     lod.project = project;
     function unproject(pixel) {
-        return pts2.divide(pixel, 1);
+        return pts2.divide(pts2.unproject(pixel), lod.size);
     }
     lod.unproject = unproject;
     function add(obj) {
@@ -67,10 +67,11 @@ var lod;
         arrays = [];
         constructor(span) {
             lod.gworld = this;
-            new grid(10, 10);
+            new grid(4, 4);
         }
         update(wpos) {
             lod.ggrid.big = lod.world.big(wpos);
+            console.log('big', lod.ggrid.big);
             lod.ggrid.ons();
             lod.ggrid.offs();
         }
@@ -98,7 +99,7 @@ var lod;
         big;
         world;
         group;
-        color;
+        color = 'white';
         fog_of_war = false;
         small;
         objs = [];
@@ -293,13 +294,13 @@ var lod;
                 return;
             this.counts[0]++;
             this.create();
-            this.obj_manual_update();
             //this.shape?.show();
         }
         hide() {
             if (this.off())
                 return;
             this.counts[0]--;
+            this.vanish();
             //this.delete();
             //this.shape?.hide();
             // console.log(' obj.hide ');
@@ -309,7 +310,6 @@ var lod;
             this.bound.translate(this.wpos);
         }
         wtorpos() {
-            this.rpos = lod.project(this.wpos);
         }
         rtospos() {
             this.wtorpos();
@@ -320,25 +320,11 @@ var lod;
         }
         create() {
             // implement me
-            // typically used to create a sprite
             console.warn(' (lod) obj.create ');
         }
         vanish() {
             // implement me
             console.warn(' (lod) obj.vanish ');
-        }
-        // delete is never used
-        delete() {
-            // implement me
-            // console.warn(' (lod) obj.delete ');
-        }
-        obj_manual_update() {
-            // implement me
-            this.wtorpos();
-            //this.shape?.shape_manual_update();
-        }
-        is_type(types) {
-            return types.indexOf(this.type) != -1;
         }
     }
     lod.obj = obj;

@@ -34,7 +34,6 @@ namespace game_manager {
 		if (!active)
 			return;
 		gview.tick();
-		lod.gworld.update(wpos);
 		projection.loop();
 	}
 }

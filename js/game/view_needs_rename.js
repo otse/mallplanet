@@ -14,13 +14,14 @@ export class view_needs_rename {
     }
     constructor() {
         new lod.world(10);
-        this.rpos = lod.project(this.wpos);
+        this.rpos = this.wpos;
     }
     set_camera() {
         const smooth = false;
         if (smooth)
             this.rpos = pts2.floor(this.rpos);
         renderer.camera.position.set(this.rpos[0], this.rpos[1], 0);
+        renderer.camera.position.z = 30 + this.rpos[0] + -this.rpos[1];
         renderer.camera.zoom = this.zoom;
         renderer.camera.updateMatrix();
         renderer.camera.updateProjectionMatrix();
@@ -30,6 +31,7 @@ export class view_needs_rename {
         this.wheelbarrow();
         this.mouse_pan();
         this.set_camera();
+        this.wpos = lod.unproject([this.rpos[0], -this.rpos[1]]);
         lod.gworld.update(this.wpos);
         //const zoom = this.zoom;
         //renderer.camera.scale.set(zoom, zoom, zoom);
@@ -72,7 +74,7 @@ export class view_needs_rename {
         const zoomFactor = 1 / 10;
         if ((mkb.key('f') == 1 || mkb.wheel == -1) && this.zoom > 1)
             this.zoom -= 1;
-        if ((mkb.key('r') == 1 || mkb.wheel == 1) && this.zoom < 20)
+        if ((mkb.key('r') == 1 || mkb.wheel == 1) && this.zoom < 30)
             this.zoom += 1;
         if (mkb.key('t') == 1) {
             lod.ggrid.shrink();
