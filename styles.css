@@ -8,10 +8,10 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	animation: mymove 3s ease-in-out 0s 1 forwards;
+	animation: main_menu_opening 3s ease-in-out 0s 1 forwards;
 }
 
-@keyframes mymove {
+@keyframes main_menu_opening {
 	from {
 		background-color: black;
 	}
@@ -80,6 +80,16 @@
 	font-size: 90px;
 	color: black;
 	ttext-shadow: 0px 0px 5px lightgray;
+	animation: menu 2.5s ease-in-out 0s infinite alternate;
+}
+
+@keyframes menu {
+	from {
+		transform: scale(1.0);
+	}
+	to {
+		transform: scale(1.15);
+	}
 }
 
 #main_menu .button {
