@@ -1,13 +1,13 @@
 // as you guessed this is the intro 
 
-import glob from "../lib/glob.js";
-import hooks from "../lib/hooks.js";
+import glob from "../util/glob.js";
+import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 
 import mall, { THREE } from "../mall.js";
-import time from "../lib/timer.js";
-import easings from "../lib/easings.js";
+import time from "../util/timer.js";
+import easings from "../util/easings.js";
 
 namespace startup {
 	export var next
@@ -21,7 +21,7 @@ namespace startup {
 
 		let geometry = new THREE.PlaneGeometry(2, 1);
 		let material = new THREE.MeshPhongMaterial({
-			map: renderer.load_image('./img/boomb.png'),
+			map: renderer.load_image('./img/startup_logo_1.png'),
 			color: 'white',
 			specular: 'cyan',
 			shininess: 150,

@@ -1,4 +1,4 @@
-import glob from "./lib/glob.js";
+import glob from "./util/glob.js";
 
 import { THREE } from "./mall.js";
 

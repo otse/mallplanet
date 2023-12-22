@@ -1,13 +1,14 @@
 // as you guessed this is the intro 
 
-import glob from "../lib/glob.js";
-import hooks from "../lib/hooks.js";
+import glob from "../util/glob.js";
+import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 
 import mall, { THREE } from "../mall.js";
 import renderer from "../renderer.js";
-import time from "../lib/timer.js";
-import easings from "../lib/easings.js";
+import time from "../util/timer.js";
+import easings from "../util/easings.js";
+import manager from "../game/manager.js";
 
 namespace main_menu {
 
@@ -35,6 +36,13 @@ namespace main_menu {
 
 		let start = make_button('start');
 		let quit = make_button('quit');
+
+		start.onclick = () => {
+			//entry
+			console.log('boo');
+			manager.start_new_game();
+			
+		};
 
 		holder.append(start);
 		holder.append(quit);

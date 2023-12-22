@@ -18,7 +18,7 @@
 #main_menu #logo {
     margin: 15px;
     font-family: Nabla;
-    font-size: 70px;
+    font-size: 90px;
     color: black;
     ttext-shadow: 0px 0px 5px lightgray;
 }
@@ -30,7 +30,7 @@
     padding: 3px 10px;
 	user-select: none;
     cursor: pointer;
-    font-size: 30px;
+    font-size: 40px;
     color: orange;
     border: 2px solid orange;
 }

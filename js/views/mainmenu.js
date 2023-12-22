@@ -1,5 +1,6 @@
 // as you guessed this is the intro 
 import mall from "../mall.js";
+import manager from "../game/manager.js";
 var main_menu;
 (function (main_menu) {
     let time = 0;
@@ -21,6 +22,11 @@ var main_menu;
         holder.append(logo);
         let start = make_button('start');
         let quit = make_button('quit');
+        start.onclick = () => {
+            //entry
+            console.log('boo');
+            manager.start_new_game();
+        };
         holder.append(start);
         holder.append(quit);
     }

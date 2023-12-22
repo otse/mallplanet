@@ -1,13 +1,13 @@
 // as you guessed this is the intro 
 
-import glob from "../lib/glob.js";
-import hooks from "../lib/hooks.js";
+import glob from "../util/glob.js";
+import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 
 import { THREE } from "../mall.js";
-import time from "../lib/timer.js";
-import easings from "../lib/easings.js";
+import time from "../util/timer.js";
+import easings from "../util/easings.js";
 
 namespace startup {
 	const seconds = 4

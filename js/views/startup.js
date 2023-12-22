@@ -1,10 +1,10 @@
 // as you guessed this is the intro 
-import hooks from "../lib/hooks.js";
+import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import { THREE } from "../mall.js";
-import time from "../lib/timer.js";
-import easings from "../lib/easings.js";
+import time from "../util/timer.js";
+import easings from "../util/easings.js";
 var startup;
 (function (startup) {
     const seconds = 4;
@@ -13,7 +13,7 @@ var startup;
         renderer.renderer.setClearColor('black');
         let geometry = new THREE.PlaneGeometry(2, 1);
         let material = new THREE.MeshPhongMaterial({
-            map: renderer.load_image('./img/boomb.png'),
+            map: renderer.load_image('./img/startup_logo_1.png'),
             color: 'white',
             specular: 'cyan',
             shininess: 150,

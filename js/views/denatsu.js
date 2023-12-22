@@ -1,8 +1,8 @@
 // as you guessed this is the intro 
-import hooks from "../lib/hooks.js";
+import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
-import time from "../lib/timer.js";
+import time from "../util/timer.js";
 var startup;
 (function (startup) {
     const seconds = 4;
