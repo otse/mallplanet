@@ -72,7 +72,19 @@
 	background: gray;
 	background: url(img/ai_generated_hotline_miami_rooster_pixelated.jpg);
 	background-attachment: fixed;
+	background-size: 100%;
+	animation: menu_warp 3s ease-in-out 0s infinite alternate;
 }
+
+@keyframes menu_warp {
+	from {
+		transform: rotate(0deg) scale(1.0);
+	}
+	to {
+		transform: rotate(3deg) scale(1.05);
+	}
+}
+
 
 #main_menu #logo {
 	margin: 15px;
@@ -99,7 +111,7 @@
 	padding: 3px 10px;
 	user-select: none;
 	cursor: pointer;
-	font-size: 40px;
+	font-size: 50px;
 	color: #ffd150;
 	bborder: 2px solid orange;
 }
