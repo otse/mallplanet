@@ -10,7 +10,7 @@ import time from "../util/timer.js";
 import easings from "../util/easings.js";
 import snd from "../snd.js";
 
-namespace startup {
+namespace strelok_game {
 	export var next
 
 	const seconds = 4
@@ -24,6 +24,8 @@ namespace startup {
 
 	export function start() {
 
+		console.log(' strelok game start ');
+		
 		let geometry = new THREE.PlaneGeometry(2, 1);
 		let material = new THREE.MeshPhongMaterial({
 			map: renderer.load_image('./img/startup_logo_1.png'),
@@ -63,7 +65,7 @@ namespace startup {
 		renderer.lock_aspect = false;
 		renderer.resize();
 		music?.stop();
-		next?.boot();
+		next?.start();
 	}
 
 	let shadetimer 
@@ -76,17 +78,17 @@ namespace startup {
 		let shade = easings.easeInCubic(shadetimer.factorc());
 		let emissive = (1 - easings.easeInOutBack(timer.factorc())) / 2;
 		plane.rotation.x = -pitch * 1.0;
-		plane.rotation.y = (1 - yaw) * Math.PI / 2;
+		plane.rotation.y = (1 - yaw) * Math.PI / 4;
 		plane.material.color.copy(new THREE.Color(shade, shade, shade));
 		//plane.material.emissive.copy(new THREE.Color(emissive, emissive, emissive));
 		plane.material.needsUpdate = true;
 		let zoom = easings.easeInOutBack(timer.factorc()) * 3;
 		plane.scale.set(zoom, zoom, zoom);
-		if (mkb.key('escape') || timer.done()) {
+		if (mkb.key('escape') == 1 || timer.done()) {
 			hooks.unregister('mallAnimate', animate); // todo we're removing a hook while iterating
 			cleanup();
 		}
 	}
 }
 
-export default startup;
+export default strelok_game;

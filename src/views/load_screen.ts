@@ -4,7 +4,7 @@
 
 import mall from "../mall.js";
 import renderer from "../renderer.js";
-import startup from "./startup.js";
+import strelok_game from "./strelok_game.js";
 
 namespace load_screen {
 	export var next
@@ -32,7 +32,7 @@ namespace load_screen {
 		last = whole.querySelector('#last');
 		bar = whole.querySelector('#bar');
 
-		next = startup;
+		next = strelok_game;
 	}
 
 	export function cleanup() {

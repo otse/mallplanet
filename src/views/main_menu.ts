@@ -26,11 +26,11 @@ namespace main_menu {
 		return button;
 	}
 
-	export function boot() {
+	export function start() {
 		fader = document.createElement('div');
 		fader.setAttribute('id', 'fader');
 		mall.whole.append(fader);
-		setTimeout(() => { fader.remove() }, 3000);
+		setTimeout(() => { fader.remove() }, 4000);
 
 		holder = document.createElement('div');
 		holder.setAttribute('id', 'main_menu');

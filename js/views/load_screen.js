@@ -1,7 +1,7 @@
 /// the load screen for mall
 // sounds can take several sounds so a load indicator is welcome
 import mall from "../mall.js";
-import startup from "./startup.js";
+import strelok_game from "./strelok_game.js";
 var load_screen;
 (function (load_screen) {
     load_screen.things_to_load = 0;
@@ -23,7 +23,7 @@ var load_screen;
 		`;
         last = whole.querySelector('#last');
         bar = whole.querySelector('#bar');
-        load_screen.next = startup;
+        load_screen.next = strelok_game;
     }
     load_screen.start = start;
     function cleanup() {

@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 export { THREE as THREE }; // just perfect (:)
+import hooks from './util/hooks.js';
 import glob from "./util/glob.js";
 import renderer from "./renderer.js";
-import startup from './views/startup.js';
-import { hooks } from './util/hooks.js';
+import strelok_game from './views/strelok_game.js';
+import denatsu_games from './views/denatsu_games.js';
 import mkb from './mkb.js';
-import main_menu from './views/main_menu.js';
 import snd from './snd.js';
 import load_screen from './views/load_screen.js';
+import main_menu from './views/main_menu.js';
 var mall;
 (function (mall) {
     const constant = 1;
@@ -26,9 +27,10 @@ var mall;
         mkb.attach_listeners();
         renderer.boot('');
         load_screen.boot(this);
-        startup.boot();
+        strelok_game.boot();
+        strelok_game.next = denatsu_games;
+        denatsu_games.next = main_menu;
         snd.boot();
-        startup.next = main_menu;
         requestAnimationFrame(animate);
     }
     mall.boot = boot;
@@ -38,6 +40,7 @@ var mall;
         last = time;
         requestAnimationFrame(animate);
         hooks.call('mallAnimate', 0);
+        mkb.loop();
         renderer.render();
     }
 })(mall || (mall = {}));

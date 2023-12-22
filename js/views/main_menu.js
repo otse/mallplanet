@@ -14,11 +14,11 @@ var main_menu;
         button.innerHTML = text;
         return button;
     }
-    function boot() {
+    function start() {
         fader = document.createElement('div');
         fader.setAttribute('id', 'fader');
         mall.whole.append(fader);
-        setTimeout(() => { fader.remove(); }, 3000);
+        setTimeout(() => { fader.remove(); }, 4000);
         holder = document.createElement('div');
         holder.setAttribute('id', 'main_menu');
         mall.whole.append(holder);
@@ -37,7 +37,7 @@ var main_menu;
         holder.append(quit);
         music = snd.play_regular('blurringmyday', 0.5, true);
     }
-    main_menu.boot = boot;
+    main_menu.start = start;
     function cleanup() {
         music.stop();
     }
