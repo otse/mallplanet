@@ -5,7 +5,6 @@ import renderer from "../renderer.js";
 import { THREE } from "../mall.js";
 import time from "../util/timer.js";
 import easings from "../util/easings.js";
-import snd from "../snd.js";
 var startup;
 (function (startup) {
     const seconds = 4;
@@ -33,7 +32,7 @@ var startup;
         renderer.scene.add(ambient);
         renderer.scene.add(plane);
         renderer.scene.add(lamp);
-        music = snd.play_regular('strelok', 1.0);
+        //music = snd.play_regular('strelok', 1.0);
         //renderer.lock_aspect = true;
         //renderer.camera.aspect = 1;
         hooks.register('mallAnimate', animate);
@@ -49,7 +48,7 @@ var startup;
         renderer.scene.remove(lamp);
         renderer.lock_aspect = false;
         renderer.resize();
-        music.stop();
+        music?.stop();
         startup.next?.boot();
     }
     startup.cleanup = cleanup;

@@ -9,7 +9,7 @@
 	<title>Mall Planet</title>
 
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Nabla&family=Silkscreen&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Nabla&family=Silkscreen&family=Single+Day&display=swap');
 	</style>
 
 	<link rel="stylesheet" href="styles.css" />
@@ -23,6 +23,13 @@
 		}
 	  </script>
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function (event) {
+			console.log(' dom content loaded ');
+			mall.boot();
+		});
+	</script>
+
 	<style>
 		body {
 			margin: 0;
@@ -30,11 +37,19 @@
 
 		#page {
 			position: absolute;
+			z-index: 2;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			color: white;
+			margin: 0;
+			padding: 0;
+			background: transparent;
+		}
+
+		canvas {
+			position: absolute;
+			z-index: 1;
 		}
 	</style>
 

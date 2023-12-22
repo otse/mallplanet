@@ -51,6 +51,6 @@ namespace mall {
 
 glob.mall = mall;
 
-mall.boot();
+(window as any).mall = mall;
 
 export default mall;

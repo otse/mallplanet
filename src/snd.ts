@@ -56,9 +56,9 @@ namespace snd {
 
 		const loader = new THREE.AudioLoader();
 		for (let path of loads) {
-			let basename = path.replace(/^.*[\\/]/, '');
-			basename = basename.split('.')[0];
-			console.log(' loading snd ', basename);
+			let filename = path.replace(/^.*[\\/]/, '');
+			let basename = filename.split('.')[0];
+			console.log(' loading snd ', filename);
 			loader.load(path,
 				function (buffer) {
 					buffers[basename] = buffer;
@@ -66,7 +66,7 @@ namespace snd {
 				},
 				function () { },
 				function () {
-					console.warn(' mall audio cannot load ', basename);
+					console.warn(' mall audio cannot load ', filename);
 				});
 		}
 		loaded = true;

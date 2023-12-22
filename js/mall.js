@@ -42,5 +42,5 @@ var mall;
     }
 })(mall || (mall = {}));
 glob.mall = mall;
-mall.boot();
+window.mall = mall;
 export default mall;

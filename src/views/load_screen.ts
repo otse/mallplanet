@@ -46,7 +46,7 @@ namespace load_screen {
 		thing.innerHTML = mall.sample(emojis);
 		bar.append(thing);
 		things_loaded++;
-		last.innerHTML = `> ${asset}`;
+		last.innerHTML = `${asset}`;
 		if (things_loaded >= things_to_load) {
 			console.log(' load screen done ');
 			setTimeout(cleanup, 500);

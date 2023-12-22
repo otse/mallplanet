@@ -37,7 +37,7 @@ var load_screen;
         thing.innerHTML = mall.sample(load_screen.emojis);
         bar.append(thing);
         load_screen.things_loaded++;
-        last.innerHTML = `> ${asset}`;
+        last.innerHTML = `${asset}`;
         if (load_screen.things_loaded >= load_screen.things_to_load) {
             console.log(' load screen done ');
             setTimeout(cleanup, 500);

@@ -1,4 +1,5 @@
 #load_screen {
+	user-select: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,14 +11,14 @@
     width: 100%;
     height: 100%;
     color: white;
-    background: grey;
+    background: #005caa;
 }
 
 #load_screen #last {
     display: block;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 11px;
-    color: #222;
+    font-family: 'Single Day';
+    font-size: 20px;
+    color: white;
     bborder: 1px solid #999;
     ppadding: 5px;
     border-radius: 4px;
@@ -30,7 +31,7 @@
 #load_screen .thing {
     display: inline-block;
     color: black;
-    font-size: 25px;
+    font-size: 35px;
 }
 
 #main_menu {

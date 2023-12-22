@@ -43,7 +43,7 @@ namespace startup {
 		renderer.scene.add(plane);
 		renderer.scene.add(lamp);
 		
-		music = snd.play_regular('strelok', 1.0);
+		//music = snd.play_regular('strelok', 1.0);
 
 		//renderer.lock_aspect = true;
 		//renderer.camera.aspect = 1;
@@ -62,7 +62,7 @@ namespace startup {
 		renderer.scene.remove(lamp);
 		renderer.lock_aspect = false;
 		renderer.resize();
-		music.stop();
+		music?.stop();
 		next?.boot();
 	}
 
