@@ -3,11 +3,15 @@ import { THREE } from "./mall.js";
 var renderer;
 (function (renderer_1) {
     const ad_hoc = 0;
+    renderer_1.lock_aspect = false;
     function resize() {
-        renderer_1.camera.aspect = window.innerWidth / window.innerHeight;
-        renderer_1.camera.updateProjectionMatrix();
+        if (!renderer_1.lock_aspect) {
+            renderer_1.camera.aspect = window.innerWidth / window.innerHeight;
+            renderer_1.camera.updateProjectionMatrix();
+        }
         renderer_1.renderer.setSize(window.innerWidth, window.innerHeight);
     }
+    renderer_1.resize = resize;
     function test_sphere() {
         let geometry = new THREE.SphereGeometry(1, 32, 16);
         let material = new THREE.MeshLambertMaterial({ wireframe: true, color: 'white' });

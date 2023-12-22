@@ -7,13 +7,15 @@ import renderer from "./renderer.js";
 import startup from './views/startup.js';
 import { hooks } from './util/hooks.js';
 import mkb from './mkb.js';
-import main_menu from './views/mainmenu.js';
+import main_menu from './views/main_menu.js';
+import snd from './snd.js';
+import load_screen from './views/load_screen.js';
 
 
 namespace mall {
 	const constant = 1
 
-	export var page
+	export var whole
 
 	export function sample(a) {
 		return a[Math.floor(Math.random() * a.length)];
@@ -26,10 +28,12 @@ namespace mall {
 	export function boot() {
 		glob.salt = '';
 		console.log(' boot mall ');
-		page = document.getElementById('page');
+		whole = document.getElementById('page');
 		mkb.attach_listeners();
 		renderer.boot('');
+		load_screen.boot(this);
 		startup.boot();
+		snd.boot();
 		startup.next = main_menu;
 		requestAnimationFrame(animate);
 	}

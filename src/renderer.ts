@@ -7,9 +7,13 @@ namespace renderer {
 
 	export var renderer, scene, camera, clock, ambient
 
-	function resize() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
+	export var lock_aspect = false;
+
+	export function resize() {
+		if (!lock_aspect) {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+		}
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
@@ -45,12 +49,12 @@ namespace renderer {
 	}
 
 	export function load_image(file: string) {
-        let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`, () => 0);
+		let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`, () => 0);
 		texture.generateMipmaps = false;
 		//texture.center.set(0, 1);
 		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        return texture;
-    }
+		return texture;
+	}
 
 	export function render() {
 		renderer.render(scene, camera);
