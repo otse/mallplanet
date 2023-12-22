@@ -15,7 +15,7 @@ var snd;
     let sounds_loaded = 0, sounds_to_load = 0;
     snd.music = [
         './snd/strelok.mp3',
-        './snd/theoryofmachines.mp3',
+        './snd/blurringmyday.mp3',
     ];
     snd.footsteps = [];
     snd.buffers = {};

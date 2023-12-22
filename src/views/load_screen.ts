@@ -11,7 +11,7 @@ namespace load_screen {
 	export var things_to_load = 0
 	export var things_loaded = 0
 
-	export var emojis = ['🐑', '🐖', '🐉', '🍄', '🐢', '🐔']
+	export var emojis = ['🐔'] // '🐑', '🐖', '🐉', '🍄', '🐢', 
 
 	let whole, last, bar
 

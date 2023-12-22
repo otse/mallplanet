@@ -6,7 +6,7 @@ var load_screen;
 (function (load_screen) {
     load_screen.things_to_load = 0;
     load_screen.things_loaded = 0;
-    load_screen.emojis = ['🐑', '🐖', '🐉', '🍄', '🐢', '🐔'];
+    load_screen.emojis = ['🐔']; // '🐑', '🐖', '🐉', '🍄', '🐢', 
     let whole, last, bar;
     function boot(mall) {
         start(mall);

@@ -16,7 +16,7 @@ namespace main_menu {
 	let time = 0
 
 	let music
-	let holder, logo
+	let fader, holder, logo
 
 	function make_button(text) {
 		let button = document.createElement('div');
@@ -27,6 +27,11 @@ namespace main_menu {
 	}
 
 	export function boot() {
+		fader = document.createElement('div');
+		fader.setAttribute('id', 'fader');
+		mall.whole.append(fader);
+		setTimeout(() => { fader.remove() }, 3000);
+
 		holder = document.createElement('div');
 		holder.setAttribute('id', 'main_menu');
 		mall.whole.append(holder);
@@ -43,13 +48,13 @@ namespace main_menu {
 			//entry
 			console.log('boo');
 			manager.start_new_game();
-			
+
 		};
 
 		holder.append(start);
 		holder.append(quit);
 
-		music = snd.play_regular('theoryofmachines', 0.5, true);
+		music = snd.play_regular('blurringmyday', 0.5, true);
 	}
 
 	export function cleanup() {

@@ -23,7 +23,7 @@ namespace snd {
 
 	export const music = [
 		'./snd/strelok.mp3',
-		'./snd/theoryofmachines.mp3',
+		'./snd/blurringmyday.mp3',
 	];
 
 	export const footsteps = [

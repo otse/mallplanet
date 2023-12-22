@@ -1,76 +1,99 @@
+#fader {
+	pointer-events: none; /* click-through */
+	z-index: 2;
+	user-select: none;
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	animation: mymove 3s ease-in-out 0s 1 forwards;
+}
+
+@keyframes mymove {
+	from {
+		background-color: black;
+	}
+	to {
+		background-color: transparent;
+	}
+}
+
 #load_screen {
 	user-select: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    color: white;
-    background: #005caa;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-direction: column;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: white;
+	background: #005caa;
 }
 
 #load_screen #last {
-    display: block;
-    font-family: 'Single Day';
-    font-size: 20px;
-    color: white;
-    bborder: 1px solid #999;
-    ppadding: 5px;
-    border-radius: 4px;
+	display: block;
+	font-family: 'Single Day';
+	font-size: 20px;
+	color: white;
+	bborder: 1px solid #999;
+	ppadding: 5px;
+	border-radius: 4px;
 }
 
 #load_screen #bar {
-    display: block;
+	display: block;
 }
 
 #load_screen .thing {
-    display: inline-block;
-    color: black;
-    font-size: 35px;
+	display: inline-block;
+	color: black;
+	font-size: 35px;
 }
 
 #main_menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    color: white;
-    background: gray;
-    background: url(img/ai_generated_hotline_miami_rooster_pixelated.jpg);
-    background-attachment: fixed;
+	user-select: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-direction: column;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: white;
+	background: gray;
+	background: url(img/ai_generated_hotline_miami_rooster_pixelated.jpg);
+	background-attachment: fixed;
 }
 
 #main_menu #logo {
-    margin: 15px;
-    font-family: Nabla;
-    font-size: 90px;
-    color: black;
-    ttext-shadow: 0px 0px 5px lightgray;
+	margin: 15px;
+	font-family: Nabla;
+	font-size: 90px;
+	color: black;
+	ttext-shadow: 0px 0px 5px lightgray;
 }
 
 #main_menu .button {
-    ttext-shadow: -3px 3px 0px darkgreen;
-    font-family: 'Silkscreen';
-    margin: 3px;
-    padding: 3px 10px;
+	ttext-shadow: -3px 3px 0px darkgreen;
+	font-family: 'Silkscreen';
+	margin: 3px;
+	padding: 3px 10px;
 	user-select: none;
-    cursor: pointer;
-    font-size: 40px;
-    color: orange;
-    bborder: 2px solid orange;
+	cursor: pointer;
+	font-size: 40px;
+	color: #ffd150;
+	bborder: 2px solid orange;
 }
 
 #main_menu .button:hover {
-   color: green;
+	color: green;
 }

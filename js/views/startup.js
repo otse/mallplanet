@@ -59,7 +59,7 @@ var startup;
     function animate() {
         let pitch = 1 - easings.easeOutQuad(timer.factorc());
         let yaw = easings.easeInOutQuart(timer.factorc());
-        let shade = easings.easeInCirc(shadetimer.factorc());
+        let shade = easings.easeInCubic(shadetimer.factorc());
         let emissive = (1 - easings.easeInOutBack(timer.factorc())) / 2;
         plane.rotation.x = -pitch * 1.0;
         plane.rotation.y = (1 - yaw) * Math.PI / 2;
