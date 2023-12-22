@@ -14,9 +14,9 @@ namespace terrain {
 	export function simple_populate() {
 		console.log('simple populate');
 
-		for (let y = 0; y < 10; y++) {
-			for (let x = 0; x < 10; x++) {
-				let til = new tile([x, y]);
+		for (let y = 0; y < 100; y++) {
+			for (let x = 0; x < 100; x++) {
+				let til = new tile([50 - x, 50 - y]);
 				lod.add(til);
 			}
 		}
@@ -46,7 +46,7 @@ namespace terrain {
 
 			cube.position.set(this.wpos[0], 0, this.wpos[1]);
 			cube.updateMatrix();
-			cube.add(new THREE.AxesHelper(2));
+			//cube.add(new THREE.AxesHelper(2));
 
 			renderer.game_objects.add(cube);
 		}

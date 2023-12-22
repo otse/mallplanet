@@ -49,6 +49,7 @@ namespace main_menu {
 		start.onclick = () => {
 			//entry
 			console.log('boo');
+			cleanup();
 			game_manager.start_new_game();
 
 		};
@@ -62,6 +63,7 @@ namespace main_menu {
 	}
 
 	export function cleanup() {
+		mall.whole.innerHTML = '';
 		music.stop();
 		hooks.unregister('mallAnimate', animate);
 	}

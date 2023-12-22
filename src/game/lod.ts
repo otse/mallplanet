@@ -36,7 +36,7 @@ class toggle {
 
 namespace lod {
 
-	export const size = 10;
+	export const size = 1;
 
 	const chunk_coloration = false;
 
@@ -80,7 +80,7 @@ namespace lod {
 		readonly arrays: sector[][] = []
 		constructor(span) {
 			gworld = this;
-			new grid(2, 2);
+			new grid(10, 10);
 		}
 		update(wpos: vec2) {
 			ggrid.big = lod.world.big(wpos);

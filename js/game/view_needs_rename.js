@@ -1,4 +1,4 @@
-// the view manages what it sees
+/// the view manages what it sees
 import mkb from "../mkb.js";
 import pts2 from "../util/pts2.js";
 import lod from "./lod.js";
@@ -45,7 +45,6 @@ export class view_needs_rename {
             mouse[1] = -mouse[1];
             this.begin = mouse;
             this.before = pts2.clone(this.rpos);
-            console.log('before', this.before);
         }
         if (mkb.button(1) >= 1) {
             let mouse = mkb.mouse();
@@ -63,17 +62,15 @@ export class view_needs_rename {
                 dif = pts2.subtract(dif, this.before);
                 this.rpos = pts2.inv(dif);
             }
-            console.log('rpos', this.rpos);
         }
         else if (mkb.button(1) == -1) {
-            console.log('woo');
             this.rpos = pts2.floor(this.rpos);
         }
     }
     wheelbarrow() {
         let pan = 10;
         const zoomFactor = 1 / 10;
-        if ((mkb.key('f') == 1 || mkb.wheel == -1) && this.zoom > 0)
+        if ((mkb.key('f') == 1 || mkb.wheel == -1) && this.zoom > 1)
             this.zoom -= 1;
         if ((mkb.key('r') == 1 || mkb.wheel == 1) && this.zoom < 20)
             this.zoom += 1;

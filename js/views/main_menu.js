@@ -33,6 +33,7 @@ var main_menu;
         start.onclick = () => {
             //entry
             console.log('boo');
+            cleanup();
             game_manager.start_new_game();
         };
         holder.append(start);
@@ -42,6 +43,7 @@ var main_menu;
     }
     main_menu.start = start;
     function cleanup() {
+        mall.whole.innerHTML = '';
         music.stop();
         hooks.unregister('mallAnimate', animate);
     }

@@ -19,8 +19,8 @@ namespace projection {
 	}
 
 	export function setup() {
-		camera = new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
-		camera.position.z = 2;
+		camera = new THREE.OrthographicCamera(0, 0, 0, 0, 0.01, 1000);
+		camera.position.y = -100;
 		camera.zoom = 20;
 		renderer.camera = camera;
 		resize();
@@ -33,7 +33,7 @@ namespace projection {
 	}
 
 	export function loop() {
-		
+
 	}
 
 	export function quit() {

@@ -13,8 +13,8 @@ var projection;
         projection.camera.bottom = height / -2;
     }
     function setup() {
-        projection.camera = new THREE.OrthographicCamera(0, 0, 0, 0, 0.1, 1000);
-        projection.camera.position.z = 2;
+        projection.camera = new THREE.OrthographicCamera(0, 0, 0, 0, 0.01, 1000);
+        projection.camera.position.y = -100;
         projection.camera.zoom = 20;
         renderer.camera = projection.camera;
         resize();

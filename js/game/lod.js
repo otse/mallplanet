@@ -33,7 +33,7 @@ class toggle {
 }
 var lod;
 (function (lod) {
-    lod.size = 10;
+    lod.size = 1;
     const chunk_coloration = false;
     const fog_of_war = false;
     const grid_crawl_makes_sectors = true;
@@ -67,7 +67,7 @@ var lod;
         arrays = [];
         constructor(span) {
             lod.gworld = this;
-            new grid(2, 2);
+            new grid(10, 10);
         }
         update(wpos) {
             lod.ggrid.big = lod.world.big(wpos);
