@@ -3,29 +3,28 @@ import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import mall from "../mall.js";
 import time from "../util/timer.js";
-var denatsu_games;
-(function (denatsu_games) {
+var strelok_game_prerendered;
+(function (strelok_game_prerendered) {
     let timer;
     function start() {
         mall.view = this;
         mall.whole.style.background = 'black';
-        mall.whole.innerHTML = `<img src="./img/denatsu_games.jpg" />`;
+        mall.whole.innerHTML = `<img src="./img/strelok_game_prerendered.gif" />`;
         hooks.register('mallAnimate', animate);
-        timer = time(2);
-        mall.view = this;
+        timer = time(3);
     }
-    denatsu_games.start = start;
+    strelok_game_prerendered.start = start;
     function cleanup() {
         mall.whole.innerHTML = '';
-        denatsu_games.next?.start();
+        strelok_game_prerendered.next?.start();
         hooks.unregister('mallAnimate', animate);
     }
-    denatsu_games.cleanup = cleanup;
+    strelok_game_prerendered.cleanup = cleanup;
     function animate() {
         if (mkb.key('escape') == 1 || timer.done()) {
             cleanup();
         }
     }
-    denatsu_games.animate = animate;
-})(denatsu_games || (denatsu_games = {}));
-export default denatsu_games;
+    strelok_game_prerendered.animate = animate;
+})(strelok_game_prerendered || (strelok_game_prerendered = {}));
+export default strelok_game_prerendered;

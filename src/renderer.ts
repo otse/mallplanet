@@ -1,19 +1,20 @@
 import glob from "./util/glob.js";
+import hooks from "./util/hooks.js";
 
 import { THREE } from "./mall.js";
 
 namespace renderer {
+	export var ndpi = 1
+	
 	const ad_hoc = 0
 
-	export var renderer, scene, camera, clock, ambient
-
-	export var lock_aspect = false;
+	export var renderer, scene, camera, clock, ambient, game_objects
 
 	export function resize() {
-		if (!lock_aspect) {
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
-		}
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		hooks.call('rendererResize');
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
@@ -29,6 +30,10 @@ namespace renderer {
 	export function boot(word: string) {
 		console.log(' boot renderer ');
 
+		console.log('THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE', THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE);
+		
+		THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE = false;
+
 		ambient = new THREE.AmbientLight(0xffffff);
 
 		clock = new THREE.Clock();
@@ -36,6 +41,9 @@ namespace renderer {
 		scene.add(ambient);
 		camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
 		camera.position.z = 10;
+
+		game_objects = new THREE.Group();
+		scene.add(game_objects);
 
 		renderer = new THREE.WebGLRenderer({ antialias: false });
 		renderer.setSize(1024, 768);

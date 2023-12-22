@@ -3,26 +3,28 @@
 import glob from "../util/glob.js";
 import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
+import renderer from "../renderer.js";
 
 import mall, { THREE } from "../mall.js";
 import time from "../util/timer.js";
+import easings from "../util/easings.js";
+import snd from "../snd.js";
 
-namespace denatsu_games {
+namespace strelok_game_prerendered {
 	export var next
 
 	let timer
 
 	export function start() {
+		
 		mall.view = this;
 
 		mall.whole.style.background = 'black';
-		mall.whole.innerHTML = `<img src="./img/denatsu_games.jpg" />`;
+		mall.whole.innerHTML = `<img src="./img/strelok_game_prerendered.gif" />`;
 
 		hooks.register('mallAnimate', animate);
 
-		timer = time(2);
-
-		mall.view = this;
+		timer = time(3);
 	}
 
 	export function cleanup() {
@@ -38,4 +40,4 @@ namespace denatsu_games {
 	}
 }
 
-export default denatsu_games;
+export default strelok_game_prerendered;

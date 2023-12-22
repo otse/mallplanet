@@ -8,7 +8,7 @@ import mall, { THREE } from "../mall.js";
 import renderer from "../renderer.js";
 import time from "../util/timer.js";
 import easings from "../util/easings.js";
-import manager from "../game/manager.js";
+import game_manager from "../game/manager.js";
 import snd from "../snd.js";
 
 namespace main_menu {
@@ -27,6 +27,8 @@ namespace main_menu {
 	}
 
 	export function start() {
+		mall.view = this;
+
 		fader = document.createElement('div');
 		fader.setAttribute('id', 'fader');
 		mall.whole.append(fader);
@@ -38,7 +40,7 @@ namespace main_menu {
 
 		logo = document.createElement('div');
 		logo.setAttribute('id', 'logo');
-		logo.innerHTML = 'Mall Planet';
+		logo.innerHTML = 'MallPlanet';
 		holder.append(logo);
 
 		let start = make_button('start');
@@ -47,7 +49,7 @@ namespace main_menu {
 		start.onclick = () => {
 			//entry
 			console.log('boo');
-			manager.start_new_game();
+			game_manager.start_new_game();
 
 		};
 
@@ -55,10 +57,13 @@ namespace main_menu {
 		holder.append(quit);
 
 		music = snd.play_regular('blurringmyday', 0.5, true);
+
+		hooks.register('mallAnimate', animate);
 	}
 
 	export function cleanup() {
 		music.stop();
+		hooks.unregister('mallAnimate', animate);
 	}
 
 	export function animate() {

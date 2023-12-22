@@ -17,18 +17,17 @@ namespace strelok_game {
 	var plane, ambient, lamp
 	let music
 
-	export function boot() {
-		renderer.renderer.setClearColor('black');
-		//hooks.register('sndLoaded', start);
-	}
-
 	export function start() {
+		
+		mall.view = this;
+
+		renderer.renderer.setClearColor('black');
 
 		console.log(' strelok game start ');
 		
 		let geometry = new THREE.PlaneGeometry(2, 1);
 		let material = new THREE.MeshPhongMaterial({
-			map: renderer.load_image('./img/startup_logo_1.png'),
+			map: renderer.load_image('./img/strelok_game.png'),
 			color: 'white',
 			specular: 'cyan',
 			shininess: 150,
@@ -62,10 +61,10 @@ namespace strelok_game {
 		renderer.scene.remove(plane);
 		renderer.scene.remove(ambient);
 		renderer.scene.remove(lamp);
-		renderer.lock_aspect = false;
 		renderer.resize();
 		music?.stop();
 		next?.start();
+		hooks.unregister('mallAnimate', animate);
 	}
 
 	let shadetimer 
@@ -85,7 +84,6 @@ namespace strelok_game {
 		let zoom = easings.easeInOutBack(timer.factorc()) * 3;
 		plane.scale.set(zoom, zoom, zoom);
 		if (mkb.key('escape') == 1 || timer.done()) {
-			hooks.unregister('mallAnimate', animate); // todo we're removing a hook while iterating
 			cleanup();
 		}
 	}

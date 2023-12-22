@@ -1,14 +1,14 @@
 import glob from "./util/glob.js";
+import hooks from "./util/hooks.js";
 import { THREE } from "./mall.js";
 var renderer;
 (function (renderer_1) {
+    renderer_1.ndpi = 1;
     const ad_hoc = 0;
-    renderer_1.lock_aspect = false;
     function resize() {
-        if (!renderer_1.lock_aspect) {
-            renderer_1.camera.aspect = window.innerWidth / window.innerHeight;
-            renderer_1.camera.updateProjectionMatrix();
-        }
+        renderer_1.camera.aspect = window.innerWidth / window.innerHeight;
+        renderer_1.camera.updateProjectionMatrix();
+        hooks.call('rendererResize');
         renderer_1.renderer.setSize(window.innerWidth, window.innerHeight);
     }
     renderer_1.resize = resize;
@@ -20,12 +20,16 @@ var renderer;
     }
     function boot(word) {
         console.log(' boot renderer ');
+        console.log('THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE', THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE);
+        THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE = false;
         renderer_1.ambient = new THREE.AmbientLight(0xffffff);
         renderer_1.clock = new THREE.Clock();
         renderer_1.scene = new THREE.Scene();
         renderer_1.scene.add(renderer_1.ambient);
         renderer_1.camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
         renderer_1.camera.position.z = 10;
+        renderer_1.game_objects = new THREE.Group();
+        renderer_1.scene.add(renderer_1.game_objects);
         renderer_1.renderer = new THREE.WebGLRenderer({ antialias: false });
         renderer_1.renderer.setSize(1024, 768);
         renderer_1.renderer.setClearColor('grey');

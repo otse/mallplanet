@@ -2,24 +2,26 @@
 
 // sounds can take several sounds so a load indicator is welcome
 
+import hooks from "../util/hooks.js";
+import game_manager from "../game/manager.js";
 import mall from "../mall.js";
-import renderer from "../renderer.js";
-import strelok_game from "./strelok_game.js";
+import mkb from "../mkb.js";
+import time from "../util/timer.js";
 
 namespace load_screen {
 	export var next
 	export var things_to_load = 0
 	export var things_loaded = 0
+	export var done
 
 	export var emojis = ['🐔'] // '🐑', '🐖', '🐉', '🍄', '🐢', 
 
 	let whole, last, bar
 
-	export function boot(mall) {
-		start(mall);
-	}
+	let skipping, delay, timeout
 
 	export function start(mall) {
+		mall.view = this;
 		whole = document.createElement('div');
 		whole.setAttribute('id', 'load_screen');
 		mall.whole.append(whole);
@@ -32,12 +34,13 @@ namespace load_screen {
 		last = whole.querySelector('#last');
 		bar = whole.querySelector('#bar');
 
-		next = strelok_game;
+		hooks.register('mallAnimate', animate);
 	}
 
 	export function cleanup() {
 		whole.remove();
 		next?.start();
+		hooks.unregister('mallAnimate', animate);
 	}
 
 	export function increment(asset = './') {
@@ -48,13 +51,25 @@ namespace load_screen {
 		things_loaded++;
 		last.innerHTML = `${asset}`;
 		if (things_loaded >= things_to_load) {
-			console.log(' load screen done ');
-			setTimeout(cleanup, 500);
+			done = true;
+			delay = time(0.5);
 		}
 	}
 
 	export function animate() {
-
+		if (!done)
+			return;
+		if (delay.done()) {
+			cleanup();
+		}
+		else if (mkb.key(' ') == 1) {
+			// go straight into game
+			console.log(' skipping ');
+			skipping = true;
+			next = undefined;
+			cleanup();
+			game_manager.start_new_game();
+		}
 	}
 }
 

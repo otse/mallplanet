@@ -2,7 +2,7 @@
 import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
-import mall, { THREE } from "../mall.js";
+import { THREE } from "../mall.js";
 import time from "../util/timer.js";
 import easings from "../util/easings.js";
 var strelok_game;
@@ -11,12 +11,11 @@ var strelok_game;
     var plane, ambient, lamp;
     let music;
     function start() {
-        mall.view = this;
         renderer.renderer.setClearColor('black');
         console.log(' strelok game start ');
         let geometry = new THREE.PlaneGeometry(2, 1);
         let material = new THREE.MeshPhongMaterial({
-            map: renderer.load_image('./img/strelok_game.png'),
+            map: renderer.load_image('./img/startup_logo_1.png'),
             color: 'white',
             specular: 'cyan',
             shininess: 150,
@@ -44,10 +43,10 @@ var strelok_game;
         renderer.scene.remove(plane);
         renderer.scene.remove(ambient);
         renderer.scene.remove(lamp);
+        renderer.lock_aspect = false;
         renderer.resize();
         music?.stop();
         strelok_game.next?.start();
-        hooks.unregister('mallAnimate', animate);
     }
     strelok_game.cleanup = cleanup;
     let shadetimer;
@@ -67,6 +66,7 @@ var strelok_game;
         let zoom = easings.easeInOutBack(timer.factorc()) * 3;
         plane.scale.set(zoom, zoom, zoom);
         if (mkb.key('escape') == 1 || timer.done()) {
+            hooks.unregister('mallAnimate', animate); // todo we're removing a hook while iterating
             cleanup();
         }
     }

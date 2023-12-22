@@ -1,7 +1,7 @@
 #fader {
 	pointer-events: none; /* click-through */
-	z-index: 2;
 	user-select: none;
+	z-index: 2;
 	display: flex;
 	position: absolute;
 	top: 0;
@@ -56,6 +56,11 @@
 	font-size: 35px;
 }
 
+#strelok_games_prerendered {
+	display: block;
+
+}
+
 #main_menu {
 	user-select: none;
 	display: flex;
@@ -70,7 +75,7 @@
 	height: 100%;
 	color: white;
 	background: gray;
-	background: url(img/ai_generated_hotline_miami_rooster_pixelated.jpg);
+	background: url(img/output_3519641894_0.jpg);
 	background-attachment: fixed;
 	background-size: 100%;
 	aanimation: menu_warp 3s ease-in-out 0s infinite alternate;
@@ -78,21 +83,23 @@
 
 @keyframes menu_warp {
 	from {
-		transform: /*rotate(-3deg)*/ scale(1.0);
+		transform: rotate(-3deg) scale(1.0);
 	}
 	to {
-		transform: /*rotate(3deg)*/ scale(1.05);
+		transform: rotate(3deg) scale(1.05);
 	}
 }
 
 
 #main_menu #logo {
 	margin: 15px;
-	font-family: Nabla;
+	margin-top: 100px;
+	font-family: Preahvihear;
 	font-size: 90px;
-	color: black;
-	ttext-shadow: 0px 0px 5px lightgray;
-	animation: menu 2.5s ease-in-out 0s infinite alternate;
+	text-transform: lowercase;
+	color: white;
+	ttext-shadow: 0px 0px 10px #555555;
+	aanimation: menu 3s ease-in-out 0s infinite alternate;
 }
 
 @keyframes menu {
@@ -100,7 +107,7 @@
 		transform: scale(1.0);
 	}
 	to {
-		transform: scale(1.15);
+		transform: scale(1.1);
 	}
 }
 
@@ -111,8 +118,8 @@
 	padding: 3px 10px;
 	user-select: none;
 	cursor: pointer;
-	font-size: 50px;
-	color: #ffc832;
+	font-size: 60px;
+	color: white;
 	bborder: 2px solid orange;
 }
 

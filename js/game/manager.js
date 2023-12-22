@@ -1,14 +1,33 @@
 /// holds things like the player object
 import player from "./player.js";
-var manager;
-(function (manager) {
+import terrain from "./terrain.js";
+import projection from "./projection.js";
+import lod from "./lod.js";
+import view_needs_rename from "./view_needs_rename.js";
+var game_manager;
+(function (game_manager) {
+    game_manager.active = false;
     const boo = 0;
     function init() {
-        manager.gplayer = new player();
     }
-    manager.init = init;
+    game_manager.init = init;
     function start_new_game() {
+        game_manager.active = true;
+        game_manager.gview = view_needs_rename.make();
+        game_manager.gplayer = new player();
+        projection.setup();
+        new lod.world(10);
+        terrain.simple_populate();
     }
-    manager.start_new_game = start_new_game;
-})(manager || (manager = {}));
-export default manager;
+    game_manager.start_new_game = start_new_game;
+    let wpos = [0, 0];
+    function loop() {
+        if (!game_manager.active)
+            return;
+        game_manager.gview.tick();
+        lod.gworld.update(wpos);
+        projection.loop();
+    }
+    game_manager.loop = loop;
+})(game_manager || (game_manager = {}));
+export default game_manager;
