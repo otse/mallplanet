@@ -8,6 +8,7 @@ import terrain from "./terrain.js";
 namespace projection {
 
 	function resize() {
+		//return;
 		let width = window.innerWidth;
 		let height = window.innerHeight;
 		renderer.camera.left = width / - 2;
@@ -23,7 +24,7 @@ namespace projection {
 
 		hooks.register('rendererResize', resize);
 		renderer.renderer.setClearColor('cyan');
-		renderer.game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
+		//renderer.game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
 		renderer.game_objects.updateMatrix();
 	}
 

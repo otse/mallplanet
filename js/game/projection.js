@@ -5,6 +5,7 @@ import hooks from "../util/hooks.js";
 var projection;
 (function (projection) {
     function resize() {
+        //return;
         let width = window.innerWidth;
         let height = window.innerHeight;
         renderer.camera.left = width / -2;
@@ -17,7 +18,7 @@ var projection;
         resize();
         hooks.register('rendererResize', resize);
         renderer.renderer.setClearColor('cyan');
-        renderer.game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
+        //renderer.game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
         renderer.game_objects.updateMatrix();
     }
     projection.setup = setup;

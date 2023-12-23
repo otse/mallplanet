@@ -24,13 +24,12 @@ namespace game_manager {
 		gview = view_needs_rename.make();
 		gplayer = new player();
 		projection.setup();
-		new lod.world(10);
 		terrain.simple_populate();
 	}
 
 	let wpos = [0, 0] as vec2;
 
-	export function loop() {
+	export function think() {
 		if (!active)
 			return;
 		gview.tick();

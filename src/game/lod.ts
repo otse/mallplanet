@@ -52,11 +52,6 @@ namespace lod {
 	export var stamp = 0; // used only by server slod
 
 	export function register() {
-		// hooks.create('sectorCreate')
-		// hooks.create('sectorShow')
-		// hooks.create('sectorHide')
-
-		// hooks.register('sectorHide', () => { console.log('~'); return false; } );
 	}
 
 	export function project(unit: vec2): vec2 {
@@ -64,7 +59,7 @@ namespace lod {
 	}
 
 	export function unproject(pixel: vec2): vec2 {
-		return pts2.divide(pts2.unproject(pixel), lod.size);
+		return pts2.divide(pts2.unproject(pixel), 1.1);
 	}
 
 	export function add(obj: obj) {
@@ -83,9 +78,7 @@ namespace lod {
 			new grid(4, 4);
 		}
 		update(wpos: vec2) {
-			
 			ggrid.big = lod.world.big(wpos);
-			console.log('big', ggrid.big);
 			ggrid.ons();
 			ggrid.offs();
 		}
@@ -238,6 +231,7 @@ namespace lod {
 						sector.show();
 						for (let obj of sector.objs)
 							obj.tick();
+						// todo why do we tick here
 					}
 				}
 			}

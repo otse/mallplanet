@@ -40,10 +40,6 @@ var lod;
     lod.SectorSpan = 4;
     lod.stamp = 0; // used only by server slod
     function register() {
-        // hooks.create('sectorCreate')
-        // hooks.create('sectorShow')
-        // hooks.create('sectorHide')
-        // hooks.register('sectorHide', () => { console.log('~'); return false; } );
     }
     lod.register = register;
     function project(unit) {
@@ -51,7 +47,7 @@ var lod;
     }
     lod.project = project;
     function unproject(pixel) {
-        return pts2.divide(pts2.unproject(pixel), lod.size);
+        return pts2.divide(pts2.unproject(pixel), 1.1);
     }
     lod.unproject = unproject;
     function add(obj) {
@@ -71,7 +67,6 @@ var lod;
         }
         update(wpos) {
             lod.ggrid.big = lod.world.big(wpos);
-            console.log('big', lod.ggrid.big);
             lod.ggrid.ons();
             lod.ggrid.offs();
         }
@@ -224,6 +219,7 @@ var lod;
                         sector.show();
                         for (let obj of sector.objs)
                             obj.tick();
+                        // todo why do we tick here
                     }
                 }
             }

@@ -49,7 +49,7 @@ namespace mall {
 		last = time;
 		requestAnimationFrame(animate);
 		hooks.call('mallAnimate', 0);
-		game_manager.loop();
+		game_manager.think();
 		renderer.render();
 		mkb.loop();
 	}

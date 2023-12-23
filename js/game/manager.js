@@ -2,7 +2,6 @@
 import player from "./player.js";
 import terrain from "./terrain.js";
 import projection from "./projection.js";
-import lod from "./lod.js";
 import view_needs_rename from "./view_needs_rename.js";
 var game_manager;
 (function (game_manager) {
@@ -16,17 +15,16 @@ var game_manager;
         game_manager.gview = view_needs_rename.make();
         game_manager.gplayer = new player();
         projection.setup();
-        new lod.world(10);
         terrain.simple_populate();
     }
     game_manager.start_new_game = start_new_game;
     let wpos = [0, 0];
-    function loop() {
+    function think() {
         if (!game_manager.active)
             return;
         game_manager.gview.tick();
         projection.loop();
     }
-    game_manager.loop = loop;
+    game_manager.think = think;
 })(game_manager || (game_manager = {}));
 export default game_manager;

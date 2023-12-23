@@ -3,25 +3,34 @@ import mkb from "../mkb.js";
 import pts2 from "../util/pts2.js";
 import lod from "./lod.js";
 import renderer from "../renderer.js";
+import dolly from "./dolly.js";
+import mall from "../mall.js";
+let stats;
 export class view_needs_rename {
     zoom = 10;
     wpos = [0, 0];
     rpos = [0, 0];
+    compas;
     static make() {
         return new view_needs_rename;
     }
     chart(big) {
     }
     constructor() {
-        new lod.world(10);
         this.rpos = this.wpos;
+        new lod.world(10);
+        this.compas = new dolly([...this.wpos]);
+        lod.add(this.compas);
+        stats = document.createElement('div');
+        stats.setAttribute('id', 'stats');
+        mall.whole.append(stats);
     }
     set_camera() {
         const smooth = false;
         if (smooth)
             this.rpos = pts2.floor(this.rpos);
-        renderer.camera.position.set(this.rpos[0], this.rpos[1], 0);
-        renderer.camera.position.z = 30 + this.rpos[0] + -this.rpos[1];
+        renderer.camera.position.x = this.rpos[0];
+        renderer.camera.position.z = this.rpos[1];
         renderer.camera.zoom = this.zoom;
         renderer.camera.updateMatrix();
         renderer.camera.updateProjectionMatrix();
@@ -31,7 +40,8 @@ export class view_needs_rename {
         this.wheelbarrow();
         this.mouse_pan();
         this.set_camera();
-        this.wpos = lod.unproject([this.rpos[0], -this.rpos[1]]);
+        this.print();
+        this.wpos = [...this.rpos];
         lod.gworld.update(this.wpos);
         //const zoom = this.zoom;
         //renderer.camera.scale.set(zoom, zoom, zoom);
@@ -58,16 +68,22 @@ export class view_needs_rename {
             }
             else {
                 dif = pts2.divide(dif, -1);
-                // necessary mods
+                dif[1] = -dif[1];
                 dif = pts2.mult(dif, renderer.ndpi);
                 dif = pts2.divide(dif, this.zoom);
                 dif = pts2.subtract(dif, this.before);
                 this.rpos = pts2.inv(dif);
+                //this.rpos[0] = -this.rpos[0];
             }
         }
         else if (mkb.button(1) == -1) {
             this.rpos = pts2.floor(this.rpos);
         }
+    }
+    print() {
+        stats.innerHTML = `
+			camera: ${pts2.to_string_fixed(this.rpos)}
+		`;
     }
     wheelbarrow() {
         let pan = 10;
