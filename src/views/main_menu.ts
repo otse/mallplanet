@@ -5,9 +5,6 @@ import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 
 import mall, { THREE } from "../mall.js";
-import renderer from "../renderer.js";
-import time from "../util/timer.js";
-import easings from "../util/easings.js";
 import game_manager from "../game/manager.js";
 import snd from "../snd.js";
 

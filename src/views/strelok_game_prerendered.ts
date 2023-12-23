@@ -1,4 +1,4 @@
-// as you guessed this is the intro 
+/// a 3d logo was very amaturish so i turned this into a gif
 
 import glob from "../util/glob.js";
 import hooks from "../util/hooks.js";

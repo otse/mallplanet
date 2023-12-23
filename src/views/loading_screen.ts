@@ -1,14 +1,14 @@
 /// the load screen for mall
 
-// sounds can take several sounds so a load indicator is welcome
+// sounds can take several seconds so a load indicator was welcome
 
 import hooks from "../util/hooks.js";
 import game_manager from "../game/manager.js";
 import mall from "../mall.js";
 import mkb from "../mkb.js";
-import time from "../util/timer.js";
+import time, { timer } from "../util/timer.js";
 
-namespace load_screen {
+namespace loading_screen {
 	export var next
 	export var things_to_load = 0
 	export var things_loaded = 0
@@ -18,7 +18,9 @@ namespace load_screen {
 
 	let whole, last, bar
 
-	let skipping, delay, timeout
+	let delay: timer
+	let timeout
+	let skipping
 
 	export function start(mall) {
 		mall.view = this;
@@ -73,4 +75,4 @@ namespace load_screen {
 	}
 }
 
-export default load_screen;
+export default loading_screen;

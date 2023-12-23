@@ -1,11 +1,11 @@
-// a simple timer i wrote for mall planet
+// a simple timer i wrote for mall planet. i can acknowledge that it is crap
 
 function clamp(val, min, max) {
 	return val > max ? max : val < min ? min : val;
 }
 
 export class timer {
-	protected readonly begin
+	begin
 	constructor(protected end = 1) {
 		this.begin = performance.now();
 	}
@@ -26,7 +26,7 @@ export class timer {
 	}
 }
 
-export function time(end: number) {
+export function time(end: number): timer {
 	return new timer(end);
 }
 

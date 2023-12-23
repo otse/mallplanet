@@ -1,4 +1,4 @@
-// as you guessed this is the intro 
+/// a 3d logo was very amaturish so i turned this into a gif
 import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import mall from "../mall.js";

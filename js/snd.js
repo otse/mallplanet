@@ -3,7 +3,7 @@
 import { THREE } from "./mall.js";
 import renderer from "./renderer.js";
 import hooks from "./util/hooks.js";
-import load_screen from "./views/load_screen.js";
+import loading_screen from "./views/loading_screen.js";
 class asd {
     asd;
 }
@@ -36,7 +36,7 @@ var snd;
         let loads = [];
         loads = loads.concat(snd.music, snd.footsteps);
         sounds_to_load = loads.length;
-        load_screen.things_to_load += sounds_to_load;
+        loading_screen.things_to_load += sounds_to_load;
         const loader = new THREE.AudioLoader();
         for (let path of loads) {
             let filename = path.replace(/^.*[\\/]/, '');
@@ -44,7 +44,7 @@ var snd;
             console.log(' loading snd ', filename);
             loader.load(path, function (buffer) {
                 snd.buffers[basename] = buffer;
-                load_screen.increment(path);
+                loading_screen.increment(path);
             }, function () { }, function () {
                 console.warn(' mall audio cannot load ', filename);
             });

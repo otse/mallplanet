@@ -6,7 +6,7 @@ import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 
 import mall, { THREE } from "../mall.js";
-import time from "../util/timer.js";
+import time, { timer } from "../util/timer.js";
 import easings from "../util/easings.js";
 import snd from "../snd.js";
 
@@ -68,7 +68,7 @@ namespace strelok_game {
 	}
 
 	let shadetimer 
-	let timer
+	let timer: timer
 	let zoom = 0
 	let rotation = 0
 	export function animate() {

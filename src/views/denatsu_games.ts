@@ -5,12 +5,12 @@ import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 
 import mall, { THREE } from "../mall.js";
-import time from "../util/timer.js";
+import time, { timer } from "../util/timer.js";
 
 namespace denatsu_games {
 	export var next
 
-	let timer
+	let timer: timer
 
 	export function start() {
 		mall.view = this;
