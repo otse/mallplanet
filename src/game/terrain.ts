@@ -23,9 +23,9 @@ namespace terrain {
 
 	export class tile extends lod.obj {
 		water
-		cube
 		geometry
 		material
+		mesh
 		constructor(wpos: vec2) {
 			super(objs.tiles);
 			if (tiles[wpos[1]] == undefined)
@@ -44,8 +44,42 @@ namespace terrain {
 			height = Math.floor(height);
 			height /= 60;
 			//console.log('height pixel', normalize[0]);
-			this.cube.scale.set(1, 1 + (height * 5), 1);
-			this.cube.updateMatrix();
+			//this.mesh.scale.set(1, 1 + (height * 5), 1);
+			this.mesh.updateMatrix();
+
+			const attribute = this.mesh.geometry.getAttribute('position');
+			attribute.needsUpdate = true;
+			for (let i = 0; i < attribute.array.length; i += 3) {
+				let a = attribute.array[i + 0];
+				let b = attribute.array[i + 1];
+				let c = attribute.array[i + 2];
+				const ar: vec2[] = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]];
+				for (let j = 0; j < 4; j++) {
+					if (a == ar[j][0] && b == 0.5 && c == ar[j][1]) {
+						let height = game_manager.gheightmap.pixel(pts2.add(this.wpos, pts2.add(ar[j], [.5, .5])));
+						let normal = height.normalize()[0];
+						normal *= 60;
+						normal = Math.floor(normal);
+						normal /= 60;
+						normal *= 5;
+						attribute.array[i + 1] = normal;
+					}
+				}
+				/*const ar = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]];
+				for (let i = 0; i < 4; i++) {
+					if (a == ar[i][0] && b == 0.5 && c == ar[i][1]) {
+						let height = game_manager.gheightmap.pixel(pts2.add(this.wpos, pts2.add(ar[i] as vec2, [.5, .5])));
+						let normal = height.normalize()[0];
+						normal *= 60;
+						normal = Math.floor(normal);
+						normal /= 60;
+						attribute.array[i + 1] = normal;
+					}
+				}*/
+			}
+			console.log('positions', attribute);
+
+			this.geometry.computeVertexNormals();
 		}
 		override create() {
 			const size = lod.size;
@@ -64,18 +98,18 @@ namespace terrain {
 				color: this.sector?.color || new THREE.Color().fromArray(color),
 				map: renderer.load_image('./tex/grass64x.png')
 			});
-			this.cube = new THREE.Mesh(this.geometry, this.material);
-			this.cube.frustumCulled = false;
-			this.cube.position.set(left_bottom[0], 0, left_bottom[1]);
-			this.cube.updateMatrix();
+			this.mesh = new THREE.Mesh(this.geometry, this.material);
+			this.mesh.frustumCulled = false;
+			this.mesh.position.set(left_bottom[0], 0, left_bottom[1]);
+			this.mesh.updateMatrix();
 			//cube.add(new THREE.AxesHelper(2));
 
 			this.adapt_from_heightmap();
 
-			renderer.game_objects.add(this.cube);
+			renderer.game_objects.add(this.mesh);
 		}
 		override vanish() {
-			renderer.game_objects.remove(this.cube);
+			renderer.game_objects.remove(this.mesh);
 		}
 		override tick() {
 			// whatever would a terrain tile think?
