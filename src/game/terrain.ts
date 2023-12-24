@@ -35,17 +35,11 @@ namespace terrain {
 		}
 		adapt_from_heightmap() {
 			// edit vertices to heightmap.png
-			if (this.water)
+			if (this.water) {
+				this.mesh.scale.set(1, 0.0, 1);
+				this.mesh.updateMatrix();
 				return;
-			let pixel = game_manager.gheightmap.pixel(this.wpos);
-			let normalize = pixel.normalize();
-			let height = normalize[0];
-			height *= 60;
-			height = Math.floor(height);
-			height /= 60;
-			//console.log('height pixel', normalize[0]);
-			//this.mesh.scale.set(1, 1 + (height * 5), 1);
-			this.mesh.updateMatrix();
+			}
 
 			const attribute = this.mesh.geometry.getAttribute('position');
 			attribute.needsUpdate = true;
