@@ -1,6 +1,6 @@
 /// the strange projection for mall planet aka camera setup
 
-// this file will eventually be purged probably
+// 
 
 import { THREE } from "../mall.js";
 import renderer from "../renderer.js";
@@ -16,6 +16,8 @@ namespace projection {
 		| 'perspective isometric'
 
 	var sun
+
+	export var yaw, pitch
 
 	export var type: projection = 'orthographic isometric'
 
@@ -33,10 +35,17 @@ namespace projection {
 				break;
 		}
 		resize();
-		renderer.camera.position.setFromSphericalCoords(10, Math.PI / 3, Math.PI / 4);
+		if (type == 'orthographic isometric' || type == 'perspective isometric') {
+			//renderer.camera.position.setFromSphericalCoords(30, Math.PI / 3, Math.PI / 4);
+			//renderer.camera.updateMatrix();
+			renderer.camera.position.set(0, 40, 0);
+		}
+		else {
+			renderer.camera.position.set(0, 40, 0);
+		}
+		renderer.camera.rotation.x = -Math.PI / 2;
 		renderer.camera.updateMatrix();
-		renderer.camera.lookAt(new THREE.Vector3(0, 0, 0));
-		renderer.camera.updateMatrix();
+		//renderer.camera.lookAt(new THREE.Vector3(0, 0, 0));
 		renderer.camera.updateProjectionMatrix();
 		//renderer.camera.position.set(5, 10, 5);
 
@@ -49,6 +58,16 @@ namespace projection {
 		hooks.register('resize', resize);
 		reinterpret();
 		renderer.renderer.setClearColor('darkgrey');
+		// make the yaw, pitch
+		yaw = new THREE.Group();
+		yaw.rotation.y = Math.PI / 4;
+		pitch = new THREE.Group();
+		pitch.rotation.x = Math.PI / 3;
+		yaw.add(pitch);
+		yaw.updateMatrix();
+		pitch.add(renderer.camera);
+		pitch.updateMatrix();
+		renderer.scene.add(yaw);
 		// add the sun
 		sun = new THREE.DirectionalLight('white', 0.5);
 		sun.position.set(-10, 10, -10);

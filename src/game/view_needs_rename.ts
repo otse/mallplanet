@@ -48,8 +48,9 @@ export class view_needs_rename {
 		const snap_to_grid = false;
 		if (snap_to_grid)
 			this.rpos = pts2.floor(this.rpos);
-		this.dolly.position.x = this.rpos[0];
-		this.dolly.position.z = this.rpos[1];
+		projection.yaw.position.x = this.rpos[0];
+		projection.yaw.position.z = this.rpos[1];
+		projection.yaw.updateMatrix();
 		if (mkb.key('arrowup'))
 		this.tilt += 0.01;
 		if (mkb.key('arrowdown'))

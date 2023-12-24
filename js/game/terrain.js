@@ -40,7 +40,7 @@ var terrain;
             let pixel = game_manager.gheightmap.pixel(this.wpos);
             let normalize = pixel.normalize();
             //console.log('height pixel', normalize[0]);
-            this.cube.scale.set(1, 1 + (normalize[0] * 20), 1);
+            this.cube.scale.set(1, 1 + (normalize[0] * 10), 1);
             this.cube.updateMatrix();
         }
         create() {
