@@ -39,8 +39,8 @@ namespace game_manager {
 	export function think() {
 		if (!active)
 			return;
+		projection.think();
 		gview.think();
-		projection.loop();
 	}
 }
 

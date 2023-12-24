@@ -1,18 +1,14 @@
 /// the view manages what it sees
-import mkb from "../mkb.js";
 import pts2 from "../util/pts2.js";
+import mkb from "../mkb.js";
+import mall from "../mall.js";
 import lod, { objs } from "./lod.js";
 import renderer from "../renderer.js";
-import mall, { THREE } from "../mall.js";
 import projection from "./projection.js";
-import { hooks } from "../util/hooks.js";
 let stats;
 export class view_needs_rename {
-    zoom = 10;
     wpos = [42, 54];
     rpos = [0, 0];
-    compas;
-    dolly;
     static make() {
         return new view_needs_rename;
     }
@@ -20,18 +16,7 @@ export class view_needs_rename {
     }
     constructor() {
         this.rpos = [...this.wpos];
-        hooks.clear('new_projection');
         new lod.world(101);
-        // Math.PI / 6, Math.PI / 4, 0
-        //this.compas = new dolly(this.wpos);
-        this.dolly = new THREE.Group();
-        //this.dolly.rotation.set(Math.PI / 6, Math.PI / 4, 0);
-        this.dolly.updateMatrix();
-        console.log('dolly rotation', this.dolly.rotation);
-        renderer.game_objects.add(this.dolly);
-        hooks.register('new_projection', () => {
-            this.dolly.add(renderer.camera);
-        });
         stats = document.createElement('div');
         stats.setAttribute('id', 'stats');
         mall.whole.append(stats);
@@ -44,13 +29,7 @@ export class view_needs_rename {
         projection.yaw.position.x = this.rpos[0];
         projection.yaw.position.z = this.rpos[1];
         projection.yaw.updateMatrix();
-        if (mkb.key('arrowup'))
-            this.tilt += 0.01;
-        if (mkb.key('arrowdown'))
-            this.tilt -= 0.01;
-        //renderer.camera.rotation.set((-Math.PI / 2) + this.tilt, 0, 0);
-        this.dolly.updateMatrix();
-        renderer.camera.zoom = this.zoom;
+        renderer.camera.zoom = projection.zoom;
         renderer.camera.updateMatrix();
         renderer.camera.updateProjectionMatrix();
     }
@@ -86,7 +65,7 @@ export class view_needs_rename {
                 dif = pts2.divide(dif, -1);
                 dif[1] = -dif[1];
                 dif = pts2.mult(dif, renderer.ndpi);
-                dif = pts2.divide(dif, this.zoom);
+                dif = pts2.divide(dif, projection.zoom);
                 dif = pts2.subtract(dif, this.before);
                 this.rpos = pts2.inv(dif);
             }
@@ -97,7 +76,7 @@ export class view_needs_rename {
     }
     print() {
         stats.innerHTML = `
-			${pts2.to_string_fixed(this.rpos)}: ${this.zoom}<br /> / ${projection.type}<br />
+			${pts2.to_string_fixed(this.rpos)}: ${projection.zoom}<br /> / ${projection.string()} (tap f2)<br />
 			terrains ${objs.tiles[0]} / ${objs.tiles[1]}<br />
 			sectors ${lod.ggrid.shown.length} / ${lod.sector.total}
 		`;
@@ -106,9 +85,9 @@ export class view_needs_rename {
         let pan = 10;
         const zoomFactor = 1 / 10;
         if (mkb.key('f') == 1 || mkb.wheel == -1)
-            this.zoom -= 1;
+            projection.zoom -= 1;
         if (mkb.key('r') == 1 || mkb.wheel == 1)
-            this.zoom += 1;
+            projection.zoom += 1;
         if (mkb.key('t') == 1) {
             lod.ggrid.shrink();
         }

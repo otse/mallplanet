@@ -1,4 +1,4 @@
-/// mouse keyboard
+/// mouse / keyboard
 
 namespace mkb {
 	export enum KEY {

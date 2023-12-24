@@ -1,4 +1,4 @@
-/// mouse keyboard
+/// mouse / keyboard
 var mkb;
 (function (mkb) {
     let KEY;

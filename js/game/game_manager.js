@@ -25,8 +25,8 @@ var game_manager;
     function think() {
         if (!game_manager.active)
             return;
+        projection.think();
         game_manager.gview.think();
-        projection.loop();
     }
     game_manager.think = think;
 })(game_manager || (game_manager = {}));
