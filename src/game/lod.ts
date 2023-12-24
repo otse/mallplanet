@@ -1,15 +1,16 @@
+/// supermassive partitioner
+
 import hooks from "../util/hooks.js"
 import pts2 from "../util/pts2.js"
 import aabb2 from "../util/aabb2.js"
 import renderer from "../renderer.js"
 import { THREE } from "../mall.js"
 
-export namespace numbers {
+export namespace objs {
 	export type tally = [active: number, total: number]
 
+	// export var objs: tally = [0, 0]
 	export var sectors: tally = [0, 0]
-	export var sprites: tally = [0, 0]
-	export var objs: tally = [0, 0]
 
 	export var tiles: tally = [0, 0]
 	export var walls: tally = [0, 0]
@@ -38,16 +39,16 @@ namespace lod {
 
 	export const size = 1;
 
-	const chunk_coloration = true;
+	const chunk_coloration = false;
 
 	const fog_of_war = false;
 
 	const grid_crawl_makes_sectors = true;
 
+	export const sector_span = 4;
+
 	export var gworld: world;
 	export var ggrid: grid;
-
-	export var SectorSpan = 4;
 
 	export var stamp = 0; // used only by server slod
 
@@ -98,13 +99,14 @@ namespace lod {
 			return s;
 		}
 		static big(units: vec2): vec2 {
-			return pts2.floor(pts2.divide(units, SectorSpan));
+			return pts2.floor(pts2.divide(units, sector_span));
 		}
 	}
 
 	export class sector extends toggle {
+		static total = 0
 		group
-		color = 'white'
+		color
 		fog_of_war = false
 		readonly small: aabb2;
 		readonly objs: obj[] = [];
@@ -115,18 +117,18 @@ namespace lod {
 			super();
 			if (chunk_coloration)
 				this.color = (['lightsalmon', 'lightblue', 'beige', 'pink'])[Math.floor(Math.random() * 4)];
-			let min = pts2.mult(this.big, SectorSpan);
-			let max = pts2.add(min, [SectorSpan - 1, SectorSpan - 1]);
+			let min = pts2.mult(this.big, sector_span);
+			let max = pts2.add(min, [sector_span - 1, sector_span - 1]);
 			this.small = new aabb2(max, min);
 			this.group = new THREE.Group();
 			this.group.frustumCulled = false;
 			this.group.matrixAutoUpdate = false;
-			numbers.sectors[1]++;
+			objs.sectors[1]++;
 			world.arrays[this.big[1]][this.big[0]] = this;
 			//console.log('sector');
 
+			sector.total++;
 			hooks.call('sectorCreate', this);
-
 		}
 		add(obj: obj) {
 			let i = this.objs.indexOf(obj);
@@ -170,7 +172,7 @@ namespace lod {
 		show() {
 			if (this.on())
 				return;
-			numbers.sectors[0]++;
+			objs.sectors[0]++;
 			for (let obj of this.objs)
 				obj.show();
 			renderer.scene.add(this.group);
@@ -179,7 +181,7 @@ namespace lod {
 		hide() {
 			if (this.off())
 				return;
-			numbers.sectors[0]--;
+			objs.sectors[0]--;
 			for (let obj of this.objs)
 				obj.hide();
 			renderer.scene.remove(this.group);
@@ -292,7 +294,7 @@ namespace lod {
 		bound: aabb2
 		expand = .5
 		constructor(
-			public readonly counts: numbers.tally = numbers.objs) {
+			public readonly counts: objs.tally = [0, 0]) {
 			super();
 			this.counts[1]++;
 		}

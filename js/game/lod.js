@@ -1,16 +1,16 @@
+/// supermassive partitioner
 import hooks from "../util/hooks.js";
 import pts2 from "../util/pts2.js";
 import aabb2 from "../util/aabb2.js";
 import renderer from "../renderer.js";
 import { THREE } from "../mall.js";
-export var numbers;
-(function (numbers) {
-    numbers.sectors = [0, 0];
-    numbers.sprites = [0, 0];
-    numbers.objs = [0, 0];
-    numbers.tiles = [0, 0];
-    numbers.walls = [0, 0];
-})(numbers || (numbers = {}));
+export var objs;
+(function (objs) {
+    // export var objs: tally = [0, 0]
+    objs.sectors = [0, 0];
+    objs.tiles = [0, 0];
+    objs.walls = [0, 0];
+})(objs || (objs = {}));
 ;
 class toggle {
     active = false;
@@ -34,10 +34,10 @@ class toggle {
 var lod;
 (function (lod) {
     lod.size = 1;
-    const chunk_coloration = true;
+    const chunk_coloration = false;
     const fog_of_war = false;
     const grid_crawl_makes_sectors = true;
-    lod.SectorSpan = 4;
+    lod.sector_span = 4;
     lod.stamp = 0; // used only by server slod
     function register() {
     }
@@ -86,15 +86,16 @@ var lod;
             return s;
         }
         static big(units) {
-            return pts2.floor(pts2.divide(units, lod.SectorSpan));
+            return pts2.floor(pts2.divide(units, lod.sector_span));
         }
     }
     lod.world = world;
     class sector extends toggle {
         big;
         world;
+        static total = 0;
         group;
-        color = 'white';
+        color;
         fog_of_war = false;
         small;
         objs = [];
@@ -104,15 +105,16 @@ var lod;
             this.world = world;
             if (chunk_coloration)
                 this.color = (['lightsalmon', 'lightblue', 'beige', 'pink'])[Math.floor(Math.random() * 4)];
-            let min = pts2.mult(this.big, lod.SectorSpan);
-            let max = pts2.add(min, [lod.SectorSpan - 1, lod.SectorSpan - 1]);
+            let min = pts2.mult(this.big, lod.sector_span);
+            let max = pts2.add(min, [lod.sector_span - 1, lod.sector_span - 1]);
             this.small = new aabb2(max, min);
             this.group = new THREE.Group();
             this.group.frustumCulled = false;
             this.group.matrixAutoUpdate = false;
-            numbers.sectors[1]++;
+            objs.sectors[1]++;
             world.arrays[this.big[1]][this.big[0]] = this;
             //console.log('sector');
+            sector.total++;
             hooks.call('sectorCreate', this);
         }
         add(obj) {
@@ -157,7 +159,7 @@ var lod;
         show() {
             if (this.on())
                 return;
-            numbers.sectors[0]++;
+            objs.sectors[0]++;
             for (let obj of this.objs)
                 obj.show();
             renderer.scene.add(this.group);
@@ -166,7 +168,7 @@ var lod;
         hide() {
             if (this.off())
                 return;
-            numbers.sectors[0]--;
+            objs.sectors[0]--;
             for (let obj of this.objs)
                 obj.hide();
             renderer.scene.remove(this.group);
@@ -276,7 +278,7 @@ var lod;
         height = 0;
         bound;
         expand = .5;
-        constructor(counts = numbers.objs) {
+        constructor(counts = [0, 0]) {
             super();
             this.counts = counts;
             this.counts[1]++;

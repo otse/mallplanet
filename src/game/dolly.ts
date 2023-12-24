@@ -1,19 +1,20 @@
-/// the name is misleading, this is actually an internal camera marker
+/// internal camera marker
 
 import { THREE } from "../mall.js";
 import renderer from "../renderer.js";
-import lod, { numbers } from "./lod.js";
+import lod, { objs } from "./lod.js";
 
-export class dolly extends lod.obj {
+export class dolly {
+	vector
 	line
 	helper
-	constructor(wpos: vec2) {
-		let before
-		super(numbers.objs);
-		this.wpos = wpos;
+	constructor(public wpos: vec2) {
+		
 	}
-	override create() {
+	make() {
 		console.log(' lod create dolly marker ');
+
+		this.vector = new THREE.Vector3(this.wpos[0], 0, this.wpos[1]);
 
 		const material = new THREE.LineBasicMaterial({
 			color: 'green'
@@ -31,23 +32,14 @@ export class dolly extends lod.obj {
 		this.helper = new THREE.AxesHelper(4);
 		this.helper.updateMatrix();
 
-		renderer.camera.rotation.x = -Math.PI / 2;
-		
-		renderer.camera.position.set(0, 30, 0);
-		renderer.camera.updateMatrix();
-		renderer.camera.updateProjectionMatrix();
+		//this.line.add(renderer.camera);
 		
 		//this.line.add(renderer.camera);
 
 		renderer.game_objects.add(this.line);
 		renderer.game_objects.add(this.helper);
 	}
-	override vanish() {
-		console.log(' vanish dolly ');
-
-		renderer.game_objects.remove(this.helper);
-	}
-	override tick() {
+	think() {
 		this.line.updateMatrix();
 		this.helper.updateMatrix();
 		// whatever would a terrain tile think?

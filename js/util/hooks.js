@@ -7,6 +7,9 @@ export class hooks {
             hooks[name] = [];
         hooks[name].push(f);
     }
+    static clear(name) {
+        delete hooks[name];
+    }
     static unregister(name, f) {
         hooks[name] = hooks[name].filter(e => e != f);
     }

@@ -13,6 +13,9 @@ export class hooks<T = never> {
 			hooks[name] = [];
 		hooks[name].push(f);
 	}
+	static clear(name: string) {
+		delete hooks[name];
+	}
 	static unregister(name: string, f: hooks.func) {
 		hooks[name] = hooks[name].filter(e => e != f);
 	}

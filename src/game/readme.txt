@@ -1,8 +1,10 @@
+colormap reads a small png of your choice. useful for e.g. heightmaps
+
 dolly is the camera marker and manager. also called compas
 
-lod is a misnomer. its not so much the level of detail as it is the partitioner
+game manager can start the game and references singletons
 
-manager is the game manager, it holds references to variables and can start the game
+lod is a misnomer. its not so much the level of detail as it is the partitioner
 
 player 
 

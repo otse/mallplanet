@@ -3,7 +3,7 @@
 // sounds can take several seconds so a load indicator was welcome
 
 import hooks from "../util/hooks.js";
-import game_manager from "../game/manager.js";
+import game_manager from "../game/game_manager.js";
 import mall from "../mall.js";
 import mkb from "../mkb.js";
 import time, { timer } from "../util/timer.js";
@@ -29,6 +29,7 @@ namespace loading_screen {
 		mall.whole.append(whole);
 
 		whole.innerHTML = `
+		<div id="skip_hint">(tap space to launch into game)</div>
 		<div id="last"></div>
 		<br />
 		<div id="bar"></div>

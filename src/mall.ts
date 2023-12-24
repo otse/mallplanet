@@ -12,7 +12,7 @@ import mkb from './mkb.js';
 import snd from './snd.js';
 import loading_screen from './views/loading_screen.js';
 import main_menu from './views/main_menu.js';
-import game_manager from './game/manager.js';
+import game_manager from './game/game_manager.js';
 
 
 namespace mall {

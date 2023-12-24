@@ -14,7 +14,7 @@ namespace renderer {
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
 
-		hooks.call('rendererResize');
+		hooks.call('resize');
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	}
@@ -43,6 +43,9 @@ namespace renderer {
 		camera.position.z = 10;
 
 		game_objects = new THREE.Group();
+		//game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
+		//game_objects.updateMatrix();
+
 		scene.add(game_objects);
 
 		renderer = new THREE.WebGLRenderer({ antialias: false });
@@ -57,7 +60,7 @@ namespace renderer {
 	}
 
 	export function load_image(file: string) {
-		let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`, () => 0);
+		let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`);
 		texture.generateMipmaps = false;
 		//texture.center.set(0, 1);
 		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;

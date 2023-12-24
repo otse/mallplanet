@@ -8,7 +8,7 @@ var renderer;
     function resize() {
         renderer_1.camera.aspect = window.innerWidth / window.innerHeight;
         renderer_1.camera.updateProjectionMatrix();
-        hooks.call('rendererResize');
+        hooks.call('resize');
         renderer_1.renderer.setSize(window.innerWidth, window.innerHeight);
     }
     renderer_1.resize = resize;
@@ -29,6 +29,8 @@ var renderer;
         renderer_1.camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
         renderer_1.camera.position.z = 10;
         renderer_1.game_objects = new THREE.Group();
+        //game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
+        //game_objects.updateMatrix();
         renderer_1.scene.add(renderer_1.game_objects);
         renderer_1.renderer = new THREE.WebGLRenderer({ antialias: false });
         renderer_1.renderer.setSize(1024, 768);
@@ -39,7 +41,7 @@ var renderer;
     }
     renderer_1.boot = boot;
     function load_image(file) {
-        let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`, () => 0);
+        let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`);
         texture.generateMipmaps = false;
         //texture.center.set(0, 1);
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;

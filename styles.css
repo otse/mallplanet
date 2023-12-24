@@ -34,16 +34,20 @@
 	height: 100%;
 	color: white;
 	background: #005caa;
+	font-family: 'Single Day';
+	font-size: 20px;
 }
 
 #load_screen #last {
 	display: block;
-	font-family: 'Single Day';
-	font-size: 20px;
-	color: white;
-	bborder: 1px solid #999;
-	ppadding: 5px;
-	border-radius: 4px;
+}
+
+#load_screen #skip_hint {
+	position: absolute;
+	display: block;
+	bottom: 0;
+	right: 0;
+	padding: 4px;
 }
 
 #load_screen #bar {

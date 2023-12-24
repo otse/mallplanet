@@ -10,8 +10,8 @@
 
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Preahvihear&family=Silkscreen&family=Single+Day&display=swap');
-		</style>
-		
+	</style>
+
 
 	<link rel="stylesheet" href="styles.css" />
 
@@ -60,9 +60,12 @@
 			right: 0;
 			padding: 5px;
 			color: green;
+			font-family: 'Single Day';
+			font-size: 18px;
 		}
 
 		canvas {
+			/* the webgl canvas */
 			position: absolute;
 			z-index: 1;
 		}
@@ -71,6 +74,10 @@
 </head>
 
 <body>
+
+	<img id="heightmap" src="./heightmap.png" style="display: none" />
+	<img id="colormap" src="./colormap.png" style="display: none" />
+
 	<!--<h1>Mall Planet lol</h1>
 	<p>👋</p> -->
 
