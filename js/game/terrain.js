@@ -12,7 +12,6 @@ var terrain;
     }
     terrain.get = get;
     function simple_populate() {
-        console.log('simple populate');
         for (let y = 0; y < 400; y++) {
             for (let x = 0; x < 400; x++) {
                 let til = new tile([200 - x, 200 - y]);
@@ -39,8 +38,12 @@ var terrain;
                 return;
             let pixel = game_manager.gheightmap.pixel(this.wpos);
             let normalize = pixel.normalize();
+            let height = normalize[0];
+            height *= 60;
+            height = Math.floor(height);
+            height /= 60;
             //console.log('height pixel', normalize[0]);
-            this.cube.scale.set(1, 1 + (normalize[0] * 10), 1);
+            this.cube.scale.set(1, 1 + (height * 5), 1);
             this.cube.updateMatrix();
         }
         create() {
@@ -57,7 +60,8 @@ var terrain;
             this.geometry = new THREE.BoxGeometry(size, height, size);
             this.material = new THREE.MeshPhongMaterial({
                 wireframe: false,
-                color: this.sector?.color || new THREE.Color().fromArray(color)
+                color: this.sector?.color || new THREE.Color().fromArray(color),
+                map: renderer.load_image('./tex/grass64x.png')
             });
             this.cube = new THREE.Mesh(this.geometry, this.material);
             this.cube.frustumCulled = false;

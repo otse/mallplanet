@@ -84,7 +84,7 @@ export class view_needs_rename {
 	}
 	print() {
 		stats.innerHTML = `
-			${pts2.to_string_fixed(this.rpos)}: ${projection.zoom}<br /> / ${projection.string()} (tap f2)<br />
+			${pts2.to_string_fixed(this.rpos)}: ${projection.zoom}<br /> / ${projection.debug()} (tap f2)<br />
 			terrains ${objs.tiles[0]} / ${objs.tiles[1]}<br />
 			sectors ${lod.ggrid.shown.length} / ${lod.sector.total}
 		`;

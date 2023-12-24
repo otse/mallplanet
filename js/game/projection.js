@@ -9,16 +9,16 @@ var projection;
     let type;
     (function (type) {
         type[type["orthographic_top_down"] = 0] = "orthographic_top_down";
-        type[type["orthographic_dimetric"] = 1] = "orthographic_dimetric";
-        type[type["orthographic_isometric"] = 2] = "orthographic_isometric";
-        type[type["perspective_top_down"] = 3] = "perspective_top_down";
+        type[type["perspective_top_down"] = 1] = "perspective_top_down";
+        type[type["orthographic_dimetric"] = 2] = "orthographic_dimetric";
+        type[type["orthographic_isometric"] = 3] = "orthographic_isometric";
         type[type["perspective_isometric"] = 4] = "perspective_isometric";
         type[type["length"] = 5] = "length";
     })(type = projection.type || (projection.type = {}));
-    function string() {
+    function debug() {
         return `${type[projection.current]} (${projection.current + 1})`;
     }
-    projection.string = string;
+    projection.debug = debug;
     projection.current = type.orthographic_dimetric;
     var sun;
     function change() {
@@ -33,22 +33,24 @@ var projection;
                 orthographic();
                 projection.yaw.rotation.y = 0;
                 projection.pitch.rotation.x = 0;
-                projection.zoom = 10;
+                projection.zoom = 20;
                 break;
             case type.orthographic_dimetric:
                 orthographic();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 3;
-                projection.zoom = 10;
+                projection.zoom = 40;
                 break;
             case type.orthographic_isometric:
                 orthographic();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 4;
-                projection.zoom = 10;
+                projection.zoom = 40;
                 break;
             case type.perspective_top_down:
                 perspective();
+                projection.yaw.rotation.y = 0;
+                projection.pitch.rotation.x = 0;
                 projection.zoom = 1;
                 break;
             case type.perspective_isometric:
@@ -72,6 +74,7 @@ var projection;
     function start() {
         hooks.register('resize', resize);
         renderer.renderer.setClearColor('darkgrey');
+        renderer.ambient.color.copy(new THREE.Color('#777'));
         // make the yaw, pitch
         projection.zoom = 10;
         projection.yaw = new THREE.Group();
@@ -86,9 +89,11 @@ var projection;
         change();
         projection.pitch.add(renderer.camera);
         // add the sun
-        sun = new THREE.DirectionalLight('white', 0.5);
-        sun.position.set(-10, 10, -10);
+        sun = new THREE.DirectionalLight('white', 1);
+        sun.position.set(5, 10, 7.5);
+        sun.updateMatrix();
         sun.target.position.set(0, 0, 0);
+        sun.target.updateMatrix();
         renderer.scene.add(sun);
         renderer.scene.add(sun.target);
     }

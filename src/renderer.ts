@@ -5,7 +5,7 @@ import { THREE } from "./mall.js";
 
 namespace renderer {
 	export var ndpi = 1
-	
+
 	const ad_hoc = 0
 
 	export var renderer, scene, camera, clock, ambient, game_objects
@@ -31,7 +31,7 @@ namespace renderer {
 		console.log(' boot renderer ');
 
 		console.log('THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE', THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE);
-		
+
 		THREE.Object3D.DEFAULT_MATRIX_AUTO_UPDATE = false;
 
 		ambient = new THREE.AmbientLight(0xffffff);
@@ -48,9 +48,11 @@ namespace renderer {
 
 		scene.add(game_objects);
 
-		renderer = new THREE.WebGLRenderer({ antialias: false });
+		renderer = new THREE.WebGLRenderer({ antialias: true });
 		renderer.setSize(1024, 768);
 		renderer.setClearColor('grey');
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 		document.getElementById('webgl')!.append(renderer.domElement);
 

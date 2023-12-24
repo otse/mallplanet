@@ -12,14 +12,14 @@ namespace projection {
 
 	export enum type {
 		orthographic_top_down,
+		perspective_top_down,
 		orthographic_dimetric,
 		orthographic_isometric,
-		perspective_top_down,
 		perspective_isometric,
 		length
 	}
 
-	export function string() {
+	export function debug() {
 		return `${type[current]} (${current + 1})`;
 	}
 
@@ -43,22 +43,24 @@ namespace projection {
 				orthographic();
 				yaw.rotation.y = 0;
 				pitch.rotation.x = 0;
-				zoom = 10;
+				zoom = 20;
 				break;
 			case type.orthographic_dimetric:
 				orthographic();
 				yaw.rotation.y = Math.PI / 4;
 				pitch.rotation.x = Math.PI / 3;
-				zoom = 10;
+				zoom = 40;
 				break;
 			case type.orthographic_isometric:
 				orthographic();
 				yaw.rotation.y = Math.PI / 4;
 				pitch.rotation.x = Math.PI / 4;
-				zoom = 10;
+				zoom = 40;
 				break;
 			case type.perspective_top_down:
 				perspective();
+				yaw.rotation.y = 0;
+				pitch.rotation.x = 0;
 				zoom = 1;
 				break;
 			case type.perspective_isometric:
@@ -83,6 +85,7 @@ namespace projection {
 	export function start() {
 		hooks.register('resize', resize);
 		renderer.renderer.setClearColor('darkgrey');
+		renderer.ambient.color.copy(new THREE.Color('#777'));
 		// make the yaw, pitch
 		zoom = 10;
 		yaw = new THREE.Group();
@@ -97,9 +100,11 @@ namespace projection {
 		change();
 		pitch.add(renderer.camera);
 		// add the sun
-		sun = new THREE.DirectionalLight('white', 0.5);
-		sun.position.set(-10, 10, -10);
+		sun = new THREE.DirectionalLight('white', 1);
+		sun.position.set(5, 10, 7.5);
+		sun.updateMatrix();
 		sun.target.position.set(0, 0, 0);
+		sun.target.updateMatrix();
 		renderer.scene.add(sun);
 		renderer.scene.add(sun.target);
 	}
