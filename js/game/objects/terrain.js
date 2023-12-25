@@ -27,7 +27,7 @@ var terrain;
         material;
         mesh;
         constructor(wpos) {
-            super(game.lod.numbers.tiles);
+            super(game.manager.tallies.tiles);
             if (tiles[wpos[1]] == undefined)
                 tiles[wpos[1]] = [];
             tiles[wpos[1]][wpos[0]] = this;

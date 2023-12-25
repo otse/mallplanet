@@ -1,4 +1,4 @@
-/// the view manages what it sees
+/// View manages the lod, camera and panning
 import pts from "../util/pts.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
@@ -15,7 +15,7 @@ export class view_needs_rename {
     }
     constructor() {
         this.rpos = [...this.wpos];
-        new game.lod.world(101);
+        new game.lod.world(101); // Shill
         stats = document.createElement('div');
         stats.setAttribute('id', 'stats');
         mall.whole.append(stats);
@@ -75,8 +75,9 @@ export class view_needs_rename {
     }
     print() {
         stats.innerHTML = `
-			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br /> / ${game.projection.debug()} (tap f2)<br />
-			terrains ${game.lod.numbers.tiles[0]} / ${game.lod.numbers.tiles[1]}<br />
+			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br />
+			/ ${game.projection.debug()} (tap f2)<br />
+			terrains ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
 			sectors ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 		`;
     }

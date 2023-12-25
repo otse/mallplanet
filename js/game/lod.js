@@ -1,36 +1,26 @@
 import hooks from "../util/hooks.js";
 import pts from "../util/pts.js";
 import aabb from "../util/aabb.js";
-export var objs;
-(function (objs) {
-    // export var objs: tally = [0, 0]
-    objs.chunks = [0, 0];
-    objs.tiles = [0, 0];
-    objs.walls = [0, 0];
-})(objs || (objs = {}));
-;
+// Internal class
 class toggle {
-    active = false;
-    is_active() { return this.active; }
-    ;
+    _active = false;
+    get active() { return this._active; }
     on() {
-        if (this.active) {
+        if (this._active)
             return true;
-        }
-        this.active = true;
+        this._active = true;
         return false;
     }
     off() {
-        if (!this.active) {
+        if (!this._active)
             return true;
-        }
-        this.active = false;
+        this._active = false;
         return false;
     }
 }
 var lod;
 (function (lod) {
-    lod.numbers = objs;
+    lod.chunks = [0, 0];
     lod.size = 1;
     const chunk_coloration = false;
     const fog_of_war = false;
@@ -58,7 +48,7 @@ var lod;
     lod.remove = remove;
     class world {
         arrays = [];
-        constructor(span) {
+        constructor(dummy) {
             lod.gworld = this;
             new grid(4, 4);
         }
@@ -104,7 +94,7 @@ var lod;
             let min = pts.mult(this.big, lod.chunk_span);
             let max = pts.add(min, [lod.chunk_span - 1, lod.chunk_span - 1]);
             this.small = new aabb(max, min);
-            objs.chunks[1]++;
+            lod.chunks[1]++;
             world.arrays[this.big[1]][this.big[0]] = this;
             //console.log('sector');
             chunk.total++;
@@ -115,7 +105,7 @@ var lod;
             if (i == -1) {
                 this.objs.push(obj);
                 obj.chunk = this;
-                if (this.is_active() && !obj.is_active())
+                if (this.active && !obj.active)
                     obj.show();
             }
         }
@@ -140,7 +130,7 @@ var lod;
             if (oldChunk != newChunk) {
                 oldChunk.remove(obj);
                 newChunk.add(obj);
-                if (!newChunk.is_active())
+                if (!newChunk.active)
                     obj.hide();
             }
         }
@@ -152,7 +142,7 @@ var lod;
         show() {
             if (this.on())
                 return;
-            objs.chunks[0]++;
+            lod.chunks[0]++;
             for (let obj of this.objs)
                 obj.show();
             hooks.call('lod_chunk_show', this);
@@ -160,7 +150,7 @@ var lod;
         hide() {
             if (this.off())
                 return;
-            objs.chunks[0]--;
+            lod.chunks[0]--;
             for (let obj of this.objs)
                 obj.hide();
             hooks.call('lod_chunk_hide', this);
@@ -207,7 +197,7 @@ var lod;
                     let chunk = grid_crawl_makes_chunks ? lod.gworld.at(pos) : lod.gworld.lookup(pos);
                     if (!chunk)
                         continue;
-                    if (!chunk.is_active()) {
+                    if (!chunk.active) {
                         this.shown.push(chunk);
                         chunk.show();
                         for (let obj of chunk.objs)

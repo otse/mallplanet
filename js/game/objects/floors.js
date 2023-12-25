@@ -16,7 +16,7 @@ var floors;
         material;
         mesh;
         constructor() {
-            super(game.lod.numbers.tiles);
+            super(game.manager.tallies.tiles);
         }
         create() {
             const size = game.lod.size;

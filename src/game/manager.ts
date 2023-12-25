@@ -8,13 +8,18 @@ import * as game from "./re-exports.js"
 
 namespace manager {
 
+	export namespace tallies {
+		export var tiles: game.lod.calories = [0, 0]
+		export var walls: game.lod.calories = [0, 0]
+	}
+
 	export let active = false
 
 	const boo = 0
 
 	export var view: game.view_needs_rename
 	export var ply: game.player
-	
+
 	export var colormap_: colormap
 	export var heightmap: colormap
 	export var wallmap: colormap
@@ -43,7 +48,7 @@ namespace manager {
 		game.projection.think();
 		view.think();
 	}
-	
+
 	export function factory<type extends game.superobject>(type: { new(): type }, pixel, wpos) {
 		let obj = new type;
 		obj.wpos = wpos;

@@ -4,6 +4,11 @@ import { colormap } from "../util/colormap.js";
 import * as game from "./re-exports.js";
 var manager;
 (function (manager) {
+    let tallies;
+    (function (tallies) {
+        tallies.tiles = [0, 0];
+        tallies.walls = [0, 0];
+    })(tallies = manager.tallies || (manager.tallies = {}));
     manager.active = false;
     const boo = 0;
     function init() {

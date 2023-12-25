@@ -2,38 +2,29 @@ import hooks from "../util/hooks.js"
 import pts from "../util/pts.js"
 import aabb from "../util/aabb.js"
 
-export namespace objs {
-	export type tally = [active: number, total: number]
-
-	// export var objs: tally = [0, 0]
-	export var chunks: tally = [0, 0]
-
-	export var tiles: tally = [0, 0]
-	export var walls: tally = [0, 0]
-};
-
+// Internal class
 class toggle {
-	protected active = false;
-	is_active() { return this.active };
+	protected _active = false
+	public get active() { return this._active; }
 	on() {
-		if (this.active) {
+		if (this._active)
 			return true;
-		}
-		this.active = true;
+		this._active = true;
 		return false;
 	}
 	off() {
-		if (!this.active) {
+		if (!this._active)
 			return true;
-		}
-		this.active = false;
+		this._active = false;
 		return false;
 	}
 }
 
 namespace lod {
 
-	export const numbers = objs
+	export type calories = [active: number, total: number]
+
+	export var chunks: calories = [0, 0]
 
 	export const size = 1
 
@@ -71,7 +62,7 @@ namespace lod {
 
 	export class world {
 		readonly arrays: chunk[][] = []
-		constructor(span) {
+		constructor(dummy) {
 			gworld = this;
 			new grid(4, 4);
 		}
@@ -116,7 +107,7 @@ namespace lod {
 			let min = pts.mult(this.big, chunk_span);
 			let max = pts.add(min, [chunk_span - 1, chunk_span - 1]);
 			this.small = new aabb(max, min);
-			objs.chunks[1]++;
+			chunks[1]++;
 			world.arrays[this.big[1]][this.big[0]] = this;
 			//console.log('sector');
 
@@ -128,7 +119,7 @@ namespace lod {
 			if (i == -1) {
 				this.objs.push(obj);
 				obj.chunk = this;
-				if (this.is_active() && !obj.is_active())
+				if (this.active && !obj.active)
 					obj.show();
 			}
 		}
@@ -153,7 +144,7 @@ namespace lod {
 			if (oldChunk != newChunk) {
 				oldChunk.remove(obj);
 				newChunk.add(obj);
-				if (!newChunk.is_active())
+				if (!newChunk.active)
 					obj.hide();
 			}
 		}
@@ -165,7 +156,7 @@ namespace lod {
 		show() {
 			if (this.on())
 				return;
-			objs.chunks[0]++;
+			chunks[0]++;
 			for (let obj of this.objs)
 				obj.show();
 			hooks.call('lod_chunk_show', this);
@@ -173,7 +164,7 @@ namespace lod {
 		hide() {
 			if (this.off())
 				return;
-			objs.chunks[0]--;
+			chunks[0]--;
 			for (let obj of this.objs)
 				obj.hide();
 			hooks.call('lod_chunk_hide', this);
@@ -219,7 +210,7 @@ namespace lod {
 					let chunk = grid_crawl_makes_chunks ? gworld.at(pos) : gworld.lookup(pos);
 					if (!chunk)
 						continue;
-					if (!chunk.is_active()) {
+					if (!chunk.active) {
 						this.shown.push(chunk);
 						chunk.show();
 						for (let obj of chunk.objs)
@@ -285,7 +276,7 @@ namespace lod {
 		bound: aabb
 		expand = .5
 		constructor(
-			public readonly counts: objs.tally = [0, 0]) {
+			public readonly counts: calories = [0, 0]) {
 			super();
 			this.counts[1]++;
 		}

@@ -18,7 +18,7 @@ namespace floors {
 		material
 		mesh
 		constructor() {
-			super(game.lod.numbers.tiles);
+			super(game.manager.tallies.tiles);
 		}
 		override create() {
 			const size = game.lod.size;
