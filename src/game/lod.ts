@@ -22,7 +22,7 @@ class toggle {
 
 namespace lod {
 
-	export const size = 16
+	export const size = 8
 
 	const chunk_coloration = true
 

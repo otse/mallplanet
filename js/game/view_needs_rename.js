@@ -79,7 +79,7 @@ export class view_needs_rename {
         stats.innerHTML = `
 			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br />
 			/ ${game.projection.debug()} (tap f2)<br />
-			lod chunks ${game.lod.ggrid.spread} / ${game.lod.ggrid.outside}<br />
+			lod ${game.lod.ggrid.spread} / ${game.lod.ggrid.outside}: ${game.lod.size}x <br />
 			walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}<br />
 			floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
 			chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
@@ -94,6 +94,7 @@ export class view_needs_rename {
             game.lod.ggrid.shrink();
         if (mkb.key_state('g') == 1)
             game.lod.ggrid.grow();
+        game.projection.zoom = mall.clamp(game.projection.zoom, 1, 10);
     }
 }
 export default view_needs_rename;

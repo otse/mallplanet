@@ -4,7 +4,7 @@ import pts from "../../util/pts.js";
 import * as game from "../re-exports.js";
 const prefabs = {
     'brick': {
-        size: [16, 16],
+        size: [8, 8],
         tex: './tex/grass64x.png'
     }
 };
@@ -29,7 +29,7 @@ export class wall extends game.superobject {
         this.material = new THREE.MeshPhongMaterial({
             wireframe: false,
             color: this.chunk?.color || new THREE.Color().fromArray(color),
-            map: renderer.load_image('./tex/placeholder16x.png')
+            map: renderer.load_image('./tex/placeholder8x.png')
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.frustumCulled = false;

@@ -20,7 +20,7 @@ class toggle {
 }
 var lod;
 (function (lod) {
-    lod.size = 16;
+    lod.size = 8;
     const chunk_coloration = true;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
