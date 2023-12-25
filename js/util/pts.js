@@ -1,5 +1,5 @@
 ;
-class pts2 {
+class pts {
     static pt(a) {
         return { x: a[0], y: a[1] };
     }
@@ -91,7 +91,7 @@ class pts2 {
         return zx[0] + zx[1];
     }
     static uneven(a, n = -1) {
-        let b = pts2.clone(a);
+        let b = pts.clone(a);
         if (b[0] % 2 != 1) {
             b[0] += n;
         }
@@ -101,7 +101,7 @@ class pts2 {
         return b;
     }
     static even(a, n = -1) {
-        let b = pts2.clone(a);
+        let b = pts.clone(a);
         if (b[0] % 2 != 0) {
             b[0] += n;
         }
@@ -120,9 +120,9 @@ class pts2 {
     //	return Math.sqrt(dx * dx + dy * dy);
     //}
     static distsimple(a, b) {
-        let c = pts2.abs(pts2.subtract(a, b));
+        let c = pts.abs(pts.subtract(a, b));
         return Math.max(c[0], c[1]);
     }
     ;
 }
-export default pts2;
+export default pts;

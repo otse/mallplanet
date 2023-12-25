@@ -1,8 +1,8 @@
-import aabb2 from "./aabb2.js";
+import aabb from "./aabb.js";
 
 export interface Pt { x: number; y: number };
 
-class pts2 {
+class pts {
 	static pt(a: vec2): Pt {
 		return { x: a[0], y: a[1] };
 	}
@@ -27,7 +27,7 @@ class pts2 {
 		return `${a[0].toFixed(1)}, ${a[1].toFixed(1)}` + pr(a[2]) + pr(a[3]);
 	}
 
-	static func(bb: aabb2, callback: (pos: vec2) => any) {
+	static func(bb: aabb, callback: (pos: vec2) => any) {
 		let y = bb.min[1];
 		for (; y <= bb.max[1]; y++) {
 			let x = bb.max[0];
@@ -121,7 +121,7 @@ class pts2 {
 	}
 
 	static uneven(a: vec2, n: number = -1): vec2 {
-		let b = pts2.clone(a);
+		let b = pts.clone(a);
 		if (b[0] % 2 != 1) {
 			b[0] += n;
 		}
@@ -131,7 +131,7 @@ class pts2 {
 		return b;
 	}
 	static even(a: vec2, n: number = -1): vec2 {
-		let b = pts2.clone(a);
+		let b = pts.clone(a);
 		if (b[0] % 2 != 0) {
 			b[0] += n;
 		}
@@ -156,10 +156,10 @@ class pts2 {
 	//}
 
 	static distsimple(a: vec2, b: vec2) {
-		let c = pts2.abs(pts2.subtract(a, b));
+		let c = pts.abs(pts.subtract(a, b));
 		return Math.max(c[0], c[1]);
 	};
 
 }
 
-export default pts2;
+export default pts;

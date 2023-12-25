@@ -1,4 +1,6 @@
-import pts2 from "../util/pts2";
+/// originally written for wastes now adapted for mall planet
+
+import pts from "./pts";
 
 export const map_span = 100
 
@@ -6,9 +8,7 @@ export class pixel {
 	constructor(public readonly pos: vec2, public data: vec4) {
 	}
 	is_color(vec: vec3) {
-		return vec[0] == this.data[0] &&
-			vec[1] == this.data[1] &&
-			vec[2] == this.data[2];
+		return vec[0] == this.data[0] && vec[1] == this.data[1] && vec[2] == this.data[2];
 	}
 	normalize(): vec4 {
 		return [

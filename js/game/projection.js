@@ -1,5 +1,3 @@
-/// the strange projection for mall planet aka camera setup
-// 
 import { THREE } from "../mall.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
@@ -19,7 +17,7 @@ var projection;
         return `${type[projection.current]} (${projection.current + 1})`;
     }
     projection.debug = debug;
-    projection.current = type.orthographic_dimetric;
+    projection.current = type.orthographic_top_down;
     var sun;
     function change() {
         const orthographic = () => {

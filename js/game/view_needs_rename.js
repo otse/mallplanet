@@ -1,10 +1,9 @@
 /// the view manages what it sees
-import pts2 from "../util/pts2.js";
+import pts from "../util/pts.js";
 import mkb from "../mkb.js";
-import mall from "../mall.js";
-import lod, { objs } from "./lod.js";
 import renderer from "../renderer.js";
-import projection from "./projection.js";
+import mall from "../mall.js";
+import * as game from "./re-exports.js";
 let stats;
 export class view_needs_rename {
     wpos = [42, 54];
@@ -16,7 +15,7 @@ export class view_needs_rename {
     }
     constructor() {
         this.rpos = [...this.wpos];
-        new lod.world(101);
+        new game.lod.world(101);
         stats = document.createElement('div');
         stats.setAttribute('id', 'stats');
         mall.whole.append(stats);
@@ -25,22 +24,22 @@ export class view_needs_rename {
     set_camera() {
         const snap_to_grid = false;
         if (snap_to_grid)
-            this.rpos = pts2.floor(this.rpos);
-        projection.yaw.position.x = this.rpos[0];
-        projection.yaw.position.z = this.rpos[1];
-        projection.yaw.updateMatrix();
-        renderer.camera.zoom = projection.zoom;
+            this.rpos = pts.floor(this.rpos);
+        game.projection.yaw.position.x = this.rpos[0];
+        game.projection.yaw.position.z = this.rpos[1];
+        game.projection.yaw.updateMatrix();
+        renderer.camera.zoom = game.projection.zoom;
         renderer.camera.updateMatrix();
         renderer.camera.updateProjectionMatrix();
     }
     think() {
-        lod.ggrid.ticks();
+        game.lod.ggrid.ticks();
         this.wheelbarrow();
         this.mouse_pan();
         this.set_camera();
         this.print();
         this.wpos = [...this.rpos];
-        lod.gworld.update(this.wpos);
+        game.lod.gworld.update(this.wpos);
     }
     begin = [0, 0];
     before = [0, 0];
@@ -51,48 +50,48 @@ export class view_needs_rename {
             let mouse = mkb.mouse();
             mouse[1] = -mouse[1];
             this.begin = mouse;
-            this.before = pts2.clone(this.rpos);
+            this.before = pts.clone(this.rpos);
         }
         if (mkb.button(1) >= 1) {
             let mouse = mkb.mouse();
             mouse[1] = -mouse[1];
-            let dif = pts2.subtract(this.begin, mouse);
+            let dif = pts.subtract(this.begin, mouse);
             if (continousMode) {
-                dif = pts2.divide(dif, continuousSpeed);
-                this.rpos = pts2.add(this.rpos, dif);
+                dif = pts.divide(dif, continuousSpeed);
+                this.rpos = pts.add(this.rpos, dif);
             }
             else {
-                dif = pts2.divide(dif, -1);
+                dif = pts.divide(dif, -1);
                 dif[1] = -dif[1];
-                dif = pts2.mult(dif, renderer.ndpi);
-                dif = pts2.divide(dif, projection.zoom);
-                dif = pts2.subtract(dif, this.before);
-                this.rpos = pts2.inv(dif);
+                dif = pts.mult(dif, renderer.ndpi);
+                dif = pts.divide(dif, game.projection.zoom);
+                dif = pts.subtract(dif, this.before);
+                this.rpos = pts.inv(dif);
             }
         }
         else if (mkb.button(1) == -1) {
-            this.rpos = pts2.floor(this.rpos);
+            this.rpos = pts.floor(this.rpos);
         }
     }
     print() {
         stats.innerHTML = `
-			${pts2.to_string_fixed(this.rpos)}: ${projection.zoom}<br /> / ${projection.debug()} (tap f2)<br />
-			terrains ${objs.tiles[0]} / ${objs.tiles[1]}<br />
-			sectors ${lod.ggrid.shown.length} / ${lod.sector.total}
+			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br /> / ${game.projection.debug()} (tap f2)<br />
+			terrains ${game.lod.numbers.tiles[0]} / ${game.lod.numbers.tiles[1]}<br />
+			sectors ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 		`;
     }
     wheelbarrow() {
         let pan = 10;
         const zoomFactor = 1 / 10;
         if (mkb.key('f') == 1 || mkb.wheel == -1)
-            projection.zoom -= 1;
+            game.projection.zoom -= 1;
         if (mkb.key('r') == 1 || mkb.wheel == 1)
-            projection.zoom += 1;
+            game.projection.zoom += 1;
         if (mkb.key('t') == 1) {
-            lod.ggrid.shrink();
+            game.lod.ggrid.shrink();
         }
         if (mkb.key('g') == 1) {
-            lod.ggrid.grow();
+            game.lod.ggrid.grow();
         }
     }
 }

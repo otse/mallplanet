@@ -1,4 +1,4 @@
-import pts2 from "./pts2.js";
+import pts from "./pts.js";
 
 // https://www.khanacademy.org/computer-programming/swept-aabb-test/4966664161263616
 // https://jsfiddle.net/Hatchet/ccjrg9b0/
@@ -9,12 +9,12 @@ enum TEST {
 	Overlap
 }
 
-class aabb2 {
+class aabb {
 	static readonly TEST = TEST
 	min: vec2
 	max: vec2
-	static dupe(bb: aabb2) {
-		return new aabb2(bb.min, bb.max)
+	static dupe(bb: aabb) {
+		return new aabb(bb.min, bb.max)
 	}
 	constructor(a: vec2, b: vec2) {
 		this.min = this.max = <vec2>[...a]
@@ -23,20 +23,20 @@ class aabb2 {
 		}
 	}
 	extend(v: vec2) {
-		this.min = pts2.min(this.min, v)
-		this.max = pts2.max(this.max, v)
+		this.min = pts.min(this.min, v)
+		this.max = pts.max(this.max, v)
 	}
 	diagonal(): vec2 {
-		return pts2.subtract(this.max, this.min)
+		return pts.subtract(this.max, this.min)
 	}
 	center(): vec2 {
-		return pts2.add(this.min, pts2.mult(this.diagonal(), 0.5))
+		return pts.add(this.min, pts.mult(this.diagonal(), 0.5))
 	}
 	translate(v: vec2) {
-		this.min = pts2.add(this.min, v)
-		this.max = pts2.add(this.max, v)
+		this.min = pts.add(this.min, v)
+		this.max = pts.add(this.max, v)
 	}
-	test(b: aabb2) {
+	test(b: aabb) {
 		if (this.max[0] < b.min[0] || this.min[0] > b.max[0] ||
 			this.max[1] < b.min[1] || this.min[1] > b.max[1])
 			return 0
@@ -45,10 +45,10 @@ class aabb2 {
 			return 1
 		return 2
 	}
-	overlap(b: aabb2) {
+	overlap(b: aabb) {
 		let min = [Math.max(this.min[0], b.min[0]), Math.max(this.min[1], b.min[1])] as vec2;
 		let max = [Math.min(this.max[0], b.max[0]), Math.min(this.max[1], b.max[1])] as vec2;
-		const overlap = new aabb2(min, max);
+		const overlap = new aabb(min, max);
 		return overlap;
 	}
 	
@@ -91,4 +91,4 @@ class aabb2 {
 	}
 }
 
-export default aabb2;
+export default aabb;

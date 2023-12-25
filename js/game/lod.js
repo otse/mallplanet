@@ -1,13 +1,10 @@
-/// supermassive partitioner
 import hooks from "../util/hooks.js";
-import pts2 from "../util/pts2.js";
-import aabb2 from "../util/aabb2.js";
-import renderer from "../renderer.js";
-import { THREE } from "../mall.js";
+import pts from "../util/pts.js";
+import aabb from "../util/aabb.js";
 export var objs;
 (function (objs) {
     // export var objs: tally = [0, 0]
-    objs.sectors = [0, 0];
+    objs.chunks = [0, 0];
     objs.tiles = [0, 0];
     objs.walls = [0, 0];
 })(objs || (objs = {}));
@@ -33,30 +30,30 @@ class toggle {
 }
 var lod;
 (function (lod) {
+    lod.numbers = objs;
     lod.size = 1;
     const chunk_coloration = false;
     const fog_of_war = false;
-    const grid_crawl_makes_sectors = true;
-    lod.sector_span = 4;
-    lod.stamp = 0; // used only by server slod
+    const grid_crawl_makes_chunks = true;
+    lod.chunk_span = 4;
     function register() {
     }
     lod.register = register;
     function project(unit) {
-        return pts2.mult(pts2.project(unit), lod.size);
+        return pts.mult(pts.project(unit), lod.size);
     }
     lod.project = project;
     function unproject(pixel) {
-        return pts2.divide(pts2.unproject(pixel), 1.1);
+        return pts.divide(pts.unproject(pixel), 1.1);
     }
     lod.unproject = unproject;
     function add(obj) {
-        let sector = lod.gworld.at(lod.world.big(obj.wpos));
-        sector.add(obj);
+        let chunk = lod.gworld.at(lod.world.big(obj.wpos));
+        chunk.add(obj);
     }
     lod.add = add;
     function remove(obj) {
-        obj.sector?.remove(obj);
+        obj.chunk?.remove(obj);
     }
     lod.remove = remove;
     class world {
@@ -82,19 +79,18 @@ var lod;
             let s = this.lookup(big);
             if (s)
                 return s;
-            s = this.arrays[big[1]][big[0]] = new sector(big, this);
+            s = this.arrays[big[1]][big[0]] = new chunk(big, this);
             return s;
         }
         static big(units) {
-            return pts2.floor(pts2.divide(units, lod.sector_span));
+            return pts.floor(pts.divide(units, lod.chunk_span));
         }
     }
     lod.world = world;
-    class sector extends toggle {
+    class chunk extends toggle {
         big;
         world;
         static total = 0;
-        group;
         color;
         fog_of_war = false;
         small;
@@ -105,23 +101,20 @@ var lod;
             this.world = world;
             if (chunk_coloration)
                 this.color = (['lightsalmon', 'lightblue', 'beige', 'pink'])[Math.floor(Math.random() * 4)];
-            let min = pts2.mult(this.big, lod.sector_span);
-            let max = pts2.add(min, [lod.sector_span - 1, lod.sector_span - 1]);
-            this.small = new aabb2(max, min);
-            this.group = new THREE.Group();
-            this.group.frustumCulled = false;
-            this.group.matrixAutoUpdate = false;
-            objs.sectors[1]++;
+            let min = pts.mult(this.big, lod.chunk_span);
+            let max = pts.add(min, [lod.chunk_span - 1, lod.chunk_span - 1]);
+            this.small = new aabb(max, min);
+            objs.chunks[1]++;
             world.arrays[this.big[1]][this.big[0]] = this;
             //console.log('sector');
-            sector.total++;
-            hooks.call('sectorCreate', this);
+            chunk.total++;
+            hooks.call('lod_chunk_create', this);
         }
         add(obj) {
             let i = this.objs.indexOf(obj);
             if (i == -1) {
                 this.objs.push(obj);
-                obj.sector = this;
+                obj.chunk = this;
                 if (this.is_active() && !obj.is_active())
                     obj.show();
             }
@@ -129,59 +122,57 @@ var lod;
         stacked(wpos) {
             let stack = [];
             for (let obj of this.objs)
-                if (pts2.equals(wpos, pts2.round(obj.wpos)))
+                if (pts.equals(wpos, pts.round(obj.wpos)))
                     stack.push(obj);
             return stack;
         }
         remove(obj) {
             let i = this.objs.indexOf(obj);
             if (i > -1) {
-                obj.sector = null;
+                obj.chunk = null;
                 return !!this.objs.splice(i, 1).length;
             }
         }
         static swap(obj) {
             // Call me whenever you move
-            let oldSector = obj.sector;
-            let newSector = oldSector.world.at(lod.world.big(pts2.round(obj.wpos)));
-            if (oldSector != newSector) {
-                oldSector.remove(obj);
-                newSector.add(obj);
-                if (!newSector.is_active())
+            let oldChunk = obj.chunk;
+            let newChunk = oldChunk.world.at(lod.world.big(pts.round(obj.wpos)));
+            if (oldChunk != newChunk) {
+                oldChunk.remove(obj);
+                newChunk.add(obj);
+                if (!newChunk.is_active())
                     obj.hide();
             }
         }
         tick() {
-            hooks.call('sectorTick', this);
+            hooks.call('lod_chunk_think', this);
             //for (let obj of this.objs)
             //	obj.tick();
         }
         show() {
             if (this.on())
                 return;
-            objs.sectors[0]++;
+            objs.chunks[0]++;
             for (let obj of this.objs)
                 obj.show();
-            renderer.scene.add(this.group);
-            hooks.call('sectorShow', this);
+            hooks.call('lod_chunk_show', this);
         }
         hide() {
             if (this.off())
                 return;
-            objs.sectors[0]--;
+            objs.chunks[0]--;
             for (let obj of this.objs)
                 obj.hide();
-            renderer.scene.remove(this.group);
-            hooks.call('sectorHide', this);
+            hooks.call('lod_chunk_hide', this);
         }
         dist() {
-            return pts2.distsimple(this.big, lod.ggrid.big);
+            return pts.distsimple(this.big, lod.ggrid.big);
         }
         grayscale() {
             this.color = 'gray';
         }
     }
-    lod.sector = sector;
+    lod.chunk = chunk;
     class grid {
         spread;
         outside;
@@ -205,21 +196,21 @@ var lod;
             this.spread--;
             this.outside--;
         }
-        visible(sector) {
-            return sector.dist() < this.spread;
+        visible(chunk) {
+            return chunk.dist() < this.spread;
         }
         ons() {
             // spread = -2; < 2
             for (let y = -this.spread; y < this.spread + 1; y++) {
                 for (let x = -this.spread; x < this.spread + 1; x++) {
-                    let pos = pts2.add(this.big, [x, y]);
-                    let sector = grid_crawl_makes_sectors ? lod.gworld.at(pos) : lod.gworld.lookup(pos);
-                    if (!sector)
+                    let pos = pts.add(this.big, [x, y]);
+                    let chunk = grid_crawl_makes_chunks ? lod.gworld.at(pos) : lod.gworld.lookup(pos);
+                    if (!chunk)
                         continue;
-                    if (!sector.is_active()) {
-                        this.shown.push(sector);
-                        sector.show();
-                        for (let obj of sector.objs)
+                    if (!chunk.is_active()) {
+                        this.shown.push(chunk);
+                        chunk.show();
+                        for (let obj of chunk.objs)
                             obj.tick();
                         // todo why do we tick here
                     }
@@ -227,36 +218,36 @@ var lod;
             }
         }
         offs() {
-            // Hide sectors
+            // Hide chunks
             this.visibleObjs = [];
             let i = this.shown.length;
             while (i--) {
-                let sector;
-                sector = this.shown[i];
-                if (sector.dist() > this.outside) {
-                    sector.hide();
+                let chunk;
+                chunk = this.shown[i];
+                if (chunk.dist() > this.outside) {
+                    chunk.hide();
                     this.shown.splice(i, 1);
                 }
                 else {
-                    sector.tick();
-                    this.visibleObjs = this.visibleObjs.concat(sector.objs);
+                    chunk.tick();
+                    this.visibleObjs = this.visibleObjs.concat(chunk.objs);
                 }
                 if (fog_of_war) {
-                    if (sector.dist() == this.outside) {
+                    if (chunk.dist() == this.outside) {
                         //console.log('brim-chunk');
-                        sector.fog_of_war = true;
+                        chunk.fog_of_war = true;
                         //sector.color = '#555555';
                     }
                     else {
-                        sector.fog_of_war = false;
+                        chunk.fog_of_war = false;
                         //sector.color = '#ffffff';
                     }
                 }
             }
         }
         ticks() {
-            for (let sector of this.shown)
-                for (let obj of sector.objs)
+            for (let chunk of this.shown)
+                for (let obj of chunk.objs)
                     obj.tick();
         }
     }
@@ -271,7 +262,7 @@ var lod;
         wpos = [0, 0];
         rpos = [0, 0];
         size = [100, 100];
-        sector;
+        chunk;
         ro = 0;
         z = 0;
         calcz = 0;
@@ -304,14 +295,14 @@ var lod;
             // console.log(' obj.hide ');
         }
         rebound() {
-            this.bound = new aabb2([-this.expand, -this.expand], [this.expand, this.expand]);
+            this.bound = new aabb([-this.expand, -this.expand], [this.expand, this.expand]);
             this.bound.translate(this.wpos);
         }
         wtorpos() {
         }
         rtospos() {
             this.wtorpos();
-            return pts2.clone(this.rpos);
+            return pts.clone(this.rpos);
         }
         tick() {
             // implement me

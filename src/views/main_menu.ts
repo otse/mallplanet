@@ -5,7 +5,7 @@ import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 
 import mall, { THREE } from "../mall.js";
-import game_manager from "../game/game_manager.js";
+import manager from "../game/manager.js";
 import snd from "../snd.js";
 
 namespace main_menu {
@@ -47,7 +47,7 @@ namespace main_menu {
 			//entry
 			console.log('boo');
 			cleanup();
-			game_manager.start_new_game();
+			manager.start_new_game();
 
 		};
 

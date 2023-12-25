@@ -9,7 +9,7 @@ import mkb from './mkb.js';
 import snd from './snd.js';
 import loading_screen from './views/loading_screen.js';
 import main_menu from './views/main_menu.js';
-import game_manager from './game/game_manager.js';
+import manager from './game/manager.js';
 var mall;
 (function (mall) {
     const constant = 1;
@@ -41,7 +41,7 @@ var mall;
         last = time;
         requestAnimationFrame(animate);
         hooks.call('mallAnimate', 0);
-        game_manager.think();
+        manager.think();
         renderer.render();
         mkb.loop();
     }

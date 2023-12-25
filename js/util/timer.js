@@ -1,4 +1,4 @@
-// a simple timer i wrote for mall planet. i can acknowledge that it is crap
+// likely the worst class ive ever written - otse
 function clamp(val, min, max) {
     return val > max ? max : val < min ? min : val;
 }

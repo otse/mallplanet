@@ -1,7 +1,7 @@
 // as you guessed this is the intro 
 import hooks from "../util/hooks.js";
 import mall from "../mall.js";
-import game_manager from "../game/game_manager.js";
+import manager from "../game/manager.js";
 import snd from "../snd.js";
 var main_menu;
 (function (main_menu) {
@@ -34,7 +34,7 @@ var main_menu;
             //entry
             console.log('boo');
             cleanup();
-            game_manager.start_new_game();
+            manager.start_new_game();
         };
         holder.append(start);
         holder.append(quit);

@@ -3,7 +3,7 @@
 // sounds can take several seconds so a load indicator was welcome
 
 import hooks from "../util/hooks.js";
-import game_manager from "../game/game_manager.js";
+import manager from "../game/manager.js";
 import mall from "../mall.js";
 import mkb from "../mkb.js";
 import time, { timer } from "../util/timer.js";
@@ -71,7 +71,7 @@ namespace loading_screen {
 			skipping = true;
 			next = undefined;
 			cleanup();
-			game_manager.start_new_game();
+			manager.start_new_game();
 		}
 	}
 }

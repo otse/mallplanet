@@ -1,3 +1,4 @@
+/// originally written for wastes now adapted for mall planet
 export const map_span = 100;
 export class pixel {
     pos;
@@ -7,9 +8,7 @@ export class pixel {
         this.data = data;
     }
     is_color(vec) {
-        return vec[0] == this.data[0] &&
-            vec[1] == this.data[1] &&
-            vec[2] == this.data[2];
+        return vec[0] == this.data[0] && vec[1] == this.data[1] && vec[2] == this.data[2];
     }
     normalize() {
         return [

@@ -1,12 +1,9 @@
-/// the strange projection for mall planet aka camera setup
-
-// 
-
 import { THREE } from "../mall.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import hooks from "../util/hooks.js";
-import game_manager from "./game_manager.js";
+
+import * as game from "./re-exports.js"
 
 namespace projection {
 
@@ -23,7 +20,7 @@ namespace projection {
 		return `${type[current]} (${current + 1})`;
 	}
 
-	export var current: type = type.orthographic_dimetric
+	export var current: type = type.orthographic_top_down
 
 	export var yaw, pitch, zoom
 
