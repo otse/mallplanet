@@ -6,7 +6,8 @@ import * as game from "../re-exports.js"
 
 const prefabs = {
 	'kitchen': {
-		tex: './tex/grass64x.png'
+		size: [8, 8],
+		tex: './tex/kitchen_floor_8x.png'
 	}
 }
 
@@ -25,7 +26,7 @@ export class floor extends game.superobject {
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.chunk?.color || new THREE.Color().fromArray(color),
-			map: renderer.load_image('./tex/grass64x.png')
+			map: renderer.load_texture('./tex/grass64x.png')
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.frustumCulled = false;

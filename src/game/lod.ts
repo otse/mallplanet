@@ -294,7 +294,6 @@ namespace lod {
 		}
 		wtorpos() {
 			this.rpos = lod.project(this.wpos);
-			console.log('wtorpos', this.rpos);
 		}
 		create() {
 			// implement me

@@ -77,12 +77,12 @@ export class view_needs_rename {
     }
     print() {
         stats.innerHTML = `
-			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br />
-			/ ${game.projection.debug()} (tap f2)<br />
-			lod ${game.lod.ggrid.spread} / ${game.lod.ggrid.outside}: ${game.lod.size}x <br />
-			walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}<br />
-			floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
-			chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
+			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}
+			<br />/ ${game.projection.debug()} (tap f2)
+			<br />lod ${game.lod.ggrid.spread} / ${game.lod.ggrid.outside}: ${game.lod.size}x
+			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
+			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
+			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}
 		`;
     }
     handle_input() {

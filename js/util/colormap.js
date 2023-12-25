@@ -1,11 +1,38 @@
+import pts from "./pts.js";
 export const map_span = 100;
 const invalid = [-1, -1, -1, -1];
 export class pixel {
+    parent;
     pos;
     data;
-    constructor(pos, data) {
+    constructor(parent, pos, data) {
+        this.parent = parent;
         this.pos = pos;
         this.data = data;
+    }
+    left() {
+        return this.parent.pixel(pts.add(this.pos, [-1, 0]));
+    }
+    right() {
+        return this.parent.pixel(pts.add(this.pos, [1, 0]));
+    }
+    top() {
+        return this.parent.pixel(pts.add(this.pos, [0, 1]));
+    }
+    bottom() {
+        return this.parent.pixel(pts.add(this.pos, [0, -1]));
+    }
+    connections() {
+        let same = 0;
+        if (this.left().is_color(this.data))
+            same++;
+        if (this.right().is_color(this.data))
+            same++;
+        if (this.top().is_color(this.data))
+            same++;
+        if (this.bottom().is_color(this.data))
+            same++;
+        return same;
     }
     is_color(vec) {
         return vec[0] == this.data[0] && vec[1] == this.data[1] && vec[2] == this.data[2];
@@ -45,7 +72,7 @@ export class colormap {
         return [...(() => this.data[pos[1]] ? this.data[pos[1]][pos[0]] : 0)() || invalid];
     }
     pixel(pos) {
-        return new pixel(pos, this.get(pos));
+        return new pixel(this, pos, this.get(pos));
     }
     process() {
         for (let y = 0; y < map_span; y++) {

@@ -61,12 +61,19 @@ namespace renderer {
 		resize();
 	}
 
-	export function load_image(file: string) {
-		let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`);
+	let textures = []
+	export function load_texture(file: string, copy = '') {
+		const name = `${file}?${copy}`
+		if (textures[name])
+			return textures[name];
+		console.log(`new texture ${file}, copy: \`${copy}\``);
+		let texture = new THREE.TextureLoader().load(file);
 		texture.generateMipmaps = false;
 		//texture.center.set(0, 1);
 		texture.magFilter = texture.minFilter = THREE.NearestFilter;
 		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+		if (!textures[name])
+			textures[name] = texture;
 		return texture;
 	}
 

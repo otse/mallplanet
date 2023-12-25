@@ -1,4 +1,3 @@
-import glob from "./util/glob.js";
 import hooks from "./util/hooks.js";
 import { THREE } from "./mall.js";
 var renderer;
@@ -42,15 +41,22 @@ var renderer;
         resize();
     }
     renderer_1.boot = boot;
-    function load_image(file) {
-        let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`);
+    let textures = [];
+    function load_texture(file, copy = '') {
+        const name = `${file}?${copy}`;
+        if (textures[name])
+            return textures[name];
+        console.log(`new texture ${file}, copy: \`${copy}\``);
+        let texture = new THREE.TextureLoader().load(file);
         texture.generateMipmaps = false;
         //texture.center.set(0, 1);
         texture.magFilter = texture.minFilter = THREE.NearestFilter;
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        if (!textures[name])
+            textures[name] = texture;
         return texture;
     }
-    renderer_1.load_image = load_image;
+    renderer_1.load_texture = load_texture;
     function render() {
         renderer_1.renderer.render(renderer_1.scene, renderer_1.camera);
     }

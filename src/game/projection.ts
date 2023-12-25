@@ -83,7 +83,7 @@ namespace projection {
 	export function start() {
 		hooks.register('resize', resize);
 		renderer.renderer.setClearColor('darkgrey');
-		renderer.ambient.color.copy(new THREE.Color('#777'));
+		renderer.ambient.color.copy(new THREE.Color('white'));
 		// Make yaw, pitch
 		zoom = 10;
 		yaw = new THREE.Group();
@@ -103,8 +103,8 @@ namespace projection {
 		sun.updateMatrix();
 		sun.target.position.set(0, 0, 0);
 		sun.target.updateMatrix();
-		renderer.scene.add(sun);
-		renderer.scene.add(sun.target);
+		//renderer.scene.add(sun);
+		//renderer.scene.add(sun.target);
 	}
 
 	export function think() {

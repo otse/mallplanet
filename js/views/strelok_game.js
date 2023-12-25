@@ -16,7 +16,7 @@ var strelok_game;
         console.log(' strelok game start ');
         let geometry = new THREE.PlaneGeometry(2, 1);
         let material = new THREE.MeshPhongMaterial({
-            map: renderer.load_image('./img/strelok_game.png'),
+            map: renderer.load_texture('./img/strelok_game.png'),
             color: 'white',
             specular: 'cyan',
             shininess: 150,
