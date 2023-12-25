@@ -37,7 +37,7 @@ namespace manager {
 		view = game.view_needs_rename.make();
 		ply = new game.player();
 		game.projection.start();
-		setup_colormap_hooks();
+		hook_in_to_the_lod();
 	}
 
 	let wpos = [0, 0] as vec2;
@@ -57,8 +57,8 @@ namespace manager {
 		return obj;
 	}
 
-	function setup_colormap_hooks() {
-		// We register to the lod here
+	function hook_in_to_the_lod() {
+		// Register to the LOD
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			pts.func(chunk.small, (pos) => {
 				let pixel = floormap.pixel(pos);

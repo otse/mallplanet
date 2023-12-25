@@ -23,7 +23,7 @@ var manager;
         manager.view = game.view_needs_rename.make();
         manager.ply = new game.player();
         game.projection.start();
-        setup_colormap_hooks();
+        hook_in_to_the_lod();
     }
     manager.start_new_game = start_new_game;
     let wpos = [0, 0];
@@ -42,8 +42,8 @@ var manager;
         return obj;
     }
     manager.factory = factory;
-    function setup_colormap_hooks() {
-        // We register to the lod here
+    function hook_in_to_the_lod() {
+        // Register to the LOD
         hooks.register('lod_chunk_create', (chunk) => {
             pts.func(chunk.small, (pos) => {
                 let pixel = manager.floormap.pixel(pos);

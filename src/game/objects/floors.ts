@@ -40,6 +40,7 @@ namespace floors {
 			this.mesh = new THREE.Mesh(this.geometry, this.material);
 			this.mesh.frustumCulled = false;
 			this.mesh.position.set(left_bottom[0], 0, left_bottom[1]);
+			this.mesh.rotation.x = -Math.PI / 2;
 			this.mesh.updateMatrix();
 			//cube.add(new THREE.AxesHelper(2));
 

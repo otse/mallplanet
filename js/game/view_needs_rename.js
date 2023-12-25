@@ -77,7 +77,8 @@ export class view_needs_rename {
         stats.innerHTML = `
 			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br />
 			/ ${game.projection.debug()} (tap f2)<br />
-			terrains ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
+			walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}<br />
+			floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
 			sectors ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 		`;
     }

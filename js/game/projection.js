@@ -2,6 +2,7 @@ import { THREE } from "../mall.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import hooks from "../util/hooks.js";
+// We maintain multiple projections because we can
 var projection;
 (function (projection) {
     let type;

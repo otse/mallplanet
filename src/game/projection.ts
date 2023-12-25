@@ -5,6 +5,8 @@ import hooks from "../util/hooks.js";
 
 import * as game from "./re-exports.js"
 
+// We maintain multiple projections because we can
+
 namespace projection {
 
 	export enum type {
