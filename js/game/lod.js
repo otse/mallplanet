@@ -20,8 +20,8 @@ class toggle {
 }
 var lod;
 (function (lod) {
-    lod.size = 1;
-    const chunk_coloration = false;
+    lod.size = 16;
+    const chunk_coloration = true;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
     lod.chunk_span = 4;
@@ -30,11 +30,11 @@ var lod;
     }
     lod.register = register;
     function project(unit) {
-        return pts.mult(pts.project(unit), lod.size);
+        return pts.mult(unit, lod.size);
     }
     lod.project = project;
     function unproject(pixel) {
-        return pts.divide(pts.unproject(pixel), 1.1);
+        return pts.divide(pixel, lod.size);
     }
     lod.unproject = unproject;
     function add(obj) {
@@ -245,18 +245,11 @@ var lod;
     ;
     class obj extends toggle {
         counts;
-        id = -1;
         type = 'an obj';
-        networked = false;
-        solid = false;
         wpos = [0, 0];
         rpos = [0, 0];
         size = [100, 100];
         chunk;
-        ro = 0;
-        z = 0;
-        calcz = 0;
-        height = 0;
         bound;
         expand = .5;
         constructor(counts = [0, 0]) {
@@ -273,33 +266,27 @@ var lod;
                 return;
             this.counts[0]++;
             this.create();
-            //this.shape?.show();
         }
         hide() {
             if (this.off())
                 return;
             this.counts[0]--;
             this.vanish();
-            //this.delete();
-            //this.shape?.hide();
-            // console.log(' obj.hide ');
         }
         rebound() {
             this.bound = new aabb([-this.expand, -this.expand], [this.expand, this.expand]);
             this.bound.translate(this.wpos);
         }
         wtorpos() {
-        }
-        rtospos() {
-            this.wtorpos();
-            return pts.clone(this.rpos);
-        }
-        think() {
-            // implement me
+            this.rpos = lod.project(this.wpos);
+            console.log('wtorpos', this.rpos);
         }
         create() {
             // implement me
             console.warn(' lod: blank obj.create ');
+        }
+        think() {
+            // implement me
         }
         vanish() {
             // implement me

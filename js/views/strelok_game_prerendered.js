@@ -10,14 +10,14 @@ var strelok_game_prerendered;
         mall.view = this;
         mall.whole.style.background = 'black';
         mall.whole.innerHTML = `<img src="./img/strelok_game_prerendered.gif" />`;
-        hooks.register('mallAnimate', animate);
+        hooks.register('mall_planet_animate', animate);
         timer = time(3);
     }
     strelok_game_prerendered.start = start;
     function cleanup() {
         mall.whole.innerHTML = '';
         strelok_game_prerendered.next?.start();
-        hooks.unregister('mallAnimate', animate);
+        hooks.unregister('mall_planet_animate', animate);
     }
     strelok_game_prerendered.cleanup = cleanup;
     function animate() {

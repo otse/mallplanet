@@ -33,7 +33,7 @@ var strelok_game;
         //music = snd.play_regular('strelok', 1.0);
         //renderer.lock_aspect = true;
         //renderer.camera.aspect = 1;
-        hooks.register('mallAnimate', animate);
+        hooks.register('mall_planet_animate', animate);
         timer = time(5);
         shadetimer = time(3);
         timer.begin -= 2000;
@@ -47,7 +47,7 @@ var strelok_game;
         renderer.resize();
         music?.stop();
         strelok_game.next?.start();
-        hooks.unregister('mallAnimate', animate);
+        hooks.unregister('mall_planet_animate', animate);
     }
     strelok_game.cleanup = cleanup;
     let shadetimer;

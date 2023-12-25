@@ -6,7 +6,7 @@ import mall from "../mall.js";
 import * as game from "./re-exports.js";
 let stats;
 export class view_needs_rename {
-    wpos = [42, 54];
+    wpos = [50, 45];
     rpos = [0, 0];
     static make() {
         return new view_needs_rename;
@@ -14,7 +14,7 @@ export class view_needs_rename {
     chart(big) {
     }
     constructor() {
-        this.rpos = [...this.wpos];
+        this.rpos = game.lod.project(this.wpos);
         new game.lod.world(0);
         stats = document.createElement('div');
         stats.setAttribute('id', 'stats');
@@ -35,9 +35,10 @@ export class view_needs_rename {
         game.lod.ggrid.think();
         this.handle_input();
         this.mouse_pan();
+        this.wpos = game.lod.unproject(this.rpos);
         this.update_camera();
         this.print();
-        this.wpos = [...this.rpos];
+        //this.wpos = [...this.rpos]
         game.lod.gworld.update(this.wpos);
     }
     begin = [0, 0];
@@ -78,6 +79,7 @@ export class view_needs_rename {
         stats.innerHTML = `
 			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}<br />
 			/ ${game.projection.debug()} (tap f2)<br />
+			lod chunks ${game.lod.ggrid.spread} / ${game.lod.ggrid.outside}<br />
 			walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}<br />
 			floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
 			chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}

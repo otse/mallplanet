@@ -48,7 +48,7 @@ namespace mall {
 		glob.delta = (time - (last || time)) / 1000;
 		last = time;
 		requestAnimationFrame(animate);
-		hooks.call('mallAnimate', 0);
+		hooks.call('mall_planet_animate', 0);
 		manager.think();
 		renderer.render();
 		mkb.loop();

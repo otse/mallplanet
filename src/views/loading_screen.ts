@@ -37,13 +37,13 @@ namespace loading_screen {
 		last = whole.querySelector('#last');
 		bar = whole.querySelector('#bar');
 
-		hooks.register('mallAnimate', animate);
+		hooks.register('mall_planet_animate', animate);
 	}
 
 	export function cleanup() {
 		whole.remove();
 		next?.start();
-		hooks.unregister('mallAnimate', animate);
+		hooks.unregister('mall_planet_animate', animate);
 	}
 
 	export function increment(asset = './') {

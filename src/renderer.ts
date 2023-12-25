@@ -65,6 +65,7 @@ namespace renderer {
 		let texture = new THREE.TextureLoader().load(file + `?v=${glob.salt}`);
 		texture.generateMipmaps = false;
 		//texture.center.set(0, 1);
+		texture.magFilter = texture.minFilter = THREE.NearestFilter;
 		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 		return texture;
 	}

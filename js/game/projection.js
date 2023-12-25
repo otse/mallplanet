@@ -2,8 +2,7 @@ import { THREE } from "../mall.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import hooks from "../util/hooks.js";
-// We maintain multiple projections because we can
-// Since we don't do isometric or 3d this file could be obsolete eventually
+// We only need 1 projection tho
 var projection;
 (function (projection) {
     let projection_enum;
@@ -33,19 +32,19 @@ var projection;
                 orthographic();
                 projection.yaw.rotation.y = 0;
                 projection.pitch.rotation.x = 0;
-                projection.zoom = 20;
+                projection.zoom = 2;
                 break;
             case projection_enum.orthographic_dimetric:
                 orthographic();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 3;
-                projection.zoom = 40;
+                projection.zoom = 2;
                 break;
             case projection_enum.orthographic_isometric:
                 orthographic();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 4;
-                projection.zoom = 40;
+                projection.zoom = 2;
                 break;
             case projection_enum.perspective_top_down:
                 perspective();

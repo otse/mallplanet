@@ -18,7 +18,7 @@ namespace denatsu_games {
 		mall.whole.style.background = 'black';
 		mall.whole.innerHTML = `<img src="./img/denatsu_games.jpg" />`;
 
-		hooks.register('mallAnimate', animate);
+		hooks.register('mall_planet_animate', animate);
 
 		timer = time(2);
 
@@ -28,7 +28,7 @@ namespace denatsu_games {
 	export function cleanup() {
 		mall.whole.innerHTML = '';
 		next?.start();
-		hooks.unregister('mallAnimate', animate);
+		hooks.unregister('mall_planet_animate', animate);
 	}
 
 	export function animate() {

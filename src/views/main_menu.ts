@@ -26,7 +26,7 @@ namespace main_menu {
 	export function start() {
 		mall.view = this;
 
-		fader = document.createElement('div');
+		fader = document.createElement('div'); 
 		fader.setAttribute('id', 'fader');
 		mall.whole.append(fader);
 		setTimeout(() => { fader.remove() }, 4000);
@@ -44,11 +44,8 @@ namespace main_menu {
 		let quit = make_button('quit');
 
 		start.onclick = () => {
-			//entry
-			console.log('boo');
-			cleanup();
+			main_menu.cleanup();
 			manager.start_new_game();
-
 		};
 
 		holder.append(start);
@@ -56,13 +53,14 @@ namespace main_menu {
 
 		music = snd.play_regular('blurringmyday', 0.5, true);
 
-		hooks.register('mallAnimate', animate);
+		hooks.register('mall_planet_animate', animate);
 	}
 
 	export function cleanup() {
+		mall.whole.style.background = 'transparent';
 		mall.whole.innerHTML = '';
 		music.stop();
-		hooks.unregister('mallAnimate', animate);
+		hooks.unregister('mall_planet_animate', animate);
 	}
 
 	export function animate() {

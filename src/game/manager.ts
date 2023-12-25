@@ -49,25 +49,39 @@ namespace manager {
 		view.think();
 	}
 
-	export function factory<type extends game.superobject>(type: { new(): type }, pixel, wpos) {
+	export function factory<type extends game.superobject>(
+		type: { new(): type }, pixel: pixel, wpos: vec2, hint: any) {
 		let obj = new type;
 		obj.wpos = wpos;
 		obj.pixel = pixel;
+		obj.hint = hint;
 		game.lod.add(obj);
 		return obj;
 	}
 
+	/*export function unused_factory_when<type extends game.superobject>(type: { new(): type }, map: colormap, pos: vec2, color: vec3) {
+		let pixel = wallmap.pixel(pos);
+		if (pixel.is_color(color))
+			factory(type, pixel, pos);
+	}*/
+
 	function hook_in_to_the_lod() {
-		// Register to the LOD
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			pts.func(chunk.small, (pos) => {
 				let pixel = floormap.pixel(pos);
-				if (pixel.is_color(game.colormap_values.color_kitchen_tiles)) {
-					factory(game.floors.tile, pixel, pos);
-				}
+				//if (pixel.is_color(game.colormap_values.tile_kitchen))
+				//	factory(game.floor, pixel, pos, 'kitchen');
 			})
 			return false;
-		})
+		});
+		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
+			pts.func(chunk.small, (pos) => {
+				let pixel = wallmap.pixel(pos);
+				if (pixel.is_color(game.colormap_values.wall_brick))
+					factory(game.wall, pixel, pos, 'brick');
+			})
+			return false;
+		});
 	}
 }
 

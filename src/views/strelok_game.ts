@@ -49,7 +49,7 @@ namespace strelok_game {
 		//renderer.lock_aspect = true;
 		//renderer.camera.aspect = 1;
 
-		hooks.register('mallAnimate', animate);
+		hooks.register('mall_planet_animate', animate);
 
 		timer = time(5);
 		shadetimer = time(3);
@@ -64,7 +64,7 @@ namespace strelok_game {
 		renderer.resize();
 		music?.stop();
 		next?.start();
-		hooks.unregister('mallAnimate', animate);
+		hooks.unregister('mall_planet_animate', animate);
 	}
 
 	let shadetimer 

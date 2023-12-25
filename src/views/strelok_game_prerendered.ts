@@ -22,7 +22,7 @@ namespace strelok_game_prerendered {
 		mall.whole.style.background = 'black';
 		mall.whole.innerHTML = `<img src="./img/strelok_game_prerendered.gif" />`;
 
-		hooks.register('mallAnimate', animate);
+		hooks.register('mall_planet_animate', animate);
 
 		timer = time(3);
 	}
@@ -30,7 +30,7 @@ namespace strelok_game_prerendered {
 	export function cleanup() {
 		mall.whole.innerHTML = '';
 		next?.start();
-		hooks.unregister('mallAnimate', animate);
+		hooks.unregister('mall_planet_animate', animate);
 	}
 
 	export function animate() {

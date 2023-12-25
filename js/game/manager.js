@@ -34,22 +34,34 @@ var manager;
         manager.view.think();
     }
     manager.think = think;
-    function factory(type, pixel, wpos) {
+    function factory(type, pixel, wpos, hint) {
         let obj = new type;
         obj.wpos = wpos;
         obj.pixel = pixel;
+        obj.hint = hint;
         game.lod.add(obj);
         return obj;
     }
     manager.factory = factory;
+    /*export function unused_factory_when<type extends game.superobject>(type: { new(): type }, map: colormap, pos: vec2, color: vec3) {
+        let pixel = wallmap.pixel(pos);
+        if (pixel.is_color(color))
+            factory(type, pixel, pos);
+    }*/
     function hook_in_to_the_lod() {
-        // Register to the LOD
         hooks.register('lod_chunk_create', (chunk) => {
             pts.func(chunk.small, (pos) => {
                 let pixel = manager.floormap.pixel(pos);
-                if (pixel.is_color(game.colormap_values.color_kitchen_tiles)) {
-                    factory(game.floors.tile, pixel, pos);
-                }
+                //if (pixel.is_color(game.colormap_values.tile_kitchen))
+                //	factory(game.floor, pixel, pos, 'kitchen');
+            });
+            return false;
+        });
+        hooks.register('lod_chunk_create', (chunk) => {
+            pts.func(chunk.small, (pos) => {
+                let pixel = manager.wallmap.pixel(pos);
+                if (pixel.is_color(game.colormap_values.wall_brick))
+                    factory(game.wall, pixel, pos, 'brick');
             });
             return false;
         });

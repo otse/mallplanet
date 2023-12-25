@@ -27,13 +27,13 @@ var loading_screen;
 		`;
         last = whole.querySelector('#last');
         bar = whole.querySelector('#bar');
-        hooks.register('mallAnimate', animate);
+        hooks.register('mall_planet_animate', animate);
     }
     loading_screen.start = start;
     function cleanup() {
         whole.remove();
         loading_screen.next?.start();
-        hooks.unregister('mallAnimate', animate);
+        hooks.unregister('mall_planet_animate', animate);
     }
     loading_screen.cleanup = cleanup;
     function increment(asset = './') {

@@ -5,6 +5,7 @@ import { pixel } from "../../util/colormap.js";
 import * as game from "../re-exports.js"
 
 export class superobject extends game.lod.obj {
+    hint: any
     pixel: pixel
     constructor(counts: [number, number]) {
         super(counts);

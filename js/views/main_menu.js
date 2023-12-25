@@ -31,21 +31,20 @@ var main_menu;
         let start = make_button('start');
         let quit = make_button('quit');
         start.onclick = () => {
-            //entry
-            console.log('boo');
-            cleanup();
+            main_menu.cleanup();
             manager.start_new_game();
         };
         holder.append(start);
         holder.append(quit);
         music = snd.play_regular('blurringmyday', 0.5, true);
-        hooks.register('mallAnimate', animate);
+        hooks.register('mall_planet_animate', animate);
     }
     main_menu.start = start;
     function cleanup() {
+        mall.whole.style.background = 'transparent';
         mall.whole.innerHTML = '';
         music.stop();
-        hooks.unregister('mallAnimate', animate);
+        hooks.unregister('mall_planet_animate', animate);
     }
     main_menu.cleanup = cleanup;
     function animate() {

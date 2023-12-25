@@ -1,8 +1,6 @@
-/// originally written for wastes now adapted for mall planet
-
-import pts from "./pts";
-
 export const map_span = 100
+
+const invalid = [-1, -1, -1, -1] as vec4
 
 export class pixel {
 	constructor(public readonly pos: vec2, public data: vec4) {
@@ -11,12 +9,7 @@ export class pixel {
 		return vec[0] == this.data[0] && vec[1] == this.data[1] && vec[2] == this.data[2];
 	}
 	normalize(): vec4 {
-		return [
-			this.data[0] / 255,
-			this.data[1] / 255,
-			this.data[2] / 255,
-			this.data[3] / 255,
-		]
+		return [this.data[0] / 255, this.data[1] / 255, this.data[2] / 255, this.data[3] / 255]
 	}
 	is_black() {
 		return this.is_color([0, 0, 0]);
@@ -48,12 +41,10 @@ export class colormap {
 		this.process();
 	}
 	get(pos: vec2): vec4 {
-		if (this.data[pos[1]])
-			return this.data[pos[1]][pos[0]] || [0, 0, 0, 0];
-		return [0, 0, 0, 0];
+		return [...(() => this.data[pos[1]] ? this.data[pos[1]][pos[0]] : 0)() || invalid];
 	}
 	pixel(pos: vec2) {
-		return new pixel(pos, [...this.get(pos)] as vec4);
+		return new pixel(pos, this.get(pos));
 	}
 	process() {
 		for (let y = 0; y < map_span; y++) {

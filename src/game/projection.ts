@@ -5,9 +5,7 @@ import hooks from "../util/hooks.js";
 
 import * as game from "./re-exports.js"
 
-// We maintain multiple projections because we can
-
-// Since we don't do isometric or 3d this file could be obsolete eventually
+// We only need 1 projection tho
 
 namespace projection {
 
@@ -44,19 +42,19 @@ namespace projection {
 				orthographic();
 				yaw.rotation.y = 0;
 				pitch.rotation.x = 0;
-				zoom = 20;
+				zoom = 2;
 				break;
 			case projection_enum.orthographic_dimetric:
 				orthographic();
 				yaw.rotation.y = Math.PI / 4;
 				pitch.rotation.x = Math.PI / 3;
-				zoom = 40;
+				zoom = 2;
 				break;
 			case projection_enum.orthographic_isometric:
 				orthographic();
 				yaw.rotation.y = Math.PI / 4;
 				pitch.rotation.x = Math.PI / 4;
-				zoom = 40;
+				zoom = 2;
 				break;
 			case projection_enum.perspective_top_down:
 				perspective();

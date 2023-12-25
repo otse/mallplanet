@@ -10,7 +10,7 @@ var denatsu_games;
         mall.view = this;
         mall.whole.style.background = 'black';
         mall.whole.innerHTML = `<img src="./img/denatsu_games.jpg" />`;
-        hooks.register('mallAnimate', animate);
+        hooks.register('mall_planet_animate', animate);
         timer = time(2);
         mall.view = this;
     }
@@ -18,7 +18,7 @@ var denatsu_games;
     function cleanup() {
         mall.whole.innerHTML = '';
         denatsu_games.next?.start();
-        hooks.unregister('mallAnimate', animate);
+        hooks.unregister('mall_planet_animate', animate);
     }
     denatsu_games.cleanup = cleanup;
     function animate() {

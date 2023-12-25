@@ -22,9 +22,9 @@ class toggle {
 
 namespace lod {
 
-	export const size = 1
+	export const size = 16
 
-	const chunk_coloration = false
+	const chunk_coloration = true
 
 	const fog_of_war = false
 
@@ -44,11 +44,11 @@ namespace lod {
 	}
 
 	export function project(unit: vec2): vec2 {
-		return pts.mult(pts.project(unit), lod.size);
+		return pts.mult(unit, lod.size);
 	}
 
 	export function unproject(pixel: vec2): vec2 {
-		return pts.divide(pts.unproject(pixel), 1.1);
+		return pts.divide(pixel, lod.size);
 	}
 
 	export function add(obj: obj) {
@@ -260,18 +260,11 @@ namespace lod {
 	};
 
 	export class obj extends toggle {
-		id = -1
 		type = 'an obj'
-		networked = false
-		solid = false
 		wpos: vec2 = [0, 0]
 		rpos: vec2 = [0, 0]
 		size: vec2 = [100, 100]
 		chunk: chunk | null
-		ro = 0
-		z = 0
-		calcz = 0
-		height = 0
 		bound: aabb
 		expand = .5
 		constructor(
@@ -288,33 +281,27 @@ namespace lod {
 				return;
 			this.counts[0]++;
 			this.create();
-			//this.shape?.show();
 		}
 		hide() {
 			if (this.off())
 				return;
 			this.counts[0]--;
 			this.vanish();
-			//this.delete();
-			//this.shape?.hide();
-			// console.log(' obj.hide ');
 		}
 		rebound() {
 			this.bound = new aabb([-this.expand, -this.expand], [this.expand, this.expand]);
 			this.bound.translate(this.wpos);
 		}
 		wtorpos() {
-		}
-		rtospos() {
-			this.wtorpos();
-			return pts.clone(this.rpos);
-		}
-		think() {
-			// implement me
+			this.rpos = lod.project(this.wpos);
+			console.log('wtorpos', this.rpos);
 		}
 		create() {
 			// implement me
 			console.warn(' lod: blank obj.create ');
+		}
+		think() {
+			// implement me
 		}
 		vanish() {
 			// implement me
