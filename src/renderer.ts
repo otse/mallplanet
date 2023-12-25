@@ -48,7 +48,7 @@ namespace renderer {
 
 		scene.add(game_objects);
 
-		renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer = new THREE.WebGLRenderer({ antialias: false });
 		renderer.setSize(1024, 768);
 		renderer.setClearColor('grey');
 		renderer.shadowMap.enabled = true;

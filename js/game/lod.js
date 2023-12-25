@@ -20,12 +20,12 @@ class toggle {
 }
 var lod;
 (function (lod) {
-    lod.chunks = [0, 0];
     lod.size = 1;
     const chunk_coloration = false;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
     lod.chunk_span = 4;
+    lod.chunks = [0, 0];
     function register() {
     }
     lod.register = register;
@@ -134,10 +134,10 @@ var lod;
                     obj.hide();
             }
         }
-        tick() {
+        think() {
             hooks.call('lod_chunk_think', this);
             //for (let obj of this.objs)
-            //	obj.tick();
+            //	obj.think();
         }
         show() {
             if (this.on())
@@ -174,7 +174,7 @@ var lod;
             this.outside = outside;
             lod.ggrid = this;
             if (this.outside < this.spread) {
-                console.warn(' outside less than spread ', this.spread, this.outside);
+                console.warn(' lod: outside less than spread ', this.spread, this.outside);
                 this.outside = this.spread;
             }
         }
@@ -200,9 +200,9 @@ var lod;
                     if (!chunk.active) {
                         this.shown.push(chunk);
                         chunk.show();
-                        for (let obj of chunk.objs)
-                            obj.tick();
-                        // todo why do we tick here
+                        //for (let obj of chunk.objs)
+                        //	obj.think();
+                        // Todo why do we think here
                     }
                 }
             }
@@ -219,7 +219,7 @@ var lod;
                     this.shown.splice(i, 1);
                 }
                 else {
-                    chunk.tick();
+                    chunk.think();
                     this.visibleObjs = this.visibleObjs.concat(chunk.objs);
                 }
                 if (fog_of_war) {
@@ -235,10 +235,10 @@ var lod;
                 }
             }
         }
-        ticks() {
+        think() {
             for (let chunk of this.shown)
                 for (let obj of chunk.objs)
-                    obj.tick();
+                    obj.think();
         }
     }
     lod.grid = grid;
@@ -294,16 +294,16 @@ var lod;
             this.wtorpos();
             return pts.clone(this.rpos);
         }
-        tick() {
+        think() {
             // implement me
         }
         create() {
             // implement me
-            console.warn(' (lod) obj.create ');
+            console.warn(' lod: blank obj.create ');
         }
         vanish() {
             // implement me
-            console.warn(' (lod) obj.vanish ');
+            console.warn(' lod: blank obj.vanish ');
         }
     }
     lod.obj = obj;

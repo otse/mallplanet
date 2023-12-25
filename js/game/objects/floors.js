@@ -46,7 +46,7 @@ var floors;
         vanish() {
             renderer.game_objects.remove(this.mesh);
         }
-        tick() {
+        think() {
             // whatever would a terrain tile think?
         }
     }

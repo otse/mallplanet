@@ -32,7 +32,7 @@ var renderer;
         //game_objects.rotation.set(Math.PI / 6, Math.PI / 4, 0);
         //game_objects.updateMatrix();
         renderer_1.scene.add(renderer_1.game_objects);
-        renderer_1.renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer_1.renderer = new THREE.WebGLRenderer({ antialias: false });
         renderer_1.renderer.setSize(1024, 768);
         renderer_1.renderer.setClearColor('grey');
         renderer_1.renderer.shadowMap.enabled = true;

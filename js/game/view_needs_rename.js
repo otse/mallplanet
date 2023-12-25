@@ -1,4 +1,4 @@
-/// View manages the lod, camera and panning
+/// View manages the LOD
 import pts from "../util/pts.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
@@ -15,13 +15,12 @@ export class view_needs_rename {
     }
     constructor() {
         this.rpos = [...this.wpos];
-        new game.lod.world(101); // Shill
+        new game.lod.world(0);
         stats = document.createElement('div');
         stats.setAttribute('id', 'stats');
         mall.whole.append(stats);
     }
-    tilt = 0;
-    set_camera() {
+    update_camera() {
         const snap_to_grid = false;
         if (snap_to_grid)
             this.rpos = pts.floor(this.rpos);
@@ -33,10 +32,10 @@ export class view_needs_rename {
         renderer.camera.updateProjectionMatrix();
     }
     think() {
-        game.lod.ggrid.ticks();
-        this.wheelbarrow();
+        game.lod.ggrid.think();
+        this.handle_input();
         this.mouse_pan();
-        this.set_camera();
+        this.update_camera();
         this.print();
         this.wpos = [...this.rpos];
         game.lod.gworld.update(this.wpos);
@@ -45,31 +44,33 @@ export class view_needs_rename {
     before = [0, 0];
     mouse_pan() {
         let continousMode = false;
-        const continuousSpeed = -1;
-        if (mkb.button(1) == 1) {
-            let mouse = mkb.mouse();
+        const continuousSpeed = -100;
+        if (mkb.mouse_button(1) == 1) {
+            let mouse = mkb.mouse_pos();
             mouse[1] = -mouse[1];
             this.begin = mouse;
             this.before = pts.clone(this.rpos);
         }
-        if (mkb.button(1) >= 1) {
-            let mouse = mkb.mouse();
-            mouse[1] = -mouse[1];
-            let dif = pts.subtract(this.begin, mouse);
+        if (mkb.mouse_button(1) >= 1) {
+            let current = mkb.mouse_pos();
+            current[1] = -current[1];
+            let dif = pts.subtract(this.begin, current);
+            dif[1] = -dif[1];
             if (continousMode) {
                 dif = pts.divide(dif, continuousSpeed);
                 this.rpos = pts.add(this.rpos, dif);
+                this.rpos = pts.inv(dif);
             }
             else {
                 dif = pts.divide(dif, -1);
-                dif[1] = -dif[1];
+                //dif[1] = -dif[1];
                 dif = pts.mult(dif, renderer.ndpi);
                 dif = pts.divide(dif, game.projection.zoom);
                 dif = pts.subtract(dif, this.before);
                 this.rpos = pts.inv(dif);
             }
         }
-        else if (mkb.button(1) == -1) {
+        else if (mkb.mouse_button(1) == -1) {
             this.rpos = pts.floor(this.rpos);
         }
     }
@@ -79,22 +80,18 @@ export class view_needs_rename {
 			/ ${game.projection.debug()} (tap f2)<br />
 			walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}<br />
 			floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}<br />
-			sectors ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
+			chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 		`;
     }
-    wheelbarrow() {
-        let pan = 10;
-        const zoomFactor = 1 / 10;
-        if (mkb.key('f') == 1 || mkb.wheel == -1)
+    handle_input() {
+        if (mkb.key_state('f') == 1 || mkb.wheel == -1)
             game.projection.zoom -= 1;
-        if (mkb.key('r') == 1 || mkb.wheel == 1)
+        if (mkb.key_state('r') == 1 || mkb.wheel == 1)
             game.projection.zoom += 1;
-        if (mkb.key('t') == 1) {
+        if (mkb.key_state('t') == 1)
             game.lod.ggrid.shrink();
-        }
-        if (mkb.key('g') == 1) {
+        if (mkb.key_state('g') == 1)
             game.lod.ggrid.grow();
-        }
     }
 }
 export default view_needs_rename;

@@ -3,22 +3,23 @@ import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import hooks from "../util/hooks.js";
 // We maintain multiple projections because we can
+// Since we don't do isometric or 3d this file could be obsolete eventually
 var projection;
 (function (projection) {
-    let type;
-    (function (type) {
-        type[type["orthographic_top_down"] = 0] = "orthographic_top_down";
-        type[type["perspective_top_down"] = 1] = "perspective_top_down";
-        type[type["orthographic_dimetric"] = 2] = "orthographic_dimetric";
-        type[type["orthographic_isometric"] = 3] = "orthographic_isometric";
-        type[type["perspective_isometric"] = 4] = "perspective_isometric";
-        type[type["length"] = 5] = "length";
-    })(type = projection.type || (projection.type = {}));
+    let projection_enum;
+    (function (projection_enum) {
+        projection_enum[projection_enum["orthographic_top_down"] = 0] = "orthographic_top_down";
+        projection_enum[projection_enum["perspective_top_down"] = 1] = "perspective_top_down";
+        projection_enum[projection_enum["orthographic_dimetric"] = 2] = "orthographic_dimetric";
+        projection_enum[projection_enum["orthographic_isometric"] = 3] = "orthographic_isometric";
+        projection_enum[projection_enum["perspective_isometric"] = 4] = "perspective_isometric";
+        projection_enum[projection_enum["length"] = 5] = "length";
+    })(projection_enum = projection.projection_enum || (projection.projection_enum = {}));
     function debug() {
-        return `${type[projection.current]} (${projection.current + 1})`;
+        return `${projection_enum[projection.current]} (${projection.current + 1})`;
     }
     projection.debug = debug;
-    projection.current = type.orthographic_top_down;
+    projection.current = projection_enum.orthographic_top_down;
     var sun;
     function change() {
         const orthographic = () => {
@@ -28,31 +29,31 @@ var projection;
             renderer.camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
         };
         switch (projection.current) {
-            case type.orthographic_top_down:
+            case projection_enum.orthographic_top_down:
                 orthographic();
                 projection.yaw.rotation.y = 0;
                 projection.pitch.rotation.x = 0;
                 projection.zoom = 20;
                 break;
-            case type.orthographic_dimetric:
+            case projection_enum.orthographic_dimetric:
                 orthographic();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 3;
                 projection.zoom = 40;
                 break;
-            case type.orthographic_isometric:
+            case projection_enum.orthographic_isometric:
                 orthographic();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 4;
                 projection.zoom = 40;
                 break;
-            case type.perspective_top_down:
+            case projection_enum.perspective_top_down:
                 perspective();
                 projection.yaw.rotation.y = 0;
                 projection.pitch.rotation.x = 0;
                 projection.zoom = 1;
                 break;
-            case type.perspective_isometric:
+            case projection_enum.perspective_isometric:
                 perspective();
                 projection.yaw.rotation.y = Math.PI / 4;
                 projection.pitch.rotation.x = Math.PI / 3;
@@ -74,7 +75,7 @@ var projection;
         hooks.register('resize', resize);
         renderer.renderer.setClearColor('darkgrey');
         renderer.ambient.color.copy(new THREE.Color('#777'));
-        // make the yaw, pitch
+        // Make yaw, pitch
         projection.zoom = 10;
         projection.yaw = new THREE.Group();
         projection.yaw.rotation.y = Math.PI / 4;
@@ -98,17 +99,17 @@ var projection;
     }
     projection.start = start;
     function think() {
-        if (mkb.key('f2') == 1) {
-            projection.current = projection.current < type.length - 1 ? projection.current + 1 : 0;
+        if (mkb.key_state('f2') == 1) {
+            projection.current = projection.current < projection_enum.length - 1 ? projection.current + 1 : 0;
             change();
         }
     }
     projection.think = think;
     function resize() {
         switch (projection.current) {
-            case type.orthographic_top_down:
-            case type.orthographic_dimetric:
-            case type.orthographic_isometric:
+            case projection_enum.orthographic_top_down:
+            case projection_enum.orthographic_dimetric:
+            case projection_enum.orthographic_isometric:
                 let width = window.innerWidth;
                 let height = window.innerHeight;
                 renderer.camera.left = width / -2;
@@ -117,15 +118,12 @@ var projection;
                 renderer.camera.bottom = height / -2;
                 renderer.camera.updateProjectionMatrix();
                 break;
-            case type.perspective_top_down:
-            case type.perspective_isometric:
+            case projection_enum.perspective_top_down:
+            case projection_enum.perspective_isometric:
                 renderer.camera.aspect = window.innerWidth / window.innerHeight;
                 renderer.camera.updateProjectionMatrix();
                 break;
         }
     }
-    function quit() {
-    }
-    projection.quit = quit;
 })(projection || (projection = {}));
 export default projection;

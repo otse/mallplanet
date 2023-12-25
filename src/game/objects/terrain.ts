@@ -64,7 +64,7 @@ namespace terrain {
 		override vanish() {
 			renderer.game_objects.remove(this.mesh);
 		}
-		override tick() {
+		override think() {
 			// whatever would a terrain tile think?
 		}
 	}

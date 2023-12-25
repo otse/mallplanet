@@ -21,7 +21,7 @@ var strelok_game_prerendered;
     }
     strelok_game_prerendered.cleanup = cleanup;
     function animate() {
-        if (mkb.key('escape') == 1 || timer.done()) {
+        if (mkb.key_state('escape') == 1 || timer.done()) {
             cleanup();
         }
     }

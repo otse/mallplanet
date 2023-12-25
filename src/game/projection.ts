@@ -7,9 +7,11 @@ import * as game from "./re-exports.js"
 
 // We maintain multiple projections because we can
 
+// Since we don't do isometric or 3d this file could be obsolete eventually
+
 namespace projection {
 
-	export enum type {
+	export enum projection_enum {
 		orthographic_top_down,
 		perspective_top_down,
 		orthographic_dimetric,
@@ -19,10 +21,10 @@ namespace projection {
 	}
 
 	export function debug() {
-		return `${type[current]} (${current + 1})`;
+		return `${projection_enum[current]} (${current + 1})`;
 	}
 
-	export var current: type = type.orthographic_top_down
+	export var current = projection_enum.orthographic_top_down
 
 	export var yaw, pitch, zoom
 
@@ -38,34 +40,33 @@ namespace projection {
 				45, 1, 1, 1000);
 		}
 		switch (current) {
-			case type.orthographic_top_down:
+			case projection_enum.orthographic_top_down:
 				orthographic();
 				yaw.rotation.y = 0;
 				pitch.rotation.x = 0;
 				zoom = 20;
 				break;
-			case type.orthographic_dimetric:
+			case projection_enum.orthographic_dimetric:
 				orthographic();
 				yaw.rotation.y = Math.PI / 4;
 				pitch.rotation.x = Math.PI / 3;
 				zoom = 40;
 				break;
-			case type.orthographic_isometric:
+			case projection_enum.orthographic_isometric:
 				orthographic();
 				yaw.rotation.y = Math.PI / 4;
 				pitch.rotation.x = Math.PI / 4;
 				zoom = 40;
 				break;
-			case type.perspective_top_down:
+			case projection_enum.perspective_top_down:
 				perspective();
 				yaw.rotation.y = 0;
 				pitch.rotation.x = 0;
 				zoom = 1;
 				break;
-			case type.perspective_isometric:
+			case projection_enum.perspective_isometric:
 				perspective();
 				yaw.rotation.y = Math.PI / 4;
-
 				pitch.rotation.x = Math.PI / 3;
 				zoom = 1;
 				break;
@@ -85,7 +86,7 @@ namespace projection {
 		hooks.register('resize', resize);
 		renderer.renderer.setClearColor('darkgrey');
 		renderer.ambient.color.copy(new THREE.Color('#777'));
-		// make the yaw, pitch
+		// Make yaw, pitch
 		zoom = 10;
 		yaw = new THREE.Group();
 		yaw.rotation.y = Math.PI / 4;
@@ -109,17 +110,17 @@ namespace projection {
 	}
 
 	export function think() {
-		if (mkb.key('f2') == 1) {
-			current = current < type.length - 1 ? current + 1 : 0;
+		if (mkb.key_state('f2') == 1) {
+			current = current < projection_enum.length - 1 ? current + 1 : 0;
 			change();
 		}
 	}
 
 	function resize() {
 		switch (current) {
-			case type.orthographic_top_down:
-			case type.orthographic_dimetric:
-			case type.orthographic_isometric:
+			case projection_enum.orthographic_top_down:
+			case projection_enum.orthographic_dimetric:
+			case projection_enum.orthographic_isometric:
 				let width = window.innerWidth;
 				let height = window.innerHeight;
 				renderer.camera.left = width / - 2;
@@ -128,16 +129,12 @@ namespace projection {
 				renderer.camera.bottom = height / - 2;
 				renderer.camera.updateProjectionMatrix();
 				break;
-			case type.perspective_top_down:
-			case type.perspective_isometric:
+			case projection_enum.perspective_top_down:
+			case projection_enum.perspective_isometric:
 				renderer.camera.aspect = window.innerWidth / window.innerHeight;
 				renderer.camera.updateProjectionMatrix();
 				break;
 		}
-	}
-
-	export function quit() {
-
 	}
 
 }

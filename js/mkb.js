@@ -9,7 +9,6 @@ var mkb;
         KEY[KEY["AGAIN"] = 3] = "AGAIN";
         KEY[KEY["UP"] = 4] = "UP";
     })(KEY = mkb.KEY || (mkb.KEY = {}));
-    ;
     let MOUSE;
     (function (MOUSE) {
         MOUSE[MOUSE["UP"] = -1] = "UP";
@@ -17,7 +16,6 @@ var mkb;
         MOUSE[MOUSE["DOWN"] = 1] = "DOWN";
         MOUSE[MOUSE["STILL"] = 2] = "STILL";
     })(MOUSE = mkb.MOUSE || (mkb.MOUSE = {}));
-    ;
     var keys = {};
     var mb = {};
     var pos = [0, 0];
@@ -76,17 +74,17 @@ var mkb;
     }
     mkb.attach_listeners = attach_listeners;
     // api functions for consoomers:
-    function key(k) {
+    function key_state(k) {
         return keys[k];
     }
-    mkb.key = key;
-    function button(b) {
+    mkb.key_state = key_state;
+    function mouse_button(b) {
         return mb[b];
     }
-    mkb.button = button;
-    function mouse() {
+    mkb.mouse_button = mouse_button;
+    function mouse_pos() {
         return [...pos];
     }
-    mkb.mouse = mouse;
+    mkb.mouse_pos = mouse_pos;
 })(mkb || (mkb = {}));
 export default mkb;

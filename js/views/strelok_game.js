@@ -66,7 +66,7 @@ var strelok_game;
         plane.material.needsUpdate = true;
         let zoom = easings.easeInOutBack(timer.factorc()) * 3;
         plane.scale.set(zoom, zoom, zoom);
-        if (mkb.key('escape') == 1 || timer.done()) {
+        if (mkb.key_state('escape') == 1 || timer.done()) {
             cleanup();
         }
     }

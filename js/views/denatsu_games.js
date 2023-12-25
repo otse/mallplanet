@@ -22,7 +22,7 @@ var denatsu_games;
     }
     denatsu_games.cleanup = cleanup;
     function animate() {
-        if (mkb.key('escape') == 1 || timer.done()) {
+        if (mkb.key_state('escape') == 1 || timer.done()) {
             cleanup();
         }
     }

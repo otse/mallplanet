@@ -55,7 +55,7 @@ var loading_screen;
         if (delay.done()) {
             cleanup();
         }
-        else if (mkb.key(' ') == 1) {
+        else if (mkb.key_state(' ') == 1) {
             // go straight into game
             console.log(' skipping ');
             skipping = true;

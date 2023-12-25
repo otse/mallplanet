@@ -7,17 +7,17 @@ namespace mkb {
 		WAIT,
 		AGAIN,
 		UP
-	};
+	}
 	export enum MOUSE {
 		UP = - 1,
 		OFF = 0,
 		DOWN,
 		STILL
-	};
-	var keys = {};
-	var mb = {};
-	var pos: vec2 = [0, 0];
-	export var wheel = 0;
+	}
+	var keys = {}
+	var mb = {}
+	var pos: vec2 = [0, 0]
+	export var wheel = 0
 	function onmousemove(e) {
 		pos[0] = e.clientX;
 		pos[1] = e.clientY;
@@ -70,13 +70,13 @@ namespace mkb {
 		document.onwheel = onwheel;
 	}
 	// api functions for consoomers:
-	export function key(k: string) {
+	export function key_state(k: string) {
 		return keys[k];
 	}
-	export function button(b: number) {
+	export function mouse_button(b: number) {
 		return mb[b];
 	}
-	export function mouse(): vec2 {
+	export function mouse_pos(): vec2 {
 		return [...pos];
 	}
 }
