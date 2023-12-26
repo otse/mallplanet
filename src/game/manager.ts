@@ -73,7 +73,9 @@ namespace manager {
 			});
 			return false;
 		});
+
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
+			// Create walls and floors
 			pts.func(chunk.small, (pos) => {
 				let pixel = wallmap.pixel(pos);
 				if (pixel.is_color(game.colormap_values.wall_brick))
@@ -84,38 +86,33 @@ namespace manager {
 					factory(game.floor, pixel, pos, 'wood');
 			});
 		});
+
+		// Every chunk should wane and wax
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			chunk.group = new THREE.Group();
+			chunk.group.name = 'a chunk group';
 		});
-		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
-			renderer.game_objects.add(chunk.group);
-		});
+
 		hooks.register('lod_chunk_hide', (chunk: game.lod.chunk) => {
 			chunk.group.parent.remove(chunk.group);
 			chunk.group.children = [];
 		});
 
-		function merge_floors(chunk: game.lod.chunk, hint = 'kitchen') {
-			let floors = chunk.objs.filter(e => e.type == 'a floor');
-			floors = floors.filter((e: game.floor) => e.hint == hint);
-			if (!floors.length)
-				return;
-			const first = floors[0] as game.floor;
-			let geometries = floors.map((e: game.floor) => e.geometry);
-			const geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
-			const material = new THREE.MeshPhongMaterial({
-				map: first.material.map
-			});
-			const mesh = new THREE.Mesh(geometry, material);
-			chunk.group.add(mesh);
-			floors.forEach(e => e.vanish());
-			console.log('done building merged geometry');
+		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
+			renderer.game_objects.add(chunk.group);
+		});
+
+		function bake(chunk: game.lod.chunk, hint) {
+			const baked = new game.baked();
+			baked.wpos = chunk.small.min;
+			baked.filter = 'a floor';
+			baked.hint = hint;
+			game.lod.add(baked);
 		}
 
 		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
-			// Let's try and merge geometries
-			merge_floors(chunk, 'kitchen');
-			merge_floors(chunk, 'wood');
+			bake(chunk, 'kitchen');
+			bake(chunk, 'wood');
 		});
 
 		return false;

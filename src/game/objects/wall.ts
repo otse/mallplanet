@@ -44,7 +44,7 @@ export class wall extends game.superobject {
 
 		const left_bottom = pts.add(this.rpos, [game.lod.unit / 2, game.lod.unit / 2]);
 		let colorPixel = game.manager.colormap_.pixel(this.wpos).normalize();
-		this.geometry = new THREE.PlaneGeometry(game.lod.unit, game.lod.unit);
+		this.geometry = new THREE.PlaneGeometry(game.lod.unit, game.lod.unit);  
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.chunk?.color || new THREE.Color().fromArray(colorPixel),
@@ -52,7 +52,7 @@ export class wall extends game.superobject {
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.frustumCulled = false;
-		this.mesh.position.set(left_bottom[0], 0, left_bottom[1]);
+		this.mesh.position.set(left_bottom[0], 1, left_bottom[1]);
 		this.mesh.rotation.x = -Math.PI / 2;
 		this.mesh.updateMatrix();
 		//this.mesh.add(new THREE.AxesHelper(1));

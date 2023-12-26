@@ -1,7 +1,7 @@
 import pts from "../util/pts.js";
 import hooks from "../util/hooks.js";
 import { colormap } from "../util/colormap.js";
-import { THREE, BufferGeometryUtils } from "../mall.js";
+import { THREE } from "../mall.js";
 import * as game from "./re-exports.js";
 import renderer from "../renderer.js";
 var manager;
@@ -59,6 +59,7 @@ var manager;
             return false;
         });
         hooks.register('lod_chunk_create', (chunk) => {
+            // Create walls and floors
             pts.func(chunk.small, (pos) => {
                 let pixel = manager.wallmap.pixel(pos);
                 if (pixel.is_color(game.colormap_values.wall_brick))
@@ -69,36 +70,28 @@ var manager;
                     factory(game.floor, pixel, pos, 'wood');
             });
         });
+        // Every chunk should wane and wax
         hooks.register('lod_chunk_create', (chunk) => {
             chunk.group = new THREE.Group();
-        });
-        hooks.register('lod_chunk_show', (chunk) => {
-            renderer.game_objects.add(chunk.group);
+            chunk.group.name = 'a chunk group';
         });
         hooks.register('lod_chunk_hide', (chunk) => {
             chunk.group.parent.remove(chunk.group);
             chunk.group.children = [];
         });
-        function merge_floors(chunk, hint = 'kitchen') {
-            let floors = chunk.objs.filter(e => e.type == 'a floor');
-            floors = floors.filter((e) => e.hint == hint);
-            if (!floors.length)
-                return;
-            const first = floors[0];
-            let geometries = floors.map((e) => e.geometry);
-            const geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
-            const material = new THREE.MeshPhongMaterial({
-                map: first.material.map
-            });
-            const mesh = new THREE.Mesh(geometry, material);
-            chunk.group.add(mesh);
-            floors.forEach(e => e.vanish());
-            console.log('done building merged geometry');
+        hooks.register('lod_chunk_show', (chunk) => {
+            renderer.game_objects.add(chunk.group);
+        });
+        function bake(chunk, hint) {
+            const baked = new game.baked();
+            baked.wpos = chunk.small.min;
+            baked.filter = 'a floor';
+            baked.hint = hint;
+            game.lod.add(baked);
         }
         hooks.register('lod_chunk_show', (chunk) => {
-            // Let's try and merge geometries
-            merge_floors(chunk, 'kitchen');
-            merge_floors(chunk, 'wood');
+            bake(chunk, 'kitchen');
+            bake(chunk, 'wood');
         });
         return false;
     }

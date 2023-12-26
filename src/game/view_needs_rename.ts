@@ -46,7 +46,6 @@ export class view_needs_rename {
 		this.wpos = game.lod.unproject(this.rpos);
 		this.update_camera();
 		this.print();
-		//this.wpos = [...this.rpos]
 		game.lod.gworld.update(this.wpos);
 	}
 	begin: vec2 = [0, 0]
@@ -88,7 +87,10 @@ export class view_needs_rename {
 			${mall.fps.toFixed(1)} fps
 			<br />${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}
 			<br />/ ${game.projection.debug()} (tap f2)
-			<br />lod ${game.lod.ggrid.spread} / ${game.lod.chunk_span}: ${game.lod.unit}x
+			<br />chunk spread: ${game.lod.ggrid.spread}, chunk span: ${game.lod.chunk_span}
+			<br />unit: ${game.lod.unit}x
+			<br />rectangles ${game.rectangle.active}
+			<br />bakeds ${game.rectangle.active}
 			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}

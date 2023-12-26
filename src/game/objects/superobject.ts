@@ -4,12 +4,15 @@ import { pixel } from "../../util/colormap.js";
 
 import * as game from "../re-exports.js"
 
-export class superobject extends game.lod.obj {
-    hint: any
-    pixel: pixel
-    constructor(counts: [number, number]) {
-        super(counts);
-    }
+let calories: game.lod.calories
+
+export interface has_single_rectangle {
+	rectangle?: game.rectangle
 }
 
-export default superobject;
+export class superobject extends game.lod.obj {
+	pixel: pixel
+	constructor(counts: typeof calories) {
+		super(counts);
+	}
+}

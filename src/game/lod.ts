@@ -262,6 +262,7 @@ namespace lod {
 
 	export class obj extends toggle {
 		type = 'an obj'
+		hint = ''
 		wpos: vec2 = [0, 0]
 		rpos: vec2 = [0, 0]
 		size: vec2 = [100, 100]
