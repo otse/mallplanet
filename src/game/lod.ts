@@ -22,7 +22,7 @@ class toggle {
 
 namespace lod {
 
-	export const size = 8
+	export const unit = 8
 
 	const chunk_coloration = true
 
@@ -44,11 +44,11 @@ namespace lod {
 	}
 
 	export function project(unit: vec2): vec2 {
-		return pts.mult(unit, lod.size);
+		return pts.mult(unit, lod.unit);
 	}
 
 	export function unproject(pixel: vec2): vec2 {
-		return pts.divide(pixel, lod.size);
+		return pts.divide(pixel, lod.unit);
 	}
 
 	export function add(obj: obj) {
@@ -95,6 +95,7 @@ namespace lod {
 		static total = 0
 		color
 		fog_of_war = false
+		group
 		readonly small: aabb
 		readonly objs: obj[] = []
 		constructor(

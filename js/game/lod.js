@@ -20,7 +20,7 @@ class toggle {
 }
 var lod;
 (function (lod) {
-    lod.size = 8;
+    lod.unit = 8;
     const chunk_coloration = true;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
@@ -30,11 +30,11 @@ var lod;
     }
     lod.register = register;
     function project(unit) {
-        return pts.mult(unit, lod.size);
+        return pts.mult(unit, lod.unit);
     }
     lod.project = project;
     function unproject(pixel) {
-        return pts.divide(pixel, lod.size);
+        return pts.divide(pixel, lod.unit);
     }
     lod.unproject = unproject;
     function add(obj) {
@@ -83,6 +83,7 @@ var lod;
         static total = 0;
         color;
         fog_of_war = false;
+        group;
         small;
         objs = [];
         constructor(big, world) {

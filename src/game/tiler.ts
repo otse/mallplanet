@@ -16,7 +16,7 @@ namespace tiler {
 			for (let j = 0; j < 4; j++) {
 				if (pts.same([attribute.array[i + 0], attribute.array[i + 1]], lrrl[j])) {
 					//console.log('change uv');
-					const sprite = pts.divides([game.lod.size, game.lod.size], sheet);
+					const sprite = pts.divides([game.lod.unit, game.lod.unit], sheet);
 					let uv = pts.mults(lrrl[j], sprite);
 					uv = pts.add(uv, pts.mults(wpos, sprite));
 					// Todo: normalize the uv 0 to 1

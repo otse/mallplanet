@@ -38,9 +38,9 @@ export class wall extends game.superobject {
             map = renderer.load_texture(this.prefab.side, 'horz');
             map.rotation = 0;
         }
-        const left_bottom = pts.add(this.rpos, [game.lod.size / 2, game.lod.size / 2]);
+        const left_bottom = pts.add(this.rpos, [game.lod.unit / 2, game.lod.unit / 2]);
         let colorPixel = game.manager.colormap_.pixel(this.wpos).normalize();
-        this.geometry = new THREE.PlaneGeometry(game.lod.size, game.lod.size, 1);
+        this.geometry = new THREE.PlaneGeometry(game.lod.unit, game.lod.unit);
         this.material = new THREE.MeshPhongMaterial({
             wireframe: false,
             color: this.chunk?.color || new THREE.Color().fromArray(colorPixel),
@@ -52,10 +52,11 @@ export class wall extends game.superobject {
         this.mesh.rotation.x = -Math.PI / 2;
         this.mesh.updateMatrix();
         //this.mesh.add(new THREE.AxesHelper(1));
-        renderer.game_objects.add(this.mesh);
+        this.chunk?.group.add(this.mesh);
+        //renderer.game_objects.add(this.mesh);
     }
     vanish() {
-        renderer.game_objects.remove(this.mesh);
+        this.mesh.parent.remove(this.mesh);
     }
     think() {
         // whatever would a wall think?

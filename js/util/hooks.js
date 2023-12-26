@@ -13,6 +13,7 @@ export class hooks {
     static unregister(name, f) {
         hooks[name] = hooks[name].filter(e => e != f);
     }
+    // Call last first
     static call(name, x) {
         if (!hooks[name])
             return;

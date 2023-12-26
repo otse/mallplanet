@@ -19,6 +19,7 @@ export class hooks<T = never> {
 	static unregister(name: string, f: hooks.func) {
 		hooks[name] = hooks[name].filter(e => e != f);
 	}
+	// Call last first
 	static call(name: string, x: any) {
 		if (!hooks[name])
 			return;

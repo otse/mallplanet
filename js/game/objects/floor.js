@@ -24,10 +24,10 @@ export class floor extends game.superobject {
     create() {
         this.wtorpos();
         this.prefab = prefabs[this.hint] || prefabs['kitchen'];
-        const left_bottom = pts.add(this.rpos, [game.lod.size / 2, game.lod.size / 2]);
+        const left_bottom = pts.add(this.rpos, [game.lod.unit / 2, game.lod.unit / 2]);
         let pixel = game.manager.colormap_.pixel(this.wpos);
         let color = pixel.normalize();
-        this.geometry = new THREE.PlaneGeometry(game.lod.size, game.lod.size);
+        this.geometry = new THREE.PlaneGeometry(game.lod.unit, game.lod.unit);
         this.geometry.rotateX(-Math.PI / 2);
         this.geometry.translate(left_bottom[0], 0, left_bottom[1]);
         game.tiler.change_uv(this.geometry, this.wpos, this.prefab.repeat);
@@ -41,10 +41,10 @@ export class floor extends game.superobject {
         this.mesh.frustumCulled = false;
         this.mesh.updateMatrix();
         //this.mesh.add(new THREE.AxesHelper(2));
-        renderer.game_objects.add(this.mesh);
+        //renderer.game_objects.add(this.mesh);
     }
     vanish() {
-        renderer.game_objects.remove(this.mesh);
+        //renderer.game_objects.remove(this.mesh);
     }
     think() {
         // whatever would a terrain tile think?

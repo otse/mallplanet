@@ -84,11 +84,20 @@ namespace manager {
 					factory(game.floor, pixel, pos, 'wood');
 			});
 		});
+		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
+			chunk.group = new THREE.Group();
+		});
+		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
+			renderer.game_objects.add(chunk.group);
+		});
+		hooks.register('lod_chunk_hide', (chunk: game.lod.chunk) => {
+			chunk.group.parent.remove(chunk.group);
+			chunk.group.children = [];
+		});
 
 		function merge_floors(chunk: game.lod.chunk, hint = 'kitchen') {
 			let floors = chunk.objs.filter(e => e.type == 'a floor');
-			floors = floors.filter((e: game.floor) => e.hint == 'kitchen');
-			//console.log('this chunk has', floors.length, 'floors');
+			floors = floors.filter((e: game.floor) => e.hint == hint);
 			if (!floors.length)
 				return;
 			const first = floors[0] as game.floor;
@@ -98,9 +107,7 @@ namespace manager {
 				map: first.material.map
 			});
 			const mesh = new THREE.Mesh(geometry, material);
-			const rpos = game.lod.project(chunk.small.min);
-			//mesh.position.set(rpos[0], 1, rpos[1]);
-			renderer.game_objects.add(mesh);
+			chunk.group.add(mesh);
 			floors.forEach(e => e.vanish());
 			console.log('done building merged geometry');
 		}
