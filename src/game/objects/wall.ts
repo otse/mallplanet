@@ -18,6 +18,7 @@ export class wall extends game.superobject {
 	mesh
 	constructor() {
 		super(game.manager.tallies.walls);
+		this.type = 'a wall';
 	}
 	ugly_prefab_code() {
 		this.prefab = prefabs[this.hint] || prefabs['brick'];

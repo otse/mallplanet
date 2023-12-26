@@ -1,6 +1,7 @@
 import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 
-export { THREE as THREE }; // just perfect (:)
+export { THREE as THREE, BufferGeometryUtils }; // just perfect (:)
 
 import hooks from './util/hooks.js';
 import glob from "./util/glob.js";
@@ -14,10 +15,10 @@ import loading_screen from './views/loading_screen.js';
 import main_menu from './views/main_menu.js';
 import manager from './game/manager.js';
 
-
 namespace mall {
 	const constant = 1
-	
+
+	export var fps = 0
 	export var view
 	export var whole
 
@@ -31,7 +32,7 @@ namespace mall {
 
 	export function boot() {
 		glob.salt = '';
-		console.log(' boot mall ');
+		console.log(' boot mall '); 
 		whole = document.getElementById('page');
 		mkb.attach_listeners();
 		renderer.boot('');
@@ -44,9 +45,19 @@ namespace mall {
 	}
 
 	let last
+	let frames = 0
+	let prevTime = 0
 	function animate(time) {
 		glob.delta = (time - (last || time)) / 1000;
 		last = time;
+		// Now fps
+		frames++;
+		let now = (performance || Date).now();
+		if (time >= prevTime + 1000) {
+			fps = (frames * 1000) / (now - prevTime);
+			prevTime = now;
+			frames = 0;
+		}
 		requestAnimationFrame(animate);
 		hooks.call('mall_planet_animate', 0);
 		manager.think();

@@ -2,9 +2,10 @@ import pts from "../util/pts.js";
 import hooks from "../util/hooks.js";
 
 import { colormap, pixel } from "../util/colormap.js";
-import mall, { THREE } from "../mall.js";
+import mall, { THREE, BufferGeometryUtils } from "../mall.js";
 
 import * as game from "./re-exports.js"
+import renderer from "../renderer.js";
 
 namespace manager {
 
@@ -69,7 +70,7 @@ namespace manager {
 				//let pixel = somemap.pixel(pos);
 				//if (pixel.is_color(game.colormap_values.some_color))
 				//	factory(game.someobject, pixel, pos, 'something');
-			})
+			});
 			return false;
 		});
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
@@ -81,10 +82,37 @@ namespace manager {
 					factory(game.floor, pixel, pos, 'kitchen');
 				else if (pixel.is_color(game.colormap_values.tile_wood))
 					factory(game.floor, pixel, pos, 'wood');
-
-			})
-			return false;
+			});
 		});
+
+		function merge_floors(chunk: game.lod.chunk, hint = 'kitchen') {
+			let floors = chunk.objs.filter(e => e.type == 'a floor');
+			floors = floors.filter((e: game.floor) => e.hint == 'kitchen');
+			//console.log('this chunk has', floors.length, 'floors');
+			if (!floors.length)
+				return;
+			const first = floors[0] as game.floor;
+			let geometries = floors.map((e: game.floor) => e.geometry);
+			const geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
+			const material = new THREE.MeshPhongMaterial({
+				map: first.material.map
+			});
+			const mesh = new THREE.Mesh(geometry, material);
+			const rpos = game.lod.project(chunk.small.min);
+			//mesh.position.set(rpos[0], 1, rpos[1]);
+			renderer.game_objects.add(mesh);
+			floors.forEach(e => e.vanish());
+			console.log('done building merged geometry');
+		}
+
+		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
+			// Let's try and merge geometries
+			merge_floors(chunk, 'kitchen');
+			merge_floors(chunk, 'wood');
+		});
+
+		return false;
+
 	}
 }
 

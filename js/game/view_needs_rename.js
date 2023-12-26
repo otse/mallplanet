@@ -78,7 +78,8 @@ export class view_needs_rename {
     }
     print() {
         stats.innerHTML = `
-			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}
+			${mall.fps.toFixed(1)} fps
+			<br />${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}
 			<br />/ ${game.projection.debug()} (tap f2)
 			<br />lod ${game.lod.ggrid.spread} / ${game.lod.chunk_span}: ${game.lod.size}x
 			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
