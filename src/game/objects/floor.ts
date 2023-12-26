@@ -8,6 +8,10 @@ const prefabs = {
 	'kitchen': {
 		repeat: [16, 16],
 		tex: './tex/kitchen_floor_16x.png'
+	},
+	'wood': {
+		repeat: [32, 32],
+		tex: './tex/wood_floor_32x.png'
 	}
 }
 
@@ -40,7 +44,7 @@ export class floor extends game.superobject {
 		this.mesh.rotation.x = -Math.PI / 2;
 		this.mesh.updateMatrix();
 
-		game.tiler.change_uv(this.mesh, this.wpos, [16, 16]);
+		game.tiler.change_uv(this.mesh, this.wpos, this.prefab.repeat);
 		//this.mesh.add(new THREE.AxesHelper(2));
 
 		renderer.game_objects.add(this.mesh);

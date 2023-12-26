@@ -63,6 +63,8 @@ var manager;
                     factory(game.wall, pixel, pos, 'brick');
                 else if (pixel.is_color(game.colormap_values.tile_kitchen))
                     factory(game.floor, pixel, pos, 'kitchen');
+                else if (pixel.is_color(game.colormap_values.tile_wood))
+                    factory(game.floor, pixel, pos, 'wood');
             });
             return false;
         });
