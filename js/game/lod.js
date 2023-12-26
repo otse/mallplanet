@@ -24,7 +24,7 @@ var lod;
     const chunk_coloration = true;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
-    lod.chunk_span = 4;
+    lod.chunk_span = 8;
     lod.chunks = [0, 0];
     function register() {
     }
@@ -112,7 +112,7 @@ var lod;
         stacked(wpos) {
             let stack = [];
             for (let obj of this.objs)
-                if (pts.equals(wpos, pts.round(obj.wpos)))
+                if (pts.same(wpos, pts.round(obj.wpos)))
                     stack.push(obj);
             return stack;
         }

@@ -32,7 +32,7 @@ class pts {
     static unproject(a) {
         return [a[0] - a[1] * 2, a[1] * 2 + a[0]];
     }
-    static equals(a, b) {
+    static same(a, b) {
         return a[0] == b[0] && a[1] == b[1];
     }
     //static range(a: vec2, b: vec2): boolean {

@@ -6,7 +6,6 @@ import * as game from "../re-exports.js"
 
 const prefabs = {
 	'brick': {
-		size: [8, 8],
 		single: './tex/wall_brick_single_8x.png',
 		side: './tex/wall_brick_side_8x.png',
 	}
@@ -44,7 +43,7 @@ export class wall extends game.superobject {
 
 		const left_bottom = pts.add(this.rpos, [game.lod.size / 2, game.lod.size / 2]);
 		let colorPixel = game.manager.colormap_.pixel(this.wpos).normalize();
-		this.geometry = new THREE.PlaneGeometry(this.prefab.size[0], this.prefab.size[0], 1);
+		this.geometry = new THREE.PlaneGeometry(game.lod.size, game.lod.size, 1);
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.chunk?.color || new THREE.Color().fromArray(colorPixel),

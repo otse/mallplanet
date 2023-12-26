@@ -19,7 +19,6 @@ var manager;
         manager.colormap_ = new colormap('colormap');
         manager.heightmap = new colormap('heightmap');
         manager.wallmap = new colormap('wallmap');
-        manager.floormap = new colormap('floormap');
         manager.view = game.view_needs_rename.make();
         manager.ply = new game.player();
         game.projection.start();
@@ -51,9 +50,9 @@ var manager;
     function hook_in_to_the_lod() {
         hooks.register('lod_chunk_create', (chunk) => {
             pts.func(chunk.small, (pos) => {
-                let pixel = manager.floormap.pixel(pos);
-                //if (pixel.is_color(game.colormap_values.tile_kitchen))
-                //	factory(game.floor, pixel, pos, 'kitchen');
+                //let pixel = somemap.pixel(pos);
+                //if (pixel.is_color(game.colormap_values.some_color))
+                //	factory(game.someobject, pixel, pos, 'something');
             });
             return false;
         });
@@ -62,6 +61,8 @@ var manager;
                 let pixel = manager.wallmap.pixel(pos);
                 if (pixel.is_color(game.colormap_values.wall_brick))
                     factory(game.wall, pixel, pos, 'brick');
+                else if (pixel.is_color(game.colormap_values.tile_kitchen))
+                    factory(game.floor, pixel, pos, 'kitchen');
             });
             return false;
         });

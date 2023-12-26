@@ -35,6 +35,7 @@ export class view_needs_rename {
 		game.projection.yaw.position.z = this.rpos[1];
 		game.projection.yaw.updateMatrix();
 		renderer.camera.zoom = game.projection.zoom;
+		renderer.camera.rotation.z = Math.PI / 360 * this.rotate;
 		renderer.camera.updateMatrix();
 		renderer.camera.updateProjectionMatrix();
 	}
@@ -86,13 +87,18 @@ export class view_needs_rename {
 		stats.innerHTML = `
 			${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}
 			<br />/ ${game.projection.debug()} (tap f2)
-			<br />lod ${game.lod.ggrid.spread} / ${game.lod.ggrid.outside}: ${game.lod.size}x
+			<br />lod ${game.lod.ggrid.spread} / ${game.lod.chunk_span}: ${game.lod.size}x
 			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}
 		`;
 	}
+	rotate = 0
 	handle_input() {
+		if (mkb.key_state('arrowup'))
+			this.rotate += 1;
+		if (mkb.key_state('arrowdown'))
+			this.rotate -= 1;
 		if (mkb.key_state('f') == 1 || mkb.wheel == -1)
 			game.projection.zoom -= 1;
 		if (mkb.key_state('r') == 1 || mkb.wheel == 1)
@@ -101,7 +107,7 @@ export class view_needs_rename {
 			game.lod.ggrid.shrink();
 		if (mkb.key_state('g') == 1)
 			game.lod.ggrid.grow();
-			game.projection.zoom = mall.clamp(game.projection.zoom, 1, 10); 
+			game.projection.zoom = mall.clamp(game.projection.zoom, 1, 10);
 	}
 }
 

@@ -8,6 +8,7 @@ import projection from "./projection.js";
 import view_needs_rename from "./view_needs_rename.js";
 import floor from "./objects/floor.js";
 import wall from "./objects/wall.js";
-export { lod, manager, superobject, colormap_values, player, projection, view_needs_rename, floor, wall };
+import tiler from "./tiler.js";
+export { lod, manager, superobject, colormap_values, tiler, player, projection, view_needs_rename, floor, wall };
 // Usage:
 // import * as game from "./re-exports.js"

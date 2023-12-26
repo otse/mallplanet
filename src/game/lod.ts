@@ -30,7 +30,7 @@ namespace lod {
 
 	const grid_crawl_makes_chunks = true
 
-	export const chunk_span = 4
+	export const chunk_span = 8
 
 	export type calories = [active: number, total: number]
 
@@ -125,7 +125,7 @@ namespace lod {
 		stacked(wpos: vec2) {
 			let stack: obj[] = [];
 			for (let obj of this.objs)
-				if (pts.equals(wpos, pts.round(obj.wpos)))
+				if (pts.same(wpos, pts.round(obj.wpos)))
 					stack.push(obj);
 			return stack;
 		}

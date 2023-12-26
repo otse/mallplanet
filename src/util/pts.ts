@@ -45,7 +45,7 @@ class pts {
 		return [a[0] - a[1] * 2, a[1] * 2 + a[0]];
 	}
 
-	static equals(a: vec2, b: vec2): boolean {
+	static same(a: vec2, b: vec2): boolean {
 		return a[0] == b[0] && a[1] == b[1];
 	}
 

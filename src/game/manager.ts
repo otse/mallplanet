@@ -23,7 +23,6 @@ namespace manager {
 	export var colormap_: colormap
 	export var heightmap: colormap
 	export var wallmap: colormap
-	export var floormap: colormap
 
 	export function init() {
 	}
@@ -33,7 +32,6 @@ namespace manager {
 		colormap_ = new colormap('colormap');
 		heightmap = new colormap('heightmap');
 		wallmap = new colormap('wallmap');
-		floormap = new colormap('floormap');
 		view = game.view_needs_rename.make();
 		ply = new game.player();
 		game.projection.start();
@@ -68,9 +66,9 @@ namespace manager {
 	function hook_in_to_the_lod() {
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			pts.func(chunk.small, (pos) => {
-				let pixel = floormap.pixel(pos);
-				//if (pixel.is_color(game.colormap_values.tile_kitchen))
-				//	factory(game.floor, pixel, pos, 'kitchen');
+				//let pixel = somemap.pixel(pos);
+				//if (pixel.is_color(game.colormap_values.some_color))
+				//	factory(game.someobject, pixel, pos, 'something');
 			})
 			return false;
 		});
@@ -79,6 +77,9 @@ namespace manager {
 				let pixel = wallmap.pixel(pos);
 				if (pixel.is_color(game.colormap_values.wall_brick))
 					factory(game.wall, pixel, pos, 'brick');
+				else if (pixel.is_color(game.colormap_values.tile_kitchen))
+					factory(game.floor, pixel, pos, 'kitchen');
+
 			})
 			return false;
 		});

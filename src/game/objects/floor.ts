@@ -6,12 +6,13 @@ import * as game from "../re-exports.js"
 
 const prefabs = {
 	'kitchen': {
-		size: [8, 8],
-		tex: './tex/kitchen_floor_8x.png'
+		repeat: [16, 16],
+		tex: './tex/kitchen_floor_16x.png'
 	}
 }
 
 export class floor extends game.superobject {
+	prefab
 	geometry
 	material
 	mesh
@@ -19,14 +20,19 @@ export class floor extends game.superobject {
 		super(game.manager.tallies.tiles);
 	}
 	override create() {
-		const left_bottom = pts.add(this.wpos, [0.5, 0.5]);
+		this.wtorpos();
+
+		this.prefab = prefabs[this.hint] || prefabs['kitchen'];
+
+		const left_bottom = pts.add(this.rpos, [game.lod.size / 2, game.lod.size / 2]);
+
 		let pixel = game.manager.colormap_.pixel(this.wpos);
 		let color = pixel.normalize();
-		this.geometry = new THREE.PlaneGeometry(1, 1, 1);
+		this.geometry = new THREE.PlaneGeometry(game.lod.size, game.lod.size);
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.chunk?.color || new THREE.Color().fromArray(color),
-			map: renderer.load_texture('./tex/grass64x.png')
+			map: renderer.load_texture(this.prefab.tex)
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.frustumCulled = false;
@@ -34,13 +40,10 @@ export class floor extends game.superobject {
 		this.mesh.rotation.x = -Math.PI / 2;
 		this.mesh.updateMatrix();
 
-		this.prefab();
+		game.tiler.change_uv(this.mesh, this.wpos, [16, 16]);
 		//this.mesh.add(new THREE.AxesHelper(2));
 
 		renderer.game_objects.add(this.mesh);
-	}
-	prefab() {
-
 	}
 	override vanish() {
 		renderer.game_objects.remove(this.mesh);
