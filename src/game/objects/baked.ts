@@ -5,10 +5,14 @@ import pts from "../../util/pts.js";
 import * as game from "../re-exports.js"
 
 //
+const minimum_mergables = 3
 
 export class baked extends game.superobject {
-	//rectangle: game.rectangle
-	filter = 'a floor'
+	static total = 0
+	static rectangles_baked = 0
+	rectangles_baked = 0
+	has_enough_candidates
+	look_for = 'a floor'
 	hint = 'kitchen'
 	geometry
 	material
@@ -19,30 +23,35 @@ export class baked extends game.superobject {
 	}
 	override create() {
 		if (!this.chunk)
-			return;		
-		let filtered = this.chunk.objs.filter(e => e.type == this.filter);
-		filtered = filtered.filter(e => e.hint == this.hint);
-		if (filtered.length < 2)
 			return;
+		let filtered = this.chunk.objs.filter(e =>
+			e.type == this.look_for &&
+			e.hint == this.hint);
+		if (filtered.length < minimum_mergables)
+			return;
+		this.has_enough_candidates = true;
+		this.rectangles_baked = filtered.length;
+		baked.total++;
+		baked.rectangles_baked += this.rectangles_baked;
 		const first = filtered[0] as game.has_single_rectangle;
-		let geometries = filtered.map((e: any) => e.rectangle?.geometry);
-		//new game.rectangle({ bind: this, solid: true });
-		//this.rectangle.build();
+		let geometries = filtered.map((e: any) => e.rectangle.geometry);
 		this.geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
 		this.material = new THREE.MeshPhongMaterial({
 			map: first.rectangle?.material.map,
-			//color: 'blue'
+			//color: this.chunk?.color,
+			color: 'red'
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-		this.mesh.position.y = -1;
-		this.mesh.updateMatrix();
 		this.chunk.group.add(this.mesh);
-		filtered.forEach((e: any) => e.rectangle?.baked());
-		console.log('baked', filtered.length, 'rectangles');
+		filtered.forEach((e: any) => e.rectangle.baked());
 	}
 	override vanish() {
-		const spliced = this.chunk?.remove(this);
-		console.log('spliced baked', spliced);
+		if (!this.has_enough_candidates)
+			return;
+		baked.total--;
+		baked.rectangles_baked -= this.rectangles_baked;
+		this.chunk?.remove(this);
+		this.finalize();
 	}
 	override think() {
 		// whatever would a baked think?

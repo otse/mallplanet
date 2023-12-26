@@ -152,7 +152,8 @@ var lod;
             if (this.off())
                 return;
             lod.chunks[0]--;
-            for (let obj of this.objs)
+            const slice = this.objs.slice(0);
+            for (let obj of slice)
                 obj.hide();
             hooks.call('lod_chunk_hide', this);
         }

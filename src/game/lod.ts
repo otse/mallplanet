@@ -130,7 +130,7 @@ namespace lod {
 					stack.push(obj);
 			return stack;
 		}
-		remove(obj: obj): boolean | undefined {
+		remove(obj: obj) {
 			let i = this.objs.indexOf(obj);
 			if (i > -1) {
 				obj.chunk = null;
@@ -165,7 +165,8 @@ namespace lod {
 			if (this.off())
 				return;
 			chunks[0]--;
-			for (let obj of this.objs)
+			const slice = this.objs.slice(0);
+			for (let obj of slice)
 				obj.hide();
 			hooks.call('lod_chunk_hide', this);
 		}

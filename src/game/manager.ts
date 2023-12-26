@@ -67,9 +67,6 @@ namespace manager {
 	function hook_in_to_the_lod() {
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			pts.func(chunk.small, (pos) => {
-				//let pixel = somemap.pixel(pos);
-				//if (pixel.is_color(game.colormap_values.some_color))
-				//	factory(game.someobject, pixel, pos, 'something');
 			});
 			return false;
 		});
@@ -87,7 +84,6 @@ namespace manager {
 			});
 		});
 
-		// Every chunk should wane and wax
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			chunk.group = new THREE.Group();
 			chunk.group.name = 'a chunk group';
@@ -104,8 +100,8 @@ namespace manager {
 
 		function bake(chunk: game.lod.chunk, hint) {
 			const baked = new game.baked();
-			baked.wpos = chunk.small.min;
-			baked.filter = 'a floor';
+			baked.wpos = chunk.small.center();
+			baked.look_for = 'a floor';
 			baked.hint = hint;
 			game.lod.add(baked);
 		}

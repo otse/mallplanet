@@ -52,7 +52,7 @@ export class wall extends game.superobject {
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.frustumCulled = false;
-		this.mesh.position.set(left_bottom[0], 1, left_bottom[1]);
+		this.mesh.position.set(left_bottom[0], 0, left_bottom[1]);
 		this.mesh.rotation.x = -Math.PI / 2;
 		this.mesh.updateMatrix();
 		//this.mesh.add(new THREE.AxesHelper(1));
