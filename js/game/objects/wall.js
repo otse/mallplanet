@@ -28,6 +28,8 @@ export class wall extends game.superobject {
             else {
                 this.hint += ' -single';
             }
+            this.shadow = new wall_shadow(this);
+            game.lod.add(this.shadow);
             this.doOnce = false;
         }
         this.wtorpos();
@@ -39,28 +41,36 @@ export class wall extends game.superobject {
         });
         rectangle.yup = 2;
         rectangle.build();
-        {
-            this.shadow = new game.superobject(game.manager.tallies.shadows);
-            //this.shadow.type = 'a wall shadow';
-            this.shadow.wpos = this.wpos;
-            this.shadow.hint = this.hint.split('-')[0] + '-shadow';
-            console.log('wall shadow hint:', this.shadow.hint);
-            game.lod.add(this.shadow);
-            const rectangle = new game.rectangle({
-                bind: this.shadow,
-                alignLeftBottom: true,
-                staticGeometry: true
-            });
-            rectangle.yup = 1;
-            rectangle.build();
-        }
     }
     vanish() {
         this.rectangle?.destroy();
-        this.shadow.rectangle?.destroy();
+        this.rectangle = undefined;
     }
     think() {
         // Whatever would a wall think?
+    }
+}
+export class wall_shadow extends game.superobject {
+    base;
+    constructor(base) {
+        super(game.manager.tallies.shadows);
+        this.base = base;
+        this.hint = base.hint.split('-')[0] + '-shadow';
+        this.wpos = base.wpos;
+    }
+    create() {
+        console.log(' wall_shadow create ');
+        const rectangle = new game.rectangle({
+            bind: this,
+            alignLeftBottom: true,
+            staticGeometry: true
+        });
+        rectangle.yup = 1;
+        rectangle.build();
+    }
+    vanish() {
+        this.rectangle?.destroy();
+        this.rectangle = undefined;
     }
 }
 export default wall;

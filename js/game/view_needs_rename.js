@@ -111,7 +111,7 @@ export class view_needs_rename {
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}
 			<br />shadows ${game.manager.tallies.shadows[0]} / ${game.manager.tallies.shadows[1]}
-			<br />(middle mouse drag, scrollwheel zoom)
+			<br />(middle mouse, scrollwheel)
 			<br />(tap f2 to change projection)
 			<br />(tap t and g to change lod grid)
 			<br />(tap h to hide)
