@@ -248,7 +248,6 @@ var lod;
     class obj extends toggle {
         counts;
         type = 'an obj';
-        hint = '';
         wpos = [0, 0];
         rpos = [0, 0];
         size = [100, 100];

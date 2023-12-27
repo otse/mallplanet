@@ -12,8 +12,8 @@ export class baked extends game.superobject {
 	static rectangles_baked = 0
 	rectangles_baked = 0
 	has_enough_candidates
-	look_for = 'a floor'
-	hint = 'kitchen'
+	match_type = 'a floor'
+	match_hint = 'kitchen floor'
 	geometry
 	material
 	mesh
@@ -24,9 +24,9 @@ export class baked extends game.superobject {
 	override create() {
 		if (!this.chunk)
 			return;
-		let filtered = this.chunk.objs.filter(e =>
-			e.type == this.look_for &&
-			e.hint == this.hint);
+		let filtered = this.chunk.objs.filter((e: any) =>
+			e.type == this.match_type &&
+			e.hint == this.match_hint);
 		if (filtered.length < minimum_mergables)
 			return;
 		this.has_enough_candidates = true;

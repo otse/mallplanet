@@ -14,7 +14,7 @@ export class floor extends game.superobject {
         this.rectangle?.destroy();
     }
     think() {
-        // whatever would a floor tile think?
+        // Whatever would a floor think?
     }
 }
 export default floor;

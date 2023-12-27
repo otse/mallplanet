@@ -19,7 +19,7 @@ export class floor extends game.superobject {
 		this.rectangle?.destroy();
 	}
 	override think() {
-		// whatever would a floor tile think?
+		// Whatever would a floor think?
 	}
 }
 

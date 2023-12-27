@@ -2,6 +2,7 @@
 import * as game from "../re-exports.js";
 let calories;
 export class superobject extends game.lod.obj {
+    hint = '';
     bakeable = false; // Not used
     pixel;
     rectangle;

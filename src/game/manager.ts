@@ -76,11 +76,11 @@ namespace manager {
 			pts.func(chunk.small, (pos) => {
 				let pixel = wallmap.pixel(pos);
 				if (pixel.is_color(game.colormap_values.wall_brick))
-					factory(game.wall, pixel, pos, 'brick');
+					factory(game.wall, pixel, pos, 'brick wall');
 				else if (pixel.is_color(game.colormap_values.tile_kitchen))
-					factory(game.floor, pixel, pos, 'kitchen');
+					factory(game.floor, pixel, pos, 'kitchen floor');
 				else if (pixel.is_color(game.colormap_values.tile_wood))
-					factory(game.floor, pixel, pos, 'wood');
+					factory(game.floor, pixel, pos, 'wooden floor');
 			});
 		});
 
@@ -98,17 +98,19 @@ namespace manager {
 			renderer.game_objects.add(chunk.group);
 		});
 
-		function bake(chunk: game.lod.chunk, hint) {
+		function bake(chunk: game.lod.chunk, type, hint) {
 			const baked = new game.baked();
 			baked.wpos = chunk.small.center();
-			baked.look_for = 'a floor';
-			baked.hint = hint;
+			baked.match_type = type;
+			baked.match_hint = hint;
 			game.lod.add(baked);
 		}
 
 		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
-			bake(chunk, 'kitchen');
-			bake(chunk, 'wood');
+			bake(chunk, 'a floor', 'kitchen floor');
+			bake(chunk, 'a floor', 'wooden floor');
+			bake(chunk, 'a wall', 'brick wall vert');
+			bake(chunk, 'a wall', 'brick wall horz');
 		});
 
 		return false;
