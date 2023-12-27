@@ -10,6 +10,7 @@ export class wall extends game.superobject {
 	geometry
 	material
 	mesh
+	doOnce = true
 	constructor() {
 		super(game.manager.tallies.walls);
 	}
@@ -17,16 +18,18 @@ export class wall extends game.superobject {
 		if (!this.pixel)
 			return;
 		this.wtorpos();
-		if (this.pixel.connections() >= 3) {
-
-		}
-		else if (this.pixel.top().is_color(this.pixel.data) &&
-			this.pixel.bottom().is_color(this.pixel.data)) {
-			this.hint += ' vert';
-		}
-		else if (this.pixel.left().is_color(this.pixel.data) &&
-			this.pixel.right().is_color(this.pixel.data)) {
-			this.hint += ' horz';
+		if (this.doOnce) {
+			if (this.pixel.connections() >= 3) {
+			}
+			else if (this.pixel.top().is_color(this.pixel.data) &&
+				this.pixel.bottom().is_color(this.pixel.data)) {
+				this.hint += ' vert';
+			}
+			else if (this.pixel.left().is_color(this.pixel.data) &&
+				this.pixel.right().is_color(this.pixel.data)) {
+				this.hint += ' horz';
+			}
+			this.doOnce = false;
 		}
 
 		this.wtorpos();

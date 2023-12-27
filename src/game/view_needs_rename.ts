@@ -90,7 +90,7 @@ export class view_needs_rename {
 			<br />chunk spread ${game.lod.ggrid.spread}, chunk span ${game.lod.chunk_span}
 			<br />unit: ${game.lod.unit}x
 			<br />rectangles ${game.rectangle.active}
-			<br />bakeds ${game.baked.total}, rectangles baked ${game.baked.rectangles_baked}
+			<br />bakeds ${game.baked.total}, rectangles baked ${game.baked.rectangles_baked} / ${game.rectangle.active}
 			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}
@@ -110,7 +110,7 @@ export class view_needs_rename {
 			game.lod.ggrid.shrink();
 		if (mkb.key_state('g') == 1)
 			game.lod.ggrid.grow();
-			game.projection.zoom = mall.clamp(game.projection.zoom, 1, 10);
+		game.projection.zoom = mall.clamp(game.projection.zoom, 1, 10);
 	}
 }
 
