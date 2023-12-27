@@ -8,6 +8,7 @@ interface prefab {
 	tex: string
 	repeat?: vec2,
 	size?: vec2,
+	offset?: vec2,
 	turn?: boolean
 	transparent?: boolean,
 	opacity?: number
@@ -27,7 +28,8 @@ const prefabs: { [prefab: string]: prefab } = {
 	},
 	'brick wall -shadow': {
 		tex: './tex/wall_brick_single_8x_shadow.png',
-		size: [16, 16],
+		size: [8, 8],
+		offset: [3, 3],
 		transparent: true,
 		opacity: .3
 	},
@@ -48,10 +50,11 @@ const prefabs: { [prefab: string]: prefab } = {
 	}
 }
 
-// Todo this class is pretty vile
-// Refactor when you can and, inevitably, destroy it
+// Todo Refactor when you can and, inevitably, destroy it
+
 export class rectangle {
 	static active = 0
+	prefab
 	baked?: game.baked
 	split
 	geometry
@@ -63,6 +66,7 @@ export class rectangle {
 	yup = 0
 	size
 	pos
+	is_box = false
 	left_bottom
 	constructor({
 		bind,
@@ -93,28 +97,37 @@ export class rectangle {
 		let pos = pts.clone(this.bind.rpos);
 		if (this.left_bottom)
 			pos = pts.add(pos, pts.divide(this.size, 2));
+		if (this.prefab.offset)
+			pos = pts.add(pos, this.prefab.offset);
 		this.pos = pos;
 	}
 	build() {
 		this.bind.wtorpos();
-		const prefab = prefabs[this.bind.hint] || prefabs['default'];
-		this.size = prefab.size || [game.lod.unit, game.lod.unit];
+		this.prefab = prefabs[this.bind.hint] || prefabs['default'];
+		this.size = this.prefab.size || [game.lod.unit, game.lod.unit];
 		this.repos();
-		this.geometry = new THREE.PlaneGeometry(this.size[0], this.size[1]);
-		this.geometry.rotateX(-Math.PI / 2);
+		if (this.is_box) {
+			const height = 3;
+			this.geometry = new THREE.BoxGeometry(this.size[0], height, this.size[1]);
+			this.geometry.translate(0, height / 2, 0);
+		}
+		else {
+			this.geometry = new THREE.PlaneGeometry(this.size[0], this.size[1]);
+			this.geometry.rotateX(-Math.PI / 2);
+		}
 		// Todo: Turning geometry could cause incorrect repeating
-		if (prefab.turn)
+		if (this.prefab.turn)
 			this.geometry.rotateY(-Math.PI / 2);
 		if (this.staticGeometry)
 			this.geometry.translate(this.pos[0], this.yup, this.pos[1]);
-		if (prefab.repeat)
-			game.tiler.change_uv(this.geometry, this.bind.wpos, prefab.repeat);
+		if (this.prefab.repeat)
+			game.tiler.change_uv(this.geometry, this.bind.wpos, this.prefab.repeat);
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.bind.chunk?.color || 'white',
-			map: renderer.load_texture(this.tex || prefab.tex),
-			transparent: !!prefab.transparent,
-			opacity: prefab.opacity != undefined ? prefab.opacity : 1
+			map: renderer.load_texture(this.tex || this.prefab.tex),
+			transparent: !!this.prefab.transparent,
+			opacity: this.prefab.opacity != undefined ? this.prefab.opacity : 1
 		});
 		this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;
 		this.mesh = new THREE.Mesh(this.geometry, this.material);

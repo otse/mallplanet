@@ -24,7 +24,7 @@ var lod;
     const random_chunk_coloration = false;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
-    lod.chunk_span = 8;
+    lod.chunk_span = 16;
     lod.objs = [0, 0];
     lod.chunks = [0, 0];
     function register() {

@@ -1,5 +1,5 @@
 import pts from "./pts.js";
-export const map_span = 100;
+export const map_span = 200;
 const invalid = [-1, -1, -1, -1];
 export class pixel {
     parent;

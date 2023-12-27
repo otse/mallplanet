@@ -39,7 +39,8 @@ export class wall extends game.superobject {
             alignLeftBottom: true,
             staticGeometry: true
         });
-        rectangle.yup = 2;
+        rectangle.yup = 3;
+        //rectangle.is_box = true;
         rectangle.build();
     }
     vanish() {
@@ -59,13 +60,12 @@ export class wall_shadow extends game.superobject {
         this.wpos = base.wpos;
     }
     create() {
-        console.log(' wall_shadow create ');
         const rectangle = new game.rectangle({
             bind: this,
             alignLeftBottom: true,
             staticGeometry: true
         });
-        rectangle.yup = 1;
+        rectangle.yup = 0.1;
         rectangle.build();
     }
     vanish() {

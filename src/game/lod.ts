@@ -30,7 +30,7 @@ namespace lod {
 
 	const grid_crawl_makes_chunks = true
 
-	export const chunk_span = 8
+	export const chunk_span = 16
 
 	export type calories = [active: number, total: number]
 

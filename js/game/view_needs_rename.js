@@ -75,7 +75,6 @@ export class view_needs_rename {
             }
             else {
                 dif = pts.divide(dif, -1);
-                //dif[1] = -dif[1];
                 dif = pts.mult(dif, renderer.ndpi);
                 dif = pts.divide(dif, game.projection.zoom);
                 dif = pts.subtract(dif, this.before);
@@ -100,6 +99,7 @@ export class view_needs_rename {
 			<br />rpos <x_vec2>[${pts.to_string_fixed(this.rpos)}]</x_vec2>
 			<br />wpos <x_vec2>[${pts.to_string_fixed(this.wpos)}]</x_vec2>
 			<br />mwpos <x_vec2>[${pts.to_string_fixed(this.mwpos)}]</x_vec2>
+			<br />plywpos <x_vec2>[${pts.to_string_fixed(game.manager.ply.wpos)}]</x_vec2>
 			<br />${game.projection.debug()}
 			<br />
 			<br />chunk size ${game.lod.chunk_span}
@@ -115,6 +115,7 @@ export class view_needs_rename {
 			<br />(tap f2 to change projection)
 			<br />(tap t and g to change lod grid)
 			<br />(tap h to hide)
+			<br />1
 			`;
     }
     rotate = 0;

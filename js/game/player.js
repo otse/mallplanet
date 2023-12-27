@@ -1,36 +1,46 @@
 import mkb from "../mkb.js";
 import glob from "../util/glob.js";
+import pts from "../util/pts.js";
 import * as game from "./re-exports.js";
 class player extends game.superobject {
     geometry;
     constructor() {
         super([0, 0]);
     }
+    move() {
+        let speed = 1 * game.lod.unit * glob.delta;
+        let x = 0;
+        let y = 0;
+        if (mkb.key_state('w')) {
+            y -= 1;
+        }
+        if (mkb.key_state('s')) {
+            y += 1;
+        }
+        if (mkb.key_state('a')) {
+            x -= 1;
+        }
+        if (mkb.key_state('d')) {
+            x += 1;
+        }
+        if (mkb.key_state('x')) {
+            speed *= 5;
+        }
+        if (x || y) {
+            let angle = -pts.angle([x, y], [0, 0]);
+            // this.rotatey = angle;
+            x = speed * Math.sin(angle);
+            y = speed * Math.cos(angle);
+        }
+        let pos = pts.subtract(this.wpos, game.manager.view.mwpos);
+        let angle = -pts.angle([0, 0], [pos[0], pos[1]]);
+        this.rotatey = angle;
+        return [x, y];
+    }
     priority_update() {
-        const speed = 8;
-        const w = mkb.key_state('w');
-        const a = mkb.key_state('a');
-        const s = mkb.key_state('s');
-        const d = mkb.key_state('d');
-        let moveTo = [0, 0];
-        if (w) {
-            moveTo[1] -= speed * glob.delta;
-            this.rotatey = Math.PI;
-        }
-        if (a) {
-            moveTo[0] -= speed * glob.delta;
-            this.rotatey = -Math.PI / 2;
-        }
-        if (s) {
-            moveTo[1] += speed * glob.delta;
-            this.rotatey = 0;
-        }
-        if (d) {
-            moveTo[0] += speed * glob.delta;
-            this.rotatey = Math.PI / 2;
-        }
+        let move_to = this.move();
         this.rebound();
-        this.try_move_as_square(moveTo);
+        this.try_move_as_square(move_to);
         this.wtorpos();
         this.rectangle?.update();
         game.lod.chunk.swap(this);
