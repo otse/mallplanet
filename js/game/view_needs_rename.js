@@ -4,6 +4,7 @@ import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import mall from "../mall.js";
 import * as game from "./re-exports.js";
+import glob from "../util/glob.js";
 let stats;
 export class view_needs_rename {
     wpos = [35, 35];
@@ -37,6 +38,9 @@ export class view_needs_rename {
         this.wpos = game.lod.unproject(this.rpos);
         this.update_camera();
         this.print();
+        //this.update();
+    }
+    update() {
         game.lod.gworld.update(this.wpos);
     }
     set_mouse() {
@@ -82,27 +86,36 @@ export class view_needs_rename {
             this.rpos = pts.floor(this.rpos);
         }
     }
+    hide = false;
     print() {
+        if (mkb.key_state('h') == 1)
+            this.hide = !this.hide;
+        stats.style.visibility = this.hide ? 'hidden' : 'visible';
         stats.innerHTML = `
-			${mall.fps.toFixed(1)} fps
+			fps ${mall.fps.toFixed(1)}
+			<br />delta ${glob.delta.toFixed(3)}
 			<br />unit ${game.lod.unit}x
 			<br />zoom 1:${game.projection.zoom}
-			<br />rpos ${pts.to_string_fixed(this.rpos)}
-			<br />wpos ${pts.to_string_fixed(this.wpos)}
-			<br />mwpos ${pts.to_string_fixed(this.mwpos)}
-			<br />\`${game.projection.debug()}\` (tap f2)
-			<br />middle mouse drag, scrollwheel zoom
+			<br />(render pos, world pos)
+			<br />rpos <x_vec2>[${pts.to_string_fixed(this.rpos)}]</x_vec2>
+			<br />wpos <x_vec2>[${pts.to_string_fixed(this.wpos)}]</x_vec2>
+			<br />mwpos <x_vec2>[${pts.to_string_fixed(this.mwpos)}]</x_vec2>
+			<br />${game.projection.debug()}
 			<br />
+			<br />chunk size ${game.lod.chunk_span}
 			<br />lod grid size ${game.lod.ggrid.spread * 2 + 1} * ${game.lod.ggrid.spread * 2 + 1}
-			, (chunk size in units: ${game.lod.chunk_span})
 			<br />objects ${game.lod.objs[0]} / ${game.lod.objs[1]}
-			<br />(tap t and g)
 			<br />merged geometries ${game.manager.tallies.bakeds[0]}
 			<br />rectangles baked ${game.baked.rectangles_baked} / ${game.rectangle.active}
 			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunks[1]}
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}
-		`;
+			<br />shadows ${game.manager.tallies.shadows[0]} / ${game.manager.tallies.shadows[1]}
+			<br />(middle mouse drag, scrollwheel zoom)
+			<br />(tap f2 to change projection)
+			<br />(tap t and g to change lod grid)
+			<br />(tap h to hide)
+			`;
     }
     rotate = 0;
     handle_input() {

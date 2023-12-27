@@ -13,6 +13,7 @@ namespace manager {
 		export var bakeds: game.lod.calories = [0, 0]
 		export var tiles: game.lod.calories = [0, 0]
 		export var walls: game.lod.calories = [0, 0]
+		export var shadows: game.lod.calories = [0, 0]
 	}
 
 	export let active = false
@@ -37,7 +38,7 @@ namespace manager {
 		view = new game.view_needs_rename();
 		hook_in_to_the_lod();
 		ply = new game.player();
-		ply.wpos = [43, 39];
+		ply.wpos = [23, 28];
 		game.lod.add(ply);
 		game.projection.start();
 	}
@@ -49,6 +50,8 @@ namespace manager {
 			return;
 		game.projection.think();
 		view.think();
+		ply.priority_update();
+		view.update();
 	}
 
 	export function factory<type extends game.superobject>(
@@ -117,8 +120,9 @@ namespace manager {
 		hooks.register('lod_chunk_show', (chunk: game.lod.chunk) => {
 			bake(chunk, 'a floor', 'kitchen floor');
 			bake(chunk, 'a floor', 'wooden floor');
-			bake(chunk, 'a wall', 'brick wall vert');
-			bake(chunk, 'a wall', 'brick wall horz');
+			bake(chunk, 'a wall', 'brick wall -vert');
+			bake(chunk, 'a wall', 'brick wall -horz');
+			bake(chunk, 'an obj', 'brick wall -shadow');
 		});
 
 	}

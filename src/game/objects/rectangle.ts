@@ -9,6 +9,8 @@ interface prefab {
 	repeat?: vec2,
 	size?: vec2,
 	turn?: boolean
+	transparent?: boolean,
+	opacity?: number
 }
 
 const prefabs: { [prefab: string]: prefab } = {
@@ -17,16 +19,23 @@ const prefabs: { [prefab: string]: prefab } = {
 	},
 	'player': {
 		tex: './tex/player_32x.png',
-		size: [32, 32]
+		size: [32, 32],
+		transparent: true
 	},
-	'brick wall': {
+	'brick wall -single': {
 		tex: './tex/wall_brick_single_8x.png'
 	},
-	'brick wall vert': {
+	'brick wall -shadow': {
+		tex: './tex/wall_brick_single_8x_shadow.png',
+		size: [16, 16],
+		transparent: true,
+		opacity: .3
+	},
+	'brick wall -vert': {
 		tex: './tex/wall_brick_side_8x.png',
 		turn: true
 	},
-	'brick wall horz': {
+	'brick wall -horz': {
 		tex: './tex/wall_brick_side_8x.png'
 	},
 	'kitchen floor': {
@@ -39,6 +48,8 @@ const prefabs: { [prefab: string]: prefab } = {
 	}
 }
 
+// Todo this class is pretty vile
+// Refactor when you can and, inevitably, destroy it
 export class rectangle {
 	static active = 0
 	baked?: game.baked
@@ -46,8 +57,8 @@ export class rectangle {
 	geometry
 	material
 	mesh
-	bind
-	solid
+	bind: game.superobject
+	staticGeometry
 	tex
 	yup = 0
 	size
@@ -55,23 +66,24 @@ export class rectangle {
 	left_bottom
 	constructor({
 		bind,
-		solid,
-		left_bottom,
+		staticGeometry,
+		alignLeftBottom: left_bottom,
 		tex
 	}: {
 		bind: game.superobject,
-		solid: boolean,
-		left_bottom: boolean,
+		staticGeometry: boolean,
+		alignLeftBottom: boolean,
 		tex?: string
 	}) {
 		this.bind = bind;
-		this.solid = solid;
+		this.staticGeometry = staticGeometry;
 		this.tex = tex;
 		bind.rectangle = this;
 		rectangle.active++;
 	}
 	destroy() {
 		rectangle.active--;
+		this.mesh.parent?.remove(this.mesh);
 	}
 	when_baked(baked: game.baked) {
 		this.baked = baked;
@@ -93,22 +105,31 @@ export class rectangle {
 		// Todo: Turning geometry could cause incorrect repeating
 		if (prefab.turn)
 			this.geometry.rotateY(-Math.PI / 2);
-		if (this.solid)
-			this.geometry.translate(this.pos[0], 0, this.pos[1]);
+		if (this.staticGeometry)
+			this.geometry.translate(this.pos[0], this.yup, this.pos[1]);
 		if (prefab.repeat)
 			game.tiler.change_uv(this.geometry, this.bind.wpos, prefab.repeat);
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.bind.chunk?.color || 'white',
-			map: renderer.load_texture(this.tex || prefab.tex)
+			map: renderer.load_texture(this.tex || prefab.tex),
+			transparent: !!prefab.transparent,
+			opacity: prefab.opacity != undefined ? prefab.opacity : 1
 		});
 		this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-		if (!this.solid)
-			this.mesh.position.set(this.pos[0], this.yup, this.pos[1]);
+		this.update();
 		this.mesh.frustumCulled = false;
 		this.mesh.updateMatrix();
 		this.add_to_chunk_group();
+	}
+	update() {
+		if (!this.staticGeometry) {
+			this.repos();
+			this.mesh.position.set(this.pos[0], this.yup, this.pos[1]);
+		}
+		this.mesh.rotation.y = this.bind.rotatey;
+		this.mesh.updateMatrix();
 	}
 	add_to_chunk_group() {
 		this.bind.chunk?.group.add(this.mesh);

@@ -168,7 +168,7 @@ var lod;
         outside;
         big = [0, 0];
         shown = [];
-        visibleObjs = [];
+        visibles = [];
         constructor(spread, outside) {
             this.spread = spread;
             this.outside = outside;
@@ -209,7 +209,7 @@ var lod;
         }
         offs() {
             // Hide chunks
-            this.visibleObjs = [];
+            this.visibles = [];
             let i = this.shown.length;
             while (i--) {
                 let chunk;
@@ -220,7 +220,7 @@ var lod;
                 }
                 else {
                     chunk.think();
-                    this.visibleObjs = this.visibleObjs.concat(chunk.children);
+                    this.visibles = this.visibles.concat(chunk.children);
                 }
                 if (fog_of_war) {
                     if (chunk.dist() == this.outside) {

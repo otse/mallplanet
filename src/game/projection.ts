@@ -19,7 +19,7 @@ namespace projection {
 	}
 
 	export function debug() {
-		return `${projection_enum[current]} (${current + 1})`;
+		return `#${current + 1} ${projection_enum[current]}`;
 	}
 
 	export var current = projection_enum.orthographic_top_down
@@ -74,7 +74,7 @@ namespace projection {
 			pitch.remove(pitch.children[0]);
 		pitch.updateMatrix();
 		pitch.add(renderer.camera);
-		renderer.camera.position.set(0, 40, 0);
+		renderer.camera.position.set(0, 100, 0);
 		renderer.camera.rotation.x = -Math.PI / 2;
 		renderer.camera.updateMatrix();
 		renderer.camera.updateProjectionMatrix();

@@ -11,6 +11,7 @@ var manager;
         tallies.bakeds = [0, 0];
         tallies.tiles = [0, 0];
         tallies.walls = [0, 0];
+        tallies.shadows = [0, 0];
     })(tallies = manager.tallies || (manager.tallies = {}));
     manager.active = false;
     const boo = 0;
@@ -25,7 +26,7 @@ var manager;
         manager.view = new game.view_needs_rename();
         hook_in_to_the_lod();
         manager.ply = new game.player();
-        manager.ply.wpos = [43, 39];
+        manager.ply.wpos = [23, 28];
         game.lod.add(manager.ply);
         game.projection.start();
     }
@@ -36,6 +37,8 @@ var manager;
             return;
         game.projection.think();
         manager.view.think();
+        manager.ply.priority_update();
+        manager.view.update();
     }
     manager.think = think;
     function factory(type, pixel, wpos, hint) {
@@ -95,8 +98,9 @@ var manager;
         hooks.register('lod_chunk_show', (chunk) => {
             bake(chunk, 'a floor', 'kitchen floor');
             bake(chunk, 'a floor', 'wooden floor');
-            bake(chunk, 'a wall', 'brick wall vert');
-            bake(chunk, 'a wall', 'brick wall horz');
+            bake(chunk, 'a wall', 'brick wall -vert');
+            bake(chunk, 'a wall', 'brick wall -horz');
+            bake(chunk, 'an obj', 'brick wall -shadow');
         });
     }
 })(manager || (manager = {}));

@@ -1,61 +1,63 @@
-import { THREE } from "../../mall.js";
-import pts from "../../util/pts.js";
 import * as game from "../re-exports.js";
 export class wall extends game.superobject {
     type = 'a wall';
+    solid = true;
     geometry;
     material;
     mesh;
     doOnce = true;
+    shadow;
     constructor() {
         super(game.manager.tallies.walls);
     }
     create() {
         if (!this.pixel)
             return;
-        this.wtorpos();
         if (this.doOnce) {
             if (this.pixel.connections() >= 3) {
+                this.hint += ' -single';
             }
             else if (this.pixel.top().is_color(this.pixel.data) &&
                 this.pixel.bottom().is_color(this.pixel.data)) {
-                this.hint += ' vert';
+                this.hint += ' -vert';
             }
             else if (this.pixel.left().is_color(this.pixel.data) &&
                 this.pixel.right().is_color(this.pixel.data)) {
-                this.hint += ' horz';
+                this.hint += ' -horz';
+            }
+            else {
+                this.hint += ' -single';
             }
             this.doOnce = false;
         }
         this.wtorpos();
         this.rebound();
-        let rectangle = new game.rectangle({
+        const rectangle = new game.rectangle({
             bind: this,
-            left_bottom: true,
-            solid: true
+            alignLeftBottom: true,
+            staticGeometry: true
         });
-        rectangle?.build();
-        return;
-        let map = 0;
-        const left_bottom = pts.add(this.rpos, [game.lod.unit / 2, game.lod.unit / 2]);
-        let colorPixel = game.manager.colormap_.pixel(this.wpos).normalize();
-        this.geometry = new THREE.PlaneGeometry(game.lod.unit, game.lod.unit);
-        this.material = new THREE.MeshPhongMaterial({
-            wireframe: false,
-            color: this.chunk?.color || new THREE.Color().fromArray(colorPixel),
-            map: map
-        });
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
-        this.mesh.frustumCulled = false;
-        this.mesh.position.set(left_bottom[0], 0, left_bottom[1]);
-        this.mesh.rotation.x = -Math.PI / 2;
-        this.mesh.updateMatrix();
-        //this.mesh.add(new THREE.AxesHelper(1));
-        this.chunk?.group.add(this.mesh);
-        //renderer.game_objects.add(this.mesh);
+        rectangle.yup = 2;
+        rectangle.build();
+        {
+            this.shadow = new game.superobject(game.manager.tallies.shadows);
+            //this.shadow.type = 'a wall shadow';
+            this.shadow.wpos = this.wpos;
+            this.shadow.hint = this.hint.split('-')[0] + '-shadow';
+            console.log('wall shadow hint:', this.shadow.hint);
+            game.lod.add(this.shadow);
+            const rectangle = new game.rectangle({
+                bind: this.shadow,
+                alignLeftBottom: true,
+                staticGeometry: true
+            });
+            rectangle.yup = 1;
+            rectangle.build();
+        }
     }
     vanish() {
         this.rectangle?.destroy();
+        this.shadow.rectangle?.destroy();
     }
     think() {
         // Whatever would a wall think?

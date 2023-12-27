@@ -7,6 +7,7 @@ import * as game from "../re-exports.js"
 export class floor extends game.superobject {
 	override type = 'a floor'
 	override bakeable = true
+	override solid = false
 	constructor() {
 		super(game.manager.tallies.tiles);
 	}
@@ -14,8 +15,8 @@ export class floor extends game.superobject {
 		this.wtorpos();
 		let rectangle = new game.rectangle({
 			bind: this,
-			left_bottom: true,
-			solid: true
+			alignLeftBottom: true,
+			staticGeometry: true
 		});
 		rectangle.build();
 	}

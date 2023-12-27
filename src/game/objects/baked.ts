@@ -35,8 +35,9 @@ export class baked extends game.superobject {
 		this.geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
 		this.material = new THREE.MeshPhongMaterial({
 			map: first.rectangle?.material.map,
-			color: this.chunk?.color || 'white',
-			//color: 'red'
+			transparent: first.rectangle?.material.transparent,
+			opacity: first.rectangle?.material.opacity,
+			color: this.chunk?.color || 'white'
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.chunk.group.add(this.mesh);

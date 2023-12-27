@@ -15,7 +15,7 @@ var projection;
         projection_enum[projection_enum["length"] = 5] = "length";
     })(projection_enum = projection.projection_enum || (projection.projection_enum = {}));
     function debug() {
-        return `${projection_enum[projection.current]} (${projection.current + 1})`;
+        return `#${projection.current + 1} ${projection_enum[projection.current]}`;
     }
     projection.debug = debug;
     projection.current = projection_enum.orthographic_top_down;
@@ -64,7 +64,7 @@ var projection;
             projection.pitch.remove(projection.pitch.children[0]);
         projection.pitch.updateMatrix();
         projection.pitch.add(renderer.camera);
-        renderer.camera.position.set(0, 40, 0);
+        renderer.camera.position.set(0, 100, 0);
         renderer.camera.rotation.x = -Math.PI / 2;
         renderer.camera.updateMatrix();
         renderer.camera.updateProjectionMatrix();

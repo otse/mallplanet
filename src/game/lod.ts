@@ -179,7 +179,7 @@ namespace lod {
 	export class grid {
 		big: vec2 = [0, 0]
 		public shown: chunk[] = []
-		visibleObjs: obj[] = []
+		visibles: obj[] = []
 		constructor(
 			public spread: number,
 			public outside: number
@@ -221,7 +221,7 @@ namespace lod {
 		}
 		offs() {
 			// Hide chunks
-			this.visibleObjs = [];
+			this.visibles = [];
 			let i = this.shown.length;
 			while (i--) {
 				let chunk: chunk;
@@ -232,7 +232,7 @@ namespace lod {
 				}
 				else {
 					chunk.think();
-					this.visibleObjs = this.visibleObjs.concat(chunk.children);
+					this.visibles = this.visibles.concat(chunk.children);
 				}
 
 				if (fog_of_war) {
