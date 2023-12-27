@@ -85,7 +85,7 @@ var lod;
         fog_of_war = false;
         group;
         small;
-        objs = [];
+        children = [];
         constructor(big, world) {
             super();
             this.big = big;
@@ -100,9 +100,9 @@ var lod;
             hooks.call('lod_chunk_create', this);
         }
         add(obj) {
-            let i = this.objs.indexOf(obj);
+            let i = this.children.indexOf(obj);
             if (i == -1) {
-                this.objs.push(obj);
+                this.children.push(obj);
                 obj.chunk = this;
                 if (this.active && !obj.active)
                     obj.show();
@@ -110,16 +110,16 @@ var lod;
         }
         stacked(wpos) {
             let stack = [];
-            for (let obj of this.objs)
+            for (let obj of this.children)
                 if (pts.same(wpos, pts.round(obj.wpos)))
                     stack.push(obj);
             return stack;
         }
         remove(obj) {
-            let i = this.objs.indexOf(obj);
+            let i = this.children.indexOf(obj);
             if (i > -1) {
                 obj.chunk = null;
-                return !!this.objs.splice(i, 1).length;
+                return !!this.children.splice(i, 1).length;
             }
         }
         static swap(obj) {
@@ -142,7 +142,7 @@ var lod;
             if (this.on())
                 return;
             lod.chunks[0]++;
-            for (let obj of this.objs)
+            for (let obj of this.children)
                 obj.show();
             hooks.call('lod_chunk_show', this);
         }
@@ -150,7 +150,7 @@ var lod;
             if (this.off())
                 return;
             lod.chunks[0]--;
-            const slice = this.objs.slice(0);
+            const slice = this.children.slice(0);
             for (let obj of slice)
                 obj.hide();
             hooks.call('lod_chunk_hide', this);
@@ -220,7 +220,7 @@ var lod;
                 }
                 else {
                     chunk.think();
-                    this.visibleObjs = this.visibleObjs.concat(chunk.objs);
+                    this.visibleObjs = this.visibleObjs.concat(chunk.children);
                 }
                 if (fog_of_war) {
                     if (chunk.dist() == this.outside) {
@@ -237,7 +237,7 @@ var lod;
         }
         think() {
             for (let chunk of this.shown)
-                for (let obj of chunk.objs)
+                for (let obj of chunk.children)
                     obj.think();
         }
     }
@@ -278,6 +278,7 @@ var lod;
             this.vanish();
         }
         rebound() {
+            // Find a nicer name than rebound
             this.bound = new aabb([-this.expand, -this.expand], [this.expand, this.expand]);
             this.bound.translate(this.wpos);
         }

@@ -6,13 +6,10 @@ import mall from "../mall.js";
 import * as game from "./re-exports.js";
 let stats;
 export class view_needs_rename {
-    wpos = [50, 45];
+    wpos = [35, 35];
     rpos = [0, 0];
-    static make() {
-        return new view_needs_rename;
-    }
-    chart(big) {
-    }
+    mrpos = [0, 0];
+    mwpos = [0, 0];
     constructor() {
         this.rpos = game.lod.project(this.wpos);
         new game.lod.world(0);
@@ -35,11 +32,21 @@ export class view_needs_rename {
     think() {
         game.lod.ggrid.think();
         this.handle_input();
+        this.set_mouse();
         this.mouse_pan();
         this.wpos = game.lod.unproject(this.rpos);
         this.update_camera();
         this.print();
         game.lod.gworld.update(this.wpos);
+    }
+    set_mouse() {
+        let mouse = mkb.mouse_pos();
+        mouse = pts.subtract(mouse, pts.divide(renderer.screen, 2));
+        mouse = pts.mult(mouse, renderer.ndpi);
+        mouse = pts.divide(mouse, game.projection.zoom);
+        //mouse[1] = -mouse[1];
+        this.mrpos = pts.add(mouse, this.rpos);
+        this.mwpos = game.lod.unproject(this.mrpos);
     }
     begin = [0, 0];
     before = [0, 0];
@@ -78,12 +85,20 @@ export class view_needs_rename {
     print() {
         stats.innerHTML = `
 			${mall.fps.toFixed(1)} fps
-			<br />${pts.to_string_fixed(this.rpos)}: ${game.projection.zoom}
-			<br />/ ${game.projection.debug()} (tap f2)
-			<br />chunk spread ${game.lod.ggrid.spread}, chunk span ${game.lod.chunk_span}
-			<br />unit: ${game.lod.unit}x
+			<br />unit ${game.lod.unit}x
+			<br />zoom 1:${game.projection.zoom}
+			<br />rpos ${pts.to_string_fixed(this.rpos)}
+			<br />wpos ${pts.to_string_fixed(this.wpos)}
+			<br />mwpos ${pts.to_string_fixed(this.mwpos)}
+			<br />\`${game.projection.debug()}\` (tap f2)
+			<br />middle mouse drag, scrollwheel zoom
+			<br />
+			<br />lod grid size ${game.lod.ggrid.spread * 2 + 1} * ${game.lod.ggrid.spread * 2 + 1}
+			, (chunk size in units: ${game.lod.chunk_span})
 			<br />objects ${game.lod.objs[0]} / ${game.lod.objs[1]}
-			<br />bakeds ${game.manager.tallies.bakeds[0]}, rectangles baked ${game.baked.rectangles_baked} / ${game.rectangle.active}
+			<br />(tap t and g)
+			<br />merged geometries ${game.manager.tallies.bakeds[0]}
+			<br />rectangles baked ${game.baked.rectangles_baked} / ${game.rectangle.active}
 			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunks[1]}
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}

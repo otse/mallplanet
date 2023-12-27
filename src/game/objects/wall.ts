@@ -33,7 +33,12 @@ export class wall extends game.superobject {
 		}
 
 		this.wtorpos();
-		let rectangle = new game.rectangle({ bind: this, solid: true });
+		this.rebound();
+		let rectangle = new game.rectangle({
+			bind: this,
+			left_bottom: true,
+			solid: true
+		});
 		rectangle?.build();
 		return;
 

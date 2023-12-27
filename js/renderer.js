@@ -3,8 +3,10 @@ import { THREE } from "./mall.js";
 var renderer;
 (function (renderer_1) {
     renderer_1.ndpi = 1;
+    renderer_1.screen = [0, 0];
     const ad_hoc = 0;
     function resize() {
+        renderer_1.screen = [window.innerWidth, window.innerHeight];
         renderer_1.camera.aspect = window.innerWidth / window.innerHeight;
         renderer_1.camera.updateProjectionMatrix();
         hooks.call('resize');

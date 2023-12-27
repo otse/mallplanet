@@ -21,7 +21,7 @@ class toggle {
 }
 
 namespace lod {
-
+	
 	export const unit = 8
 
 	const random_chunk_coloration = false
@@ -97,7 +97,7 @@ namespace lod {
 		fog_of_war = false
 		group?
 		readonly small: aabb
-		readonly objs: obj[] = []
+		readonly children: obj[] = []
 		constructor(
 			public readonly big: vec2,
 			readonly world: world
@@ -113,9 +113,9 @@ namespace lod {
 			hooks.call('lod_chunk_create', this);
 		}
 		add(obj: obj) {
-			let i = this.objs.indexOf(obj);
+			let i = this.children.indexOf(obj);
 			if (i == -1) {
-				this.objs.push(obj);
+				this.children.push(obj);
 				obj.chunk = this;
 				if (this.active && !obj.active)
 					obj.show();
@@ -123,16 +123,16 @@ namespace lod {
 		}
 		stacked(wpos: vec2) {
 			let stack: obj[] = [];
-			for (let obj of this.objs)
+			for (let obj of this.children)
 				if (pts.same(wpos, pts.round(obj.wpos)))
 					stack.push(obj);
 			return stack;
 		}
 		remove(obj: obj) {
-			let i = this.objs.indexOf(obj);
+			let i = this.children.indexOf(obj);
 			if (i > -1) {
 				obj.chunk = null;
-				return !!this.objs.splice(i, 1).length;
+				return !!this.children.splice(i, 1).length;
 			}
 		}
 		static swap(obj: obj) {
@@ -155,7 +155,7 @@ namespace lod {
 			if (this.on())
 				return;
 			chunks[0]++;
-			for (let obj of this.objs)
+			for (let obj of this.children)
 				obj.show();
 			hooks.call('lod_chunk_show', this);
 		}
@@ -163,7 +163,7 @@ namespace lod {
 			if (this.off())
 				return;
 			chunks[0]--;
-			const slice = this.objs.slice(0);
+			const slice = this.children.slice(0);
 			for (let obj of slice)
 				obj.hide();
 			hooks.call('lod_chunk_hide', this);
@@ -232,7 +232,7 @@ namespace lod {
 				}
 				else {
 					chunk.think();
-					this.visibleObjs = this.visibleObjs.concat(chunk.objs);
+					this.visibleObjs = this.visibleObjs.concat(chunk.children);
 				}
 
 				if (fog_of_war) {
@@ -250,7 +250,7 @@ namespace lod {
 		}
 		think() {
 			for (let chunk of this.shown)
-				for (let obj of chunk.objs)
+				for (let obj of chunk.children)
 					obj.think();
 		}
 	}
@@ -293,6 +293,7 @@ namespace lod {
 			this.vanish();
 		}
 		rebound() {
+			// Find a nicer name than rebound
 			this.bound = new aabb([-this.expand, -this.expand], [this.expand, this.expand]);
 			this.bound.translate(this.wpos);
 		}

@@ -9,7 +9,6 @@ const minimum_mergables = 3
 export class baked extends game.superobject {
 	static total = 0
 	static rectangles_baked = 0
-	array = []
 	rectangles_baked = 0
 	match_type = 'a floor'
 	match_hint = 'kitchen floor'
@@ -20,18 +19,19 @@ export class baked extends game.superobject {
 		super(game.manager.tallies.bakeds);
 		this.type = 'a baked';
 	}
-	static filter(chunk, type, hint) {
-		return chunk.objs.filter((e: any) =>
+	static filter(chunk: game.lod.chunk, type, hint) {
+		return chunk.children.filter((e: any) =>
 			e.type == type &&
 			e.hint == hint);
 	}
 	override create() {
 		if (!this.chunk)
 			return;
-		this.rectangles_baked = this.array.length;
+		const filtered = baked.filter(this.chunk, this.match_type, this.match_hint);
+		this.rectangles_baked = filtered.length;
 		baked.rectangles_baked += this.rectangles_baked;
-		const first = this.array[0] as game.superobject;
-		let geometries = this.array.map((e: game.superobject) => e.rectangle?.geometry);
+		const first = filtered[0] as game.superobject;
+		let geometries = filtered.map((e: game.superobject) => e.rectangle?.geometry);
 		this.geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
 		this.material = new THREE.MeshPhongMaterial({
 			map: first.rectangle?.material.map,
@@ -40,7 +40,7 @@ export class baked extends game.superobject {
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.chunk.group.add(this.mesh);
-		this.array.forEach((e: any) => e.rectangle.when_baked(this));
+		filtered.forEach((e: any) => e.rectangle.when_baked(this));
 	}
 	override vanish() {
 		this.finalize();

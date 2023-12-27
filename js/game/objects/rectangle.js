@@ -6,6 +6,10 @@ const prefabs = {
     'default': {
         tex: './tex/placeholder_8x.png'
     },
+    'player': {
+        tex: './tex/player_32x.png',
+        size: [32, 32]
+    },
     'brick wall': {
         tex: './tex/wall_brick_single_8x.png'
     },
@@ -35,7 +39,11 @@ export class rectangle {
     bind;
     solid;
     tex;
-    constructor({ bind, solid, tex }) {
+    yup = 0;
+    size;
+    pos;
+    left_bottom;
+    constructor({ bind, solid, left_bottom, tex }) {
         this.bind = bind;
         this.solid = solid;
         this.tex = tex;
@@ -49,18 +57,24 @@ export class rectangle {
         this.baked = baked;
         this.mesh.parent?.remove(this.mesh);
     }
+    repos() {
+        let pos = pts.clone(this.bind.rpos);
+        if (this.left_bottom)
+            pos = pts.add(pos, pts.divide(this.size, 2));
+        this.pos = pos;
+    }
     build() {
         this.bind.wtorpos();
         const prefab = prefabs[this.bind.hint] || prefabs['default'];
-        let size = prefab.size || [game.lod.unit, game.lod.unit];
-        const left_bottom = pts.add(this.bind.rpos, pts.divide(size, 2));
-        this.geometry = new THREE.PlaneGeometry(size[0], size[1]);
+        this.size = prefab.size || [game.lod.unit, game.lod.unit];
+        this.repos();
+        this.geometry = new THREE.PlaneGeometry(this.size[0], this.size[1]);
         this.geometry.rotateX(-Math.PI / 2);
         // Todo: Turning geometry could cause incorrect repeating
         if (prefab.turn)
             this.geometry.rotateY(-Math.PI / 2);
         if (this.solid)
-            this.geometry.translate(left_bottom[0], 0, left_bottom[1]);
+            this.geometry.translate(this.pos[0], 0, this.pos[1]);
         if (prefab.repeat)
             game.tiler.change_uv(this.geometry, this.bind.wpos, prefab.repeat);
         this.material = new THREE.MeshPhongMaterial({
@@ -71,7 +85,7 @@ export class rectangle {
         this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         if (!this.solid)
-            this.mesh.position.set(left_bottom[0], 0, left_bottom[1]);
+            this.mesh.position.set(this.pos[0], this.yup, this.pos[1]);
         this.mesh.frustumCulled = false;
         this.mesh.updateMatrix();
         this.add_to_chunk_group();

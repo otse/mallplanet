@@ -22,11 +22,11 @@ var manager;
         manager.colormap_ = new colormap('colormap');
         manager.heightmap = new colormap('heightmap');
         manager.wallmap = new colormap('wallmap');
-        manager.view = game.view_needs_rename.make();
+        manager.view = new game.view_needs_rename();
         hook_in_to_the_lod();
         manager.ply = new game.player();
         manager.ply.wpos = [43, 39];
-        //game.lod.add(ply);
+        game.lod.add(manager.ply);
         game.projection.start();
     }
     manager.start_new_game = start_new_game;
@@ -83,11 +83,10 @@ var manager;
             renderer.game_objects.add(chunk.group);
         });
         function bake(chunk, type, hint) {
-            let collect = game.baked.filter(chunk, type, hint);
-            if (collect.length < 2)
+            let filtered = game.baked.filter(chunk, type, hint);
+            if (filtered.length < 2)
                 return;
             const baked = new game.baked();
-            baked.array = collect;
             baked.wpos = chunk.small.center();
             baked.match_type = type;
             baked.match_hint = hint;

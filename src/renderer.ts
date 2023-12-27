@@ -6,11 +6,14 @@ import { THREE } from "./mall.js";
 namespace renderer {
 	export var ndpi = 1
 
+	export var screen = [0, 0] as vec2
+
 	const ad_hoc = 0
 
 	export var renderer, scene, camera, clock, ambient, game_objects
 
 	export function resize() {
+		screen = [window.innerWidth, window.innerHeight];
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
 

@@ -7,8 +7,12 @@ export class floor extends game.superobject {
     }
     create() {
         this.wtorpos();
-        let rectangle = new game.rectangle({ bind: this, solid: true });
-        rectangle?.build();
+        let rectangle = new game.rectangle({
+            bind: this,
+            left_bottom: true,
+            solid: true
+        });
+        rectangle.build();
     }
     vanish() {
         this.rectangle?.destroy();

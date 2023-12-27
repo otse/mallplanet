@@ -4,7 +4,6 @@ const minimum_mergables = 3;
 export class baked extends game.superobject {
     static total = 0;
     static rectangles_baked = 0;
-    array = [];
     rectangles_baked = 0;
     match_type = 'a floor';
     match_hint = 'kitchen floor';
@@ -16,16 +15,17 @@ export class baked extends game.superobject {
         this.type = 'a baked';
     }
     static filter(chunk, type, hint) {
-        return chunk.objs.filter((e) => e.type == type &&
+        return chunk.children.filter((e) => e.type == type &&
             e.hint == hint);
     }
     create() {
         if (!this.chunk)
             return;
-        this.rectangles_baked = this.array.length;
+        const filtered = baked.filter(this.chunk, this.match_type, this.match_hint);
+        this.rectangles_baked = filtered.length;
         baked.rectangles_baked += this.rectangles_baked;
-        const first = this.array[0];
-        let geometries = this.array.map((e) => e.rectangle?.geometry);
+        const first = filtered[0];
+        let geometries = filtered.map((e) => e.rectangle?.geometry);
         this.geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
         this.material = new THREE.MeshPhongMaterial({
             map: first.rectangle?.material.map,
@@ -34,7 +34,7 @@ export class baked extends game.superobject {
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.chunk.group.add(this.mesh);
-        this.array.forEach((e) => e.rectangle.when_baked(this));
+        filtered.forEach((e) => e.rectangle.when_baked(this));
     }
     vanish() {
         this.finalize();

@@ -34,11 +34,11 @@ namespace manager {
 		colormap_ = new colormap('colormap');
 		heightmap = new colormap('heightmap');
 		wallmap = new colormap('wallmap');
-		view = game.view_needs_rename.make();
+		view = new game.view_needs_rename();
 		hook_in_to_the_lod();
 		ply = new game.player();
 		ply.wpos = [43, 39];
-		//game.lod.add(ply);
+		game.lod.add(ply);
 		game.projection.start();
 	}
 
@@ -104,11 +104,10 @@ namespace manager {
 		});
 
 		function bake(chunk: game.lod.chunk, type, hint) {
-			let collect = game.baked.filter(chunk, type, hint);
-			if (collect.length < 2)
+			let filtered = game.baked.filter(chunk, type, hint);
+			if (filtered.length < 2)
 				return;
 			const baked = new game.baked();
-			baked.array = collect;
 			baked.wpos = chunk.small.center();
 			baked.match_type = type;
 			baked.match_hint = hint;
