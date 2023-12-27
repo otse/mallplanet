@@ -21,10 +21,11 @@ class toggle {
 var lod;
 (function (lod) {
     lod.unit = 8;
-    const chunk_coloration = true;
+    const random_chunk_coloration = false;
     const fog_of_war = false;
     const grid_crawl_makes_chunks = true;
     lod.chunk_span = 8;
+    lod.objs = [0, 0];
     lod.chunks = [0, 0];
     function register() {
     }
@@ -80,7 +81,6 @@ var lod;
     class chunk extends toggle {
         big;
         world;
-        static total = 0;
         color;
         fog_of_war = false;
         group;
@@ -90,15 +90,13 @@ var lod;
             super();
             this.big = big;
             this.world = world;
-            if (chunk_coloration)
+            if (random_chunk_coloration)
                 this.color = (['lightsalmon', 'lightblue', 'beige', 'pink'])[Math.floor(Math.random() * 4)];
             let min = pts.mult(this.big, lod.chunk_span);
             let max = pts.add(min, [lod.chunk_span - 1, lod.chunk_span - 1]);
             this.small = new aabb(max, min);
             lod.chunks[1]++;
             world.arrays[this.big[1]][this.big[0]] = this;
-            //console.log('sector');
-            chunk.total++;
             hooks.call('lod_chunk_create', this);
         }
         add(obj) {
@@ -257,21 +255,25 @@ var lod;
         constructor(counts = [0, 0]) {
             super();
             this.counts = counts;
+            lod.objs[1]++;
             this.counts[1]++;
         }
         finalize() {
             // this.hide();
+            lod.objs[1]--;
             this.counts[1]--;
         }
         show() {
             if (this.on())
                 return;
+            lod.objs[0]++;
             this.counts[0]++;
             this.create();
         }
         hide() {
             if (this.off())
                 return;
+            lod.objs[0]--;
             this.counts[0]--;
             this.vanish();
         }

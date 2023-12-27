@@ -10,6 +10,7 @@ import renderer from "../renderer.js";
 namespace manager {
 
 	export namespace tallies {
+		export var bakeds: game.lod.calories = [0, 0]
 		export var tiles: game.lod.calories = [0, 0]
 		export var walls: game.lod.calories = [0, 0]
 	}
@@ -34,9 +35,11 @@ namespace manager {
 		heightmap = new colormap('heightmap');
 		wallmap = new colormap('wallmap');
 		view = game.view_needs_rename.make();
-		ply = new game.player();
-		game.projection.start();
 		hook_in_to_the_lod();
+		ply = new game.player();
+		ply.wpos = [43, 39];
+		//game.lod.add(ply);
+		game.projection.start();
 	}
 
 	let wpos = [0, 0] as vec2;
@@ -65,6 +68,8 @@ namespace manager {
 	}*/
 
 	function hook_in_to_the_lod() {
+		// Last registered hooks get called first
+
 		hooks.register('lod_chunk_create', (chunk: game.lod.chunk) => {
 			pts.func(chunk.small, (pos) => {
 			});
@@ -99,7 +104,11 @@ namespace manager {
 		});
 
 		function bake(chunk: game.lod.chunk, type, hint) {
+			let collect = game.baked.filter(chunk, type, hint);
+			if (collect.length < 2)
+				return;
 			const baked = new game.baked();
+			baked.array = collect;
 			baked.wpos = chunk.small.center();
 			baked.match_type = type;
 			baked.match_hint = hint;
@@ -112,8 +121,6 @@ namespace manager {
 			bake(chunk, 'a wall', 'brick wall vert');
 			bake(chunk, 'a wall', 'brick wall horz');
 		});
-
-		return false;
 
 	}
 }

@@ -89,9 +89,9 @@ export class view_needs_rename {
 			<br />/ ${game.projection.debug()} (tap f2)
 			<br />chunk spread ${game.lod.ggrid.spread}, chunk span ${game.lod.chunk_span}
 			<br />unit: ${game.lod.unit}x
-			<br />rectangles ${game.rectangle.active}
-			<br />bakeds ${game.baked.total}, rectangles baked ${game.baked.rectangles_baked} / ${game.rectangle.active}
-			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunk.total}
+			<br />objects ${game.lod.objs[0]} / ${game.lod.objs[1]}
+			<br />bakeds ${game.manager.tallies.bakeds[0]}, rectangles baked ${game.baked.rectangles_baked} / ${game.rectangle.active}
+			<br />chunks ${game.lod.ggrid.shown.length} / ${game.lod.chunks[1]}
 			<br />walls ${game.manager.tallies.walls[0]} / ${game.manager.tallies.walls[1]}
 			<br />floors ${game.manager.tallies.tiles[0]} / ${game.manager.tallies.tiles[1]}
 		`;

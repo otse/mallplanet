@@ -24,7 +24,7 @@ namespace lod {
 
 	export const unit = 8
 
-	const chunk_coloration = true
+	const random_chunk_coloration = false
 
 	const fog_of_war = false
 
@@ -34,6 +34,7 @@ namespace lod {
 
 	export type calories = [active: number, total: number]
 
+	export var objs: calories = [0, 0]
 	export var chunks: calories = [0, 0]
 
 	// Yep like singletons
@@ -92,10 +93,9 @@ namespace lod {
 	}
 
 	export class chunk extends toggle {
-		static total = 0
 		color
 		fog_of_war = false
-		group
+		group?
 		readonly small: aabb
 		readonly objs: obj[] = []
 		constructor(
@@ -103,15 +103,13 @@ namespace lod {
 			readonly world: world
 		) {
 			super();
-			if (chunk_coloration)
+			if (random_chunk_coloration)
 				this.color = (['lightsalmon', 'lightblue', 'beige', 'pink'])[Math.floor(Math.random() * 4)];
 			let min = pts.mult(this.big, chunk_span);
 			let max = pts.add(min, [chunk_span - 1, chunk_span - 1]);
 			this.small = new aabb(max, min);
 			chunks[1]++;
 			world.arrays[this.big[1]][this.big[0]] = this;
-			//console.log('sector');
-			chunk.total++;
 			hooks.call('lod_chunk_create', this);
 		}
 		add(obj: obj) {
@@ -272,21 +270,25 @@ namespace lod {
 		constructor(
 			public readonly counts: calories = [0, 0]) {
 			super();
-			this.counts[1]++;
+			lod.objs[1]++;
+			this.counts[1]++;			
 		}
 		finalize() {
 			// this.hide();
+			lod.objs[1]--;
 			this.counts[1]--;
 		}
 		show() {
 			if (this.on())
 				return;
+			lod.objs[0]++;
 			this.counts[0]++;
 			this.create();
 		}
 		hide() {
 			if (this.off())
 				return;
+			lod.objs[0]--;
 			this.counts[0]--;
 			this.vanish();
 		}

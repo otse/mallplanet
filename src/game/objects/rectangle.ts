@@ -83,7 +83,7 @@ export class rectangle {
 			game.tiler.change_uv(this.geometry, this.bind.wpos, prefab.repeat);
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
-			color: this.bind.chunk?.color,
+			color: this.bind.chunk?.color || 'white',
 			map: renderer.load_texture(this.tex || prefab.tex)
 		});
 		this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;

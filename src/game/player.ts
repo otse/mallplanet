@@ -2,18 +2,24 @@ import { THREE } from "../mall.js";
 
 import * as game from "./re-exports.js"
 
-class player extends game.lod.obj {
+class player extends game.superobject {
 	geometry
 	constructor() {
-		super();
-		this.geometry = new THREE.PlaneGeometry(game.lod.unit, game.lod.unit);
-		this.geometry.rotateX(-Math.PI / 2);
+		super([0, 0]);
 	}
-	update() {
+	priority_update() {
 
 	}
+	override create() {
+		this.wtorpos();
+		let rectangle = new game.rectangle({ bind: this, solid: true });
+		rectangle?.build();
+	}
+	override vanish() {
+		this.rectangle?.destroy();
+	}
 	override think() {
-		// We update manually before the others
+		// 
 	}
 }
 
