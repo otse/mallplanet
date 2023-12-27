@@ -1,7 +1,7 @@
 /// Rocket science
 
 import lod from "./lod.js";
-import { superobject, has_single_rectangle } from "./objects/superobject.js";
+import superobject from "./objects/superobject.js";
 import manager from "./manager.js";
 import colormap_values from "./colormap_values.js";
 import player from "./player.js";
@@ -15,7 +15,7 @@ import baked from "./objects/baked.js";
 
 type foo = number
 
-export { lod, manager, superobject, has_single_rectangle, baked, rectangle, colormap_values, tiler, player, projection, view_needs_rename, floor, wall }
+export { lod, manager, superobject, baked, rectangle, colormap_values, tiler, player, projection, view_needs_rename, floor, wall }
 
 // Usage:
 // import * as game from "./re-exports.js"

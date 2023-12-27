@@ -6,13 +6,13 @@ import * as game from "../re-exports.js"
 
 let calories: game.lod.calories
 
-export interface has_single_rectangle {
-	rectangle?: game.rectangle
-}
-
 export class superobject extends game.lod.obj {
-	pixel: pixel
+	bakeable = false // Not used
+	pixel?: pixel
+	rectangle?: game.rectangle
 	constructor(counts: typeof calories) {
 		super(counts);
 	}
 }
+
+export default superobject;

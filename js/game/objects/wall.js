@@ -9,18 +9,20 @@ const prefabs = {
     }
 };
 export class wall extends game.superobject {
+    type = 'a wall';
     prefab;
     geometry;
     material;
     mesh;
     constructor() {
         super(game.manager.tallies.walls);
-        this.type = 'a wall';
     }
     ugly_prefab_code() {
         this.prefab = prefabs[this.hint] || prefabs['brick'];
     }
     create() {
+        if (!this.pixel)
+            return;
         this.wtorpos();
         this.ugly_prefab_code();
         let tex = this.prefab.single;

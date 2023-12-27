@@ -33,17 +33,17 @@ export class baked extends game.superobject {
 		this.rectangles_baked = filtered.length;
 		baked.total++;
 		baked.rectangles_baked += this.rectangles_baked;
-		const first = filtered[0] as game.has_single_rectangle;
-		let geometries = filtered.map((e: any) => e.rectangle.geometry);
+		const first = filtered[0] as game.superobject;
+		let geometries = filtered.map((e: game.superobject) => e.rectangle?.geometry);
 		this.geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
 		this.material = new THREE.MeshPhongMaterial({
 			map: first.rectangle?.material.map,
-			//color: this.chunk?.color,
-			color: 'red'
+			color: this.chunk?.color,
+			//color: 'red'
 		});
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.chunk.group.add(this.mesh);
-		filtered.forEach((e: any) => e.rectangle.baked());
+		filtered.forEach((e: any) => e.rectangle.when_baked(this));
 	}
 	override vanish() {
 		if (!this.has_enough_candidates)

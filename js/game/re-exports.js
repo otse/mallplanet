@@ -1,6 +1,6 @@
 /// Rocket science
 import lod from "./lod.js";
-import { superobject } from "./objects/superobject.js";
+import superobject from "./objects/superobject.js";
 import manager from "./manager.js";
 import colormap_values from "./colormap_values.js";
 import player from "./player.js";

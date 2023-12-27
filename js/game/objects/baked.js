@@ -28,16 +28,16 @@ export class baked extends game.superobject {
         baked.total++;
         baked.rectangles_baked += this.rectangles_baked;
         const first = filtered[0];
-        let geometries = filtered.map((e) => e.rectangle.geometry);
+        let geometries = filtered.map((e) => e.rectangle?.geometry);
         this.geometry = BufferGeometryUtils.mergeGeometries(geometries, true);
         this.material = new THREE.MeshPhongMaterial({
             map: first.rectangle?.material.map,
-            //color: this.chunk?.color,
-            color: 'red'
+            color: this.chunk?.color,
+            //color: 'red'
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.chunk.group.add(this.mesh);
-        filtered.forEach((e) => e.rectangle.baked());
+        filtered.forEach((e) => e.rectangle.when_baked(this));
     }
     vanish() {
         if (!this.has_enough_candidates)
