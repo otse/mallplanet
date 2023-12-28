@@ -32,6 +32,7 @@ class player extends game.superobject {
 		}
 		if (x || y) {
 			let angle = -pts.angle([x, y], [0, 0]);
+			angle += game.projection.yaw.rotation.y;
 			// this.rotatey = angle;
 			x = speed * Math.sin(angle);
 			y = speed * Math.cos(angle);

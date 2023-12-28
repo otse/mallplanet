@@ -13,6 +13,9 @@ import glob from "../util/glob.js"
 let stats
 
 export class view_needs_rename {
+	dimetric = false
+	chaseCam = true
+	follow?: game.lod.obj
 	wpos: vec2 = [35, 35]
 	rpos: vec2 = [0, 0]
 	mrpos: vec2 = [0, 0]
@@ -24,6 +27,33 @@ export class view_needs_rename {
 		stats.setAttribute('id', 'stats');
 		mall.whole.append(stats);
 	}
+	think() {
+		this.dimetric = game.projection.value == 2;
+		game.lod.ggrid.think();
+		this.handle_input();
+		this.set_mouse();
+		this.mouse_pan();
+		this.chase_cam();
+		this.wpos = game.lod.unproject(this.rpos);
+		this.update_camera();
+		this.print();
+		//this.update();
+	}
+	update() {
+		game.lod.gworld.update(this.wpos);
+	}
+	lastrpos: vec2 = [0, 0]
+	towardsrpos: vec2 = [0, 0]
+	chase_cam() {
+		if (!this.follow)
+			return;
+		this.towardsrpos = pts.clone(this.follow.rpos);
+		let dif = pts.subtract(this.towardsrpos, this.lastrpos);
+		dif = pts.mult(dif, 5 * glob.delta);
+		this.rpos = pts.add(this.rpos, dif);
+		this.lastrpos = pts.clone(this.rpos);
+	}
+
 	update_camera() {
 		const snap_to_grid = false;
 		if (snap_to_grid)
@@ -36,56 +66,27 @@ export class view_needs_rename {
 		renderer.camera.updateMatrix();
 		renderer.camera.updateProjectionMatrix();
 	}
-	think() {
-		game.lod.ggrid.think();
-		this.handle_input();
-		this.set_mouse();
-		this.mouse_pan();
-		this.wpos = game.lod.unproject(this.rpos);
-		this.update_camera();
-		this.print();
-		//this.update();
-	}
-	update() {
-		game.lod.gworld.update(this.wpos);
-	}
 	set_mouse() {
-		let mouse = mkb.mouse_pos();
-		mouse = pts.subtract(mouse, pts.divide(renderer.screen, 2));
-		mouse = pts.mult(mouse, renderer.ndpi);
-		mouse = pts.divide(mouse, game.projection.zoom);
-		//mouse[1] = -mouse[1];
-		this.mrpos = pts.add(mouse, this.rpos);
+		this.mrpos = pts.clone(game.projection.hit);
 		this.mwpos = game.lod.unproject(this.mrpos);
 	}
-	begin: vec2 = [0, 0]
 	before: vec2 = [0, 0]
+	begin: vec2 = [0, 0]
+	now: vec2 = [0, 0]
 	mouse_pan() {
-		let continousMode = false;
-		const continuousSpeed = -100;
 		if (mkb.mouse_button(1) == 1) {
-			let mouse = mkb.mouse_pos();
-			mouse[1] = -mouse[1];
-			this.begin = mouse;
 			this.before = pts.clone(this.rpos);
+			this.begin = pts.clone(game.projection.hit);
 		}
 		if (mkb.mouse_button(1) >= 1) {
-			let current = mkb.mouse_pos();
-			current[1] = -current[1];
-			let dif = pts.subtract(this.begin, current);
-			dif[1] = -dif[1];
-			if (continousMode) {
-				dif = pts.divide(dif, continuousSpeed);
-				this.rpos = pts.add(this.rpos, dif);
-				this.rpos = pts.inv(dif);
-			}
-			else {
-				dif = pts.divide(dif, -1);
-				dif = pts.mult(dif, renderer.ndpi);
-				dif = pts.divide(dif, game.projection.zoom);
-				dif = pts.subtract(dif, this.before);
-				this.rpos = pts.inv(dif);
-			}
+			this.now = pts.clone(game.projection.hit);
+			let dif = pts.subtract(this.now, this.begin);
+			//dif = pts.inv(dif);
+			dif = pts.mult(dif, 0.5);
+			//dif = pts.inv(dif);
+			dif = pts.add(dif, this.before);
+			//dif = pts.mult(dif, glob.delta);
+			this.rpos = dif;
 		}
 		else if (mkb.mouse_button(1) == -1) {
 			this.rpos = pts.floor(this.rpos);

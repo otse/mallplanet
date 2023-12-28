@@ -38,6 +38,7 @@ namespace manager {
 		view = new game.view_needs_rename();
 		hook_in_to_the_lod();
 		ply = new game.player();
+		view.follow = ply;
 		ply.wpos = [23, 28];
 		game.lod.add(ply);
 		game.projection.start();
