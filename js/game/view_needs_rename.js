@@ -7,8 +7,8 @@ import * as game from "./re-exports.js";
 import glob from "../util/glob.js";
 let stats;
 export class view_needs_rename {
-    dimetric = false;
-    chaseCam = true;
+    chase = true;
+    orient = true;
     follow;
     wpos = [35, 35];
     rpos = [0, 0];
@@ -22,7 +22,6 @@ export class view_needs_rename {
         mall.whole.append(stats);
     }
     think() {
-        this.dimetric = game.projection.value == 2;
         game.lod.ggrid.think();
         this.handle_input();
         this.set_mouse();
@@ -51,9 +50,9 @@ export class view_needs_rename {
         const snap_to_grid = false;
         if (snap_to_grid)
             this.rpos = pts.floor(this.rpos);
-        game.projection.yaw.position.x = this.rpos[0];
-        game.projection.yaw.position.z = this.rpos[1];
-        game.projection.yaw.updateMatrix();
+        game.projection.roll.position.x = this.rpos[0];
+        game.projection.roll.position.z = this.rpos[1];
+        game.projection.roll.updateMatrix();
         renderer.camera.zoom = game.projection.zoom;
         renderer.camera.rotation.z = Math.PI / 360 * this.rotate;
         renderer.camera.updateMatrix();

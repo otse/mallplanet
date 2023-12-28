@@ -8,11 +8,12 @@ var projection;
     let enum_;
     (function (enum_) {
         enum_[enum_["orthographic_top_down"] = 0] = "orthographic_top_down";
-        enum_[enum_["perspective_top_down"] = 1] = "perspective_top_down";
-        enum_[enum_["orthographic_dimetric"] = 2] = "orthographic_dimetric";
-        enum_[enum_["orthographic_isometric"] = 3] = "orthographic_isometric";
-        enum_[enum_["perspective_isometric"] = 4] = "perspective_isometric";
-        enum_[enum_["length"] = 5] = "length";
+        enum_[enum_["orthographic_dimetric"] = 1] = "orthographic_dimetric";
+        enum_[enum_["orthographic_isometric"] = 2] = "orthographic_isometric";
+        enum_[enum_["perspective_top_down"] = 3] = "perspective_top_down";
+        enum_[enum_["perspective_dimetric"] = 4] = "perspective_dimetric";
+        enum_[enum_["perspective_isometric"] = 5] = "perspective_isometric";
+        enum_[enum_["length"] = 6] = "length";
     })(enum_ = projection.enum_ || (projection.enum_ = {}));
     function debug() {
         return `#${projection.value + 1} ${enum_[projection.value]}`;
@@ -31,43 +32,58 @@ var projection;
         switch (projection.value) {
             case enum_.orthographic_top_down:
                 orthographic();
-                projection.yaw.rotation.y = 0;
-                projection.pitch.rotation.x = 0;
+                projection.roll.rotation.y = 0;
+                projection.roll.rotation.x = 0;
                 projection.zoom = 2;
                 break;
             case enum_.orthographic_dimetric:
                 orthographic();
-                projection.yaw.rotation.y = Math.PI / 4;
-                projection.pitch.rotation.x = Math.PI / 3;
+                projection.roll.rotation.y = Math.PI / 4;
+                projection.roll.rotation.x = Math.PI / 3;
                 projection.zoom = 10;
                 projection.yup = 400;
                 break;
             case enum_.orthographic_isometric:
                 orthographic();
-                projection.yaw.rotation.y = Math.PI / 4;
-                projection.pitch.rotation.x = Math.PI / 4;
-                projection.zoom = 2;
+                // 60 is 2:1
+                // 70 is 3:1
+                let a = new THREE.Vector3(0, 0, 0);
+                let b = new THREE.Vector3(1, -1, 1);
+                let c = new THREE.Object3D();
+                c.position.copy(a);
+                c.rotation.order = 'YXZ';
+                c.updateMatrix();
+                c.lookAt(b);
+                projection.roll.rotation.copy(c.rotation);
+                projection.zoom = 10;
                 break;
             case enum_.perspective_top_down:
                 perspective();
-                projection.yaw.rotation.y = 0;
-                projection.pitch.rotation.x = 0;
+                projection.roll.rotation.y = 0;
+                projection.roll.rotation.x = 0;
+                projection.zoom = 1;
+                projection.yup = 200;
+                break;
+            case enum_.perspective_dimetric:
+                perspective();
+                projection.roll.rotation.y = Math.PI / 4;
+                projection.roll.rotation.x = Math.PI / 3;
                 projection.zoom = 1;
                 projection.yup = 200;
                 break;
             case enum_.perspective_isometric:
                 perspective();
-                projection.yaw.rotation.y = Math.PI / 4;
-                projection.pitch.rotation.x = Math.PI / 3;
+                projection.roll.rotation.y = Math.PI / 4;
+                projection.roll.rotation.x = Math.PI / 4;
                 projection.zoom = 1;
                 projection.yup = 200;
                 break;
         }
         resize();
-        while (projection.pitch.children.length)
-            projection.pitch.remove(projection.pitch.children[0]);
-        projection.pitch.updateMatrix();
-        projection.pitch.add(renderer.camera);
+        while (projection.roll.children.length)
+            projection.roll.remove(projection.roll.children[0]);
+        projection.roll.updateMatrix();
+        projection.roll.add(renderer.camera);
         renderer.camera.position.set(0, projection.yup, 0);
         renderer.camera.rotation.x = -Math.PI / 2;
         renderer.camera.updateMatrix();
@@ -116,21 +132,14 @@ var projection;
         projection.point = new THREE.Vector2();
         projection.pointer = new THREE.Vector2();
         projection.raycaster = new THREE.Raycaster();
-        // Make yaw, pitch
+        // Make yaw, pitch, roll
+        projection.roll = new THREE.Object3D();
+        projection.roll.rotation.order = 'YXZ';
+        renderer.scene.add(projection.roll);
         projection.yup = 200;
         projection.zoom = 10;
-        projection.yaw = new THREE.Group();
-        projection.yaw.rotation.y = Math.PI / 4;
-        projection.pitch = new THREE.Group();
-        projection.pitch.rotation.x = Math.PI / 3;
-        projection.yaw.add(projection.pitch);
-        projection.yaw.add(new THREE.AxesHelper(2));
-        projection.yaw.updateMatrix();
-        projection.pitch.updateMatrix();
-        projection.pitch.add(renderer.camera);
         projection.mousemarker = new THREE.AxesHelper(5);
         renderer.scene.add(projection.mousemarker);
-        renderer.scene.add(projection.yaw);
         change_projection(); // Set the settings
         // Add the sun
         sun = new THREE.DirectionalLight('white', 1);
@@ -142,22 +151,6 @@ var projection;
         //renderer.scene.add(sun.target);
     }
     projection.start = start;
-    function unproject_mouse(mouse) {
-        switch (projection.value) {
-            case enum_.orthographic_dimetric:
-            case enum_.orthographic_isometric:
-            case enum_.orthographic_top_down:
-                return mouse;
-            default:
-        }
-        let worldPoint = new THREE.Vector3();
-        worldPoint.x = mouse[0];
-        worldPoint.y = 0;
-        worldPoint.z = mouse[1];
-        worldPoint.unproject(renderer.camera);
-        return [worldPoint.x, worldPoint.z];
-    }
-    projection.unproject_mouse = unproject_mouse;
     function think() {
         reset_pointer();
         update_mousemarker();

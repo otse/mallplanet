@@ -32,7 +32,7 @@ class player extends game.superobject {
 		}
 		if (x || y) {
 			let angle = -pts.angle([x, y], [0, 0]);
-			angle += game.projection.yaw.rotation.y;
+			angle += game.projection.roll.rotation.y;
 			// this.rotatey = angle;
 			x = speed * Math.sin(angle);
 			y = speed * Math.cos(angle);
@@ -58,7 +58,7 @@ class player extends game.superobject {
 			staticGeometry: false,
 			alignLeftBottom: false,
 		});
-		rectangle.yup = 3;
+		rectangle.yup = 0.09;
 		//rectangle.tex = './tex/player_32x.png';
 		rectangle.build();
 	}

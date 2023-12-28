@@ -12,9 +12,10 @@ namespace projection {
 
 	export enum enum_ {
 		orthographic_top_down,
-		perspective_top_down,
 		orthographic_dimetric,
 		orthographic_isometric,
+		perspective_top_down,
+		perspective_dimetric,
 		perspective_isometric,
 		length
 	}
@@ -28,7 +29,9 @@ namespace projection {
 
 	export var value = enum_.orthographic_top_down
 
-	export var yaw, pitch, yup, zoom
+	export var yaw, pitch, roll
+
+	export var yup, zoom
 
 	export var mousemarker
 
@@ -46,43 +49,58 @@ namespace projection {
 		switch (value) {
 			case enum_.orthographic_top_down:
 				orthographic();
-				yaw.rotation.y = 0;
-				pitch.rotation.x = 0;
+				roll.rotation.y = 0;
+				roll.rotation.x = 0;
 				zoom = 2;
 				break;
 			case enum_.orthographic_dimetric:
 				orthographic();
-				yaw.rotation.y = Math.PI / 4;
-				pitch.rotation.x = Math.PI / 3;
+				roll.rotation.y = Math.PI / 4;
+				roll.rotation.x = Math.PI / 3;
 				zoom = 10;
 				yup = 400;
 				break;
 			case enum_.orthographic_isometric:
 				orthographic();
-				yaw.rotation.y = Math.PI / 4;
-				pitch.rotation.x = Math.PI / 4;
-				zoom = 2;
+				// 60 is 2:1
+				// 70 is 3:1
+				let a = new THREE.Vector3(0, 0, 0);
+				let b = new THREE.Vector3(1, -1, 1);
+				let c = new THREE.Object3D();
+				c.position.copy(a);
+				c.rotation.order = 'YXZ';
+				c.updateMatrix();
+				c.lookAt(b);
+				roll.rotation.copy(c.rotation);
+				zoom = 10;
 				break;
 			case enum_.perspective_top_down:
 				perspective();
-				yaw.rotation.y = 0;
-				pitch.rotation.x = 0;
+				roll.rotation.y = 0;
+				roll.rotation.x = 0;
+				zoom = 1;
+				yup = 200;
+				break;
+			case enum_.perspective_dimetric:
+				perspective();
+				roll.rotation.y = Math.PI / 4;
+				roll.rotation.x = Math.PI / 3;
 				zoom = 1;
 				yup = 200;
 				break;
 			case enum_.perspective_isometric:
 				perspective();
-				yaw.rotation.y = Math.PI / 4;
-				pitch.rotation.x = Math.PI / 3;
+				roll.rotation.y = Math.PI / 4;
+				roll.rotation.x = Math.PI / 4;
 				zoom = 1;
 				yup = 200;
 				break;
 		}
 		resize();
-		while (pitch.children.length)
-			pitch.remove(pitch.children[0]);
-		pitch.updateMatrix();
-		pitch.add(renderer.camera);
+		while (roll.children.length)
+			roll.remove(roll.children[0]);
+		roll.updateMatrix();
+		roll.add(renderer.camera);
 		renderer.camera.position.set(0, yup, 0);
 		renderer.camera.rotation.x = -Math.PI / 2;
 		renderer.camera.updateMatrix();
@@ -107,7 +125,7 @@ namespace projection {
 		pointer.x = (mouse[0] / window.innerWidth) * 2 - 1;
 		pointer.y = - (mouse[1] / window.innerHeight) * 2 + 1;
 		//console.log(pointer);
-		
+
 		renderer.camera.updateMatrixWorld();
 		raycaster.setFromCamera(pointer, renderer.camera);
 		raycaster.params.Points.threshold = 1;
@@ -127,26 +145,19 @@ namespace projection {
 		// Set pointer for use in projection
 		let geometry = new THREE.PlaneGeometry(100000, 100000);
 		geometry.rotateX(-Math.PI / 2);
-		flatgrass = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 'blue'}));
+		flatgrass = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 'blue' }));
 		flatgrass.visible = true;
 		point = new THREE.Vector2();
 		pointer = new THREE.Vector2();
 		raycaster = new THREE.Raycaster();
-		// Make yaw, pitch
+		// Make yaw, pitch, roll
+		roll = new THREE.Object3D();
+		roll.rotation.order = 'YXZ';
+		renderer.scene.add(roll);
 		yup = 200;
 		zoom = 10;
-		yaw = new THREE.Group();
-		yaw.rotation.y = Math.PI / 4;
-		pitch = new THREE.Group();
-		pitch.rotation.x = Math.PI / 3;
-		yaw.add(pitch);
-		yaw.add(new THREE.AxesHelper(2));
-		yaw.updateMatrix();
-		pitch.updateMatrix();
-		pitch.add(renderer.camera);
 		mousemarker = new THREE.AxesHelper(5);
 		renderer.scene.add(mousemarker);
-		renderer.scene.add(yaw);
 		change_projection(); // Set the settings
 		// Add the sun
 		sun = new THREE.DirectionalLight('white', 1);
@@ -158,21 +169,6 @@ namespace projection {
 		//renderer.scene.add(sun.target);
 	}
 
-	export function unproject_mouse(mouse: vec2) {
-		switch (value) {
-			case enum_.orthographic_dimetric:
-			case enum_.orthographic_isometric:
-			case enum_.orthographic_top_down:
-				return mouse;
-			default:
-		}
-		let worldPoint = new THREE.Vector3();
-		worldPoint.x = mouse[0];
-		worldPoint.y = 0;
-		worldPoint.z = mouse[1];
-		worldPoint.unproject(renderer.camera);
-		return [worldPoint.x, worldPoint.z] as vec2;
-	}
 
 	export function think() {
 		reset_pointer();
