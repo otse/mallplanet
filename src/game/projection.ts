@@ -74,7 +74,7 @@ namespace projection {
 			pitch.remove(pitch.children[0]);
 		pitch.updateMatrix();
 		pitch.add(renderer.camera);
-		renderer.camera.position.set(0, 150, 0);
+		renderer.camera.position.set(0, 200, 0);
 		renderer.camera.rotation.x = -Math.PI / 2;
 		renderer.camera.updateMatrix();
 		renderer.camera.updateProjectionMatrix();

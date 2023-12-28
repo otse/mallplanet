@@ -6,7 +6,14 @@ import * as game from "./re-exports.js"
 // It turns a 16x, 24x, 32x, 40x, 48x, etc into a repeatable 8x
 
 namespace tiler {
-	
+
+	export function remove_top_face(geometry) {
+		//const indices = geometry.getIndex();
+		//console.log('indices', indices);
+		//indices[32];
+		//geometry.setIndex(indices);
+	}
+
 	export function change_uv(geometry, wpos: vec2, sheet: vec2) {
 
 		const attribute = geometry.getAttribute('uv');

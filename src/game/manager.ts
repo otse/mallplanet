@@ -123,6 +123,7 @@ namespace manager {
 			bake(chunk, 'a wall', 'brick wall -vert');
 			bake(chunk, 'a wall', 'brick wall -horz');
 			bake(chunk, 'an obj', 'brick wall -shadow');
+			bake(chunk, 'an obj', 'brick wall -box');
 		});
 
 	}

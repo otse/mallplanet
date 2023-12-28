@@ -11,7 +11,8 @@ interface prefab {
 	offset?: vec2,
 	turn?: boolean
 	transparent?: boolean,
-	opacity?: number
+	opacity?: number,
+	box?: boolean
 }
 
 const prefabs: { [prefab: string]: prefab } = {
@@ -32,6 +33,11 @@ const prefabs: { [prefab: string]: prefab } = {
 		offset: [3, 3],
 		transparent: true,
 		opacity: .3
+	},
+	'brick wall -box': {
+		tex: './tex/wall_brick_under_8x.png',
+		size: [8, 8],
+		box: true
 	},
 	'brick wall -vert': {
 		tex: './tex/wall_brick_side_8x.png',
@@ -66,7 +72,6 @@ export class rectangle {
 	yup = 0
 	size
 	pos
-	is_box = false
 	left_bottom
 	constructor({
 		bind,
@@ -106,16 +111,17 @@ export class rectangle {
 		this.prefab = prefabs[this.bind.hint] || prefabs['default'];
 		this.size = this.prefab.size || [game.lod.unit, game.lod.unit];
 		this.repos();
-		if (this.is_box) {
+		if (this.prefab.box) {
 			const height = 3;
 			this.geometry = new THREE.BoxGeometry(this.size[0], height, this.size[1]);
 			this.geometry.translate(0, height / 2, 0);
+			game.tiler.remove_top_face(this.geometry);
 		}
 		else {
 			this.geometry = new THREE.PlaneGeometry(this.size[0], this.size[1]);
 			this.geometry.rotateX(-Math.PI / 2);
+			// Turning geometry may cause incorrect repeating
 		}
-		// Todo: Turning geometry could cause incorrect repeating
 		if (this.prefab.turn)
 			this.geometry.rotateY(-Math.PI / 2);
 		if (this.staticGeometry)
@@ -130,6 +136,9 @@ export class rectangle {
 			opacity: this.prefab.opacity != undefined ? this.prefab.opacity : 1
 		});
 		this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;
+		if (this.prefab.box) {
+			this.material = new THREE.MeshPhongMaterial({ color: '#333' });
+		}
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.update();
 		this.mesh.frustumCulled = false;

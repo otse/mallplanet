@@ -3,6 +3,13 @@ import * as game from "./re-exports.js";
 // It turns a 16x, 24x, 32x, 40x, 48x, etc into a repeatable 8x
 var tiler;
 (function (tiler) {
+    function remove_top_face(geometry) {
+        //const indices = geometry.getIndex();
+        //console.log('indices', indices);
+        //indices[32];
+        //geometry.setIndex(indices);
+    }
+    tiler.remove_top_face = remove_top_face;
     function change_uv(geometry, wpos, sheet) {
         const attribute = geometry.getAttribute('uv');
         attribute.needsUpdate = true;

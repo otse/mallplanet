@@ -7,6 +7,7 @@ export class wall extends game.superobject {
     mesh;
     doOnce = true;
     shadow;
+    box;
     constructor() {
         super(game.manager.tallies.walls);
     }
@@ -30,6 +31,8 @@ export class wall extends game.superobject {
             }
             this.shadow = new wall_shadow(this);
             game.lod.add(this.shadow);
+            this.box = new wall_box(this);
+            game.lod.add(this.box);
             this.doOnce = false;
         }
         this.wtorpos();
@@ -39,8 +42,7 @@ export class wall extends game.superobject {
             alignLeftBottom: true,
             staticGeometry: true
         });
-        rectangle.yup = 3;
-        //rectangle.is_box = true;
+        rectangle.yup = 3.1;
         rectangle.build();
     }
     vanish() {
@@ -49,6 +51,28 @@ export class wall extends game.superobject {
     }
     think() {
         // Whatever would a wall think?
+    }
+}
+export class wall_box extends game.superobject {
+    base;
+    constructor(base) {
+        super(game.manager.tallies.shadows);
+        this.base = base;
+        this.hint = base.hint.split('-')[0] + '-box';
+        this.wpos = base.wpos;
+    }
+    create() {
+        const rectangle = new game.rectangle({
+            bind: this,
+            alignLeftBottom: true,
+            staticGeometry: true
+        });
+        rectangle.yup = 0;
+        rectangle.build();
+    }
+    vanish() {
+        this.rectangle?.destroy();
+        this.rectangle = undefined;
     }
 }
 export class wall_shadow extends game.superobject {
