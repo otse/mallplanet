@@ -4,7 +4,7 @@ import hooks from "../util/hooks.js";
 import manager from "../game/manager.js";
 import mall from "../mall.js";
 import mkb from "../mkb.js";
-import time from "../util/timer.js";
+import timer from "../util/timer.js";
 var loading_screen;
 (function (loading_screen) {
     loading_screen.things_to_load = 0;
@@ -45,7 +45,7 @@ var loading_screen;
         last.innerHTML = `${asset}`;
         if (loading_screen.things_loaded >= loading_screen.things_to_load) {
             loading_screen.done = true;
-            delay = time(0.5);
+            delay = new timer(0.5);
         }
     }
     loading_screen.increment = increment;

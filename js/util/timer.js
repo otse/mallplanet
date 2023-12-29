@@ -5,15 +5,20 @@ function clamp(val, min, max) {
 export class timer {
     end;
     begin;
-    constructor(end = 1) {
+    constructor(end = 1, base) {
         this.end = end;
         this.begin = performance.now();
+        if (base)
+            this.begin += base.overtime();
     }
     dif() {
         return performance.now() - this.begin;
     }
     elapsed() {
         return this.dif() / 1000;
+    }
+    overtime() {
+        return this.dif() - (this.end * 1000);
     }
     factor(override = 0) {
         return this.dif() / ((override || this.end) * 1000);
@@ -25,7 +30,4 @@ export class timer {
         return this.dif() >= ((override || this.end) * 1000);
     }
 }
-export function time(end) {
-    return new timer(end);
-}
-export default time;
+export default timer;

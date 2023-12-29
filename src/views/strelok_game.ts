@@ -6,7 +6,7 @@ import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 
 import mall, { THREE } from "../mall.js";
-import time, { timer } from "../util/timer.js";
+import timer from "../util/timer.js";
 import easings from "../util/easings.js";
 import snd from "../snd.js";
 
@@ -51,9 +51,9 @@ namespace strelok_game {
 
 		hooks.register('mall_planet_animate', animate);
 
-		timer = time(5);
-		shadetimer = time(3);
-		timer.begin -= 2000;
+		timerr = new timer(5);
+		shadetimer = new timer(3);
+		timerr.begin -= 2000;
 	}
 
 	export function cleanup() {
@@ -68,22 +68,22 @@ namespace strelok_game {
 	}
 
 	let shadetimer 
-	let timer: timer
+	let timerr: timer
 	let zoom = 0
 	let rotation = 0
 	export function animate() {
-		let pitch = 1 - easings.easeOutQuad(timer.factorc());
-		let yaw = easings.easeInOutQuart(timer.factorc());
+		let pitch = 1 - easings.easeOutQuad(timerr.factorc());
+		let yaw = easings.easeInOutQuart(timerr.factorc());
 		let shade = easings.easeInCubic(shadetimer.factorc());
-		let emissive = (1 - easings.easeInOutBack(timer.factorc())) / 2;
+		let emissive = (1 - easings.easeInOutBack(timerr.factorc())) / 2;
 		plane.rotation.x = -pitch * 1.0;
 		plane.rotation.y = (1 - yaw) * Math.PI / 4;
 		plane.material.color.copy(new THREE.Color(shade, shade, shade));
 		//plane.material.emissive.copy(new THREE.Color(emissive, emissive, emissive));
 		plane.material.needsUpdate = true;
-		let zoom = easings.easeInOutBack(timer.factorc()) * 3;
+		let zoom = easings.easeInOutBack(timerr.factorc()) * 3;
 		plane.scale.set(zoom, zoom, zoom);
-		if (mkb.key_state('escape') == 1 || timer.done()) {
+		if (mkb.key_state('escape') == 1 || timerr.done()) {
 			cleanup();
 		}
 	}

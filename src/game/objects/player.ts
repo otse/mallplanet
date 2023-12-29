@@ -1,35 +1,32 @@
-import { THREE } from "../mall.js";
-import mkb from "../mkb.js";
-import renderer from "../renderer.js";
-import glob from "../util/glob.js";
-import pts from "../util/pts.js";
+import { THREE } from "../../mall.js";
+import mkb from "../../mkb.js";
+import renderer from "../../renderer.js";
+import glob from "../../util/glob.js";
+import pts from "../../util/pts.js";
 
-import * as game from "./re-exports.js"
+import * as game from "../re-exports.js"
 
 class player extends game.superobject {
 	geometry
+	weapon_group
 	constructor() {
-		super([0, 0]);
+		super();
 	}
 	move() {
-		let speed = 1 * game.lod.unit * glob.delta;
+		const pixels_per_second = x => x / game.lod.unit * glob.delta;
+		let speed = pixels_per_second(100);
 		let x = 0;
 		let y = 0;
-		if (mkb.key_state('w')) {
+		if (mkb.key_state('w'))
 			y -= 1;
-		}
-		if (mkb.key_state('s')) {
+		if (mkb.key_state('s'))
 			y += 1;
-		}
-		if (mkb.key_state('a')) {
+		if (mkb.key_state('a'))
 			x -= 1;
-		}
-		if (mkb.key_state('d')) {
+		if (mkb.key_state('d'))
 			x += 1;
-		}
-		if (mkb.key_state('x')) {
+		if (mkb.key_state('x'))
 			speed *= 5;
-		}
 		if (x || y) {
 			let angle = -pts.angle([x, y], [0, 0]);
 			angle += game.projection.roll.rotation.y;
@@ -61,6 +58,15 @@ class player extends game.superobject {
 		rectangle.yup = 0.09;
 		//rectangle.tex = './tex/player_32x.png';
 		rectangle.build();
+		// Gun marker
+		this.weapon_group = new THREE.Group();
+		this.weapon_group.add(new THREE.AxesHelper(2));
+		const size = [32, 32] as vec2;
+		let weap_pos = [24, 31] as vec2;
+		weap_pos = pts.subtract(weap_pos, pts.divide(size, 2));
+		this.weapon_group.position.set(weap_pos[0], 0, weap_pos[1]);
+		this.weapon_group.updateMatrix();
+		rectangle.mesh.add(this.weapon_group);
 	}
 	override vanish() {
 		this.rectangle?.destroy();

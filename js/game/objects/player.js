@@ -1,8 +1,8 @@
-import { THREE } from "../mall.js";
-import mkb from "../mkb.js";
-import glob from "../util/glob.js";
-import pts from "../util/pts.js";
-import * as game from "./re-exports.js";
+import { THREE } from "../../mall.js";
+import mkb from "../../mkb.js";
+import glob from "../../util/glob.js";
+import pts from "../../util/pts.js";
+import * as game from "../re-exports.js";
 class player extends game.superobject {
     geometry;
     weapon_group;
@@ -10,24 +10,20 @@ class player extends game.superobject {
         super();
     }
     move() {
-        let speed = 1 * game.lod.unit * glob.delta;
+        const pixels_per_second = x => x / game.lod.unit * glob.delta;
+        let speed = pixels_per_second(100);
         let x = 0;
         let y = 0;
-        if (mkb.key_state('w')) {
+        if (mkb.key_state('w'))
             y -= 1;
-        }
-        if (mkb.key_state('s')) {
+        if (mkb.key_state('s'))
             y += 1;
-        }
-        if (mkb.key_state('a')) {
+        if (mkb.key_state('a'))
             x -= 1;
-        }
-        if (mkb.key_state('d')) {
+        if (mkb.key_state('d'))
             x += 1;
-        }
-        if (mkb.key_state('x')) {
+        if (mkb.key_state('x'))
             speed *= 5;
-        }
         if (x || y) {
             let angle = -pts.angle([x, y], [0, 0]);
             angle += game.projection.roll.rotation.y;

@@ -21,9 +21,9 @@ class toggle {
 var lod;
 (function (lod) {
     lod.unit = 8;
+    const grid_crawl_makes_chunks = true;
     const random_chunk_coloration = false;
     const fog_of_war = false;
-    const grid_crawl_makes_chunks = true;
     lod.chunk_span = 16;
     lod.objs = [0, 0];
     lod.chunks = [0, 0];
@@ -245,6 +245,8 @@ var lod;
     ;
     class obj extends toggle {
         counts;
+        static ids = 0;
+        id = 0;
         type = 'an obj';
         wpos = [0, 0];
         rpos = [0, 0];
@@ -255,6 +257,7 @@ var lod;
         constructor(counts = [0, 0]) {
             super();
             this.counts = counts;
+            this.id = obj.ids++;
             lod.objs[1]++;
             this.counts[1]++;
         }

@@ -15,7 +15,7 @@ export class superobject extends game.lod.obj {
 	pixel?: pixel
 	rotatey = 0
 	rectangle?: game.rectangle
-	constructor(counts: game.lod.calories) {
+	constructor(counts: game.lod.calories = [0, 0]) {
 		super(counts);
 	}
 	try_move_as_square(to: vec2) {

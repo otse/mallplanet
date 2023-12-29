@@ -6,14 +6,14 @@ import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 
 import mall, { THREE } from "../mall.js";
-import time from "../util/timer.js";
+import timer from "../util/timer.js";
 import easings from "../util/easings.js";
 import snd from "../snd.js";
 
 namespace strelok_game_prerendered {
 	export var next
 
-	let timer
+	let timerr: timer
 
 	export function start() {
 		
@@ -24,7 +24,7 @@ namespace strelok_game_prerendered {
 
 		hooks.register('mall_planet_animate', animate);
 
-		timer = time(3);
+		timerr = new timer(3);
 	}
 
 	export function cleanup() {
@@ -34,7 +34,7 @@ namespace strelok_game_prerendered {
 	}
 
 	export function animate() {
-		if (mkb.key_state('escape') == 1 || timer.done()) {
+		if (mkb.key_state('escape') == 1 || timerr.done()) {
 			cleanup();
 		}
 	}

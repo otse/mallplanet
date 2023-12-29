@@ -29,7 +29,7 @@ namespace projection {
 
 	export var value = enum_.orthographic_top_down
 
-	export var yaw, pitch, roll
+	export var roll
 
 	export var yup, zoom
 

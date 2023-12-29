@@ -64,7 +64,7 @@ export class wall extends game.superobject {
 
 export class wall_box extends game.superobject {
 	constructor(readonly base: wall) {
-		super(game.manager.tallies.shadows);
+		super();
 		this.hint = base.hint.split('-')[0] + '-box';
 		this.wpos = base.wpos;
 	}

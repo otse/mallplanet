@@ -3,7 +3,7 @@ import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import renderer from "../renderer.js";
 import mall, { THREE } from "../mall.js";
-import time from "../util/timer.js";
+import timer from "../util/timer.js";
 import easings from "../util/easings.js";
 var strelok_game;
 (function (strelok_game) {
@@ -34,9 +34,9 @@ var strelok_game;
         //renderer.lock_aspect = true;
         //renderer.camera.aspect = 1;
         hooks.register('mall_planet_animate', animate);
-        timer = time(5);
-        shadetimer = time(3);
-        timer.begin -= 2000;
+        timerr = new timer(5);
+        shadetimer = new timer(3);
+        timerr.begin -= 2000;
     }
     strelok_game.start = start;
     function cleanup() {
@@ -51,22 +51,22 @@ var strelok_game;
     }
     strelok_game.cleanup = cleanup;
     let shadetimer;
-    let timer;
+    let timerr;
     let zoom = 0;
     let rotation = 0;
     function animate() {
-        let pitch = 1 - easings.easeOutQuad(timer.factorc());
-        let yaw = easings.easeInOutQuart(timer.factorc());
+        let pitch = 1 - easings.easeOutQuad(timerr.factorc());
+        let yaw = easings.easeInOutQuart(timerr.factorc());
         let shade = easings.easeInCubic(shadetimer.factorc());
-        let emissive = (1 - easings.easeInOutBack(timer.factorc())) / 2;
+        let emissive = (1 - easings.easeInOutBack(timerr.factorc())) / 2;
         plane.rotation.x = -pitch * 1.0;
         plane.rotation.y = (1 - yaw) * Math.PI / 4;
         plane.material.color.copy(new THREE.Color(shade, shade, shade));
         //plane.material.emissive.copy(new THREE.Color(emissive, emissive, emissive));
         plane.material.needsUpdate = true;
-        let zoom = easings.easeInOutBack(timer.factorc()) * 3;
+        let zoom = easings.easeInOutBack(timerr.factorc()) * 3;
         plane.scale.set(zoom, zoom, zoom);
-        if (mkb.key_state('escape') == 1 || timer.done()) {
+        if (mkb.key_state('escape') == 1 || timerr.done()) {
             cleanup();
         }
     }

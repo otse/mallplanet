@@ -5,9 +5,9 @@ import pts from "../../util/pts.js";
 import * as game from "../re-exports.js"
 
 interface prefab {
-	tex: string
-	repeat?: vec2,
-	size?: vec2,
+	spriteTuple: game.sprites.tuple
+	isAnimated?: boolean
+	posBasedUv?: boolean
 	offset?: vec2,
 	turn?: boolean
 	transparent?: boolean,
@@ -17,42 +17,48 @@ interface prefab {
 
 const prefabs: { [prefab: string]: prefab } = {
 	'default': {
-		tex: './tex/placeholder_8x.png'
+		spriteTuple: game.sprites.placeholder_8x,
+	},
+	'car': {
+		spriteTuple: game.sprites.sprJacketCar,
+		isAnimated: true,
+		transparent: true
 	},
 	'player': {
-		tex: './tex/player_32x.png',
-		size: [32, 32],
+		spriteTuple: game.sprites.jacket,
+		isAnimated: true,
 		transparent: true
 	},
 	'brick wall -single': {
-		tex: './tex/wall_brick_single_8x.png'
+		spriteTuple: game.sprites.wall_brick_single_8x,
+		posBasedUv: true,
 	},
 	'brick wall -shadow': {
-		tex: './tex/wall_brick_single_8x_shadow.png',
-		size: [8, 8],
+		spriteTuple: game.sprites.wall_brick_shadow_8x,
 		offset: [3, 3],
 		transparent: true,
 		opacity: .3
 	},
 	'brick wall -box': {
-		tex: './tex/wall_brick_under_8x.png',
-		size: [8, 8],
+		spriteTuple: game.sprites.wall_brick_under_8x,
 		box: true
 	},
 	'brick wall -vert': {
-		tex: './tex/wall_brick_side_8x.png',
-		turn: true
+		spriteTuple: game.sprites.wall_brick_vert_8x,
+		posBasedUv: true,
+		//turn: true
 	},
 	'brick wall -horz': {
-		tex: './tex/wall_brick_side_8x.png'
+		spriteTuple: game.sprites.wall_brick_horz_8x,
+		posBasedUv: true,
 	},
 	'kitchen floor': {
-		repeat: [16, 16],
-		tex: './tex/kitchen_floor_16x.png'
+		spriteTuple: game.sprites.floor_kitchen,
+		posBasedUv: true,
 	},
 	'wooden floor': {
-		repeat: [32, 32],
-		tex: './tex/wood_floor_32x.png'
+		spriteTuple: game.sprites.floor_wooden,
+		posBasedUv: true,
 	}
 }
 
@@ -60,7 +66,8 @@ const prefabs: { [prefab: string]: prefab } = {
 
 export class rectangle {
 	static active = 0
-	prefab
+	cell: vec2 = [0, 0]
+	prefab: prefab
 	baked?: game.baked
 	split
 	geometry
@@ -68,7 +75,6 @@ export class rectangle {
 	mesh
 	bind: game.superobject
 	staticGeometry
-	tex
 	yup = 0
 	size
 	pos
@@ -76,17 +82,14 @@ export class rectangle {
 	constructor({
 		bind,
 		staticGeometry,
-		alignLeftBottom: left_bottom,
-		tex
+		alignLeftBottom: left_bottom
 	}: {
 		bind: game.superobject,
 		staticGeometry: boolean,
-		alignLeftBottom: boolean,
-		tex?: string
+		alignLeftBottom: boolean
 	}) {
 		this.bind = bind;
 		this.staticGeometry = staticGeometry;
-		this.tex = tex;
 		bind.rectangle = this;
 		rectangle.active++;
 	}
@@ -97,6 +100,10 @@ export class rectangle {
 	when_baked(baked: game.baked) {
 		this.baked = baked;
 		this.mesh.parent?.remove(this.mesh);
+	}
+	update_cell() {
+		//console.log('update cell for', this.bind.hint);
+		this.material.map.matrix.copy(game.sprites.get_uv_transform(this.cell, this.prefab.spriteTuple));
 	}
 	repos() {
 		let pos = pts.clone(this.bind.rpos);
@@ -109,7 +116,7 @@ export class rectangle {
 	build() {
 		this.bind.wtorpos();
 		this.prefab = prefabs[this.bind.hint] || prefabs['default'];
-		this.size = this.prefab.size || [game.lod.unit, game.lod.unit];
+		this.size = this.prefab.spriteTuple[1] || [game.lod.unit, game.lod.unit];
 		this.repos();
 		if (this.prefab.box) {
 			const height = 3;
@@ -126,16 +133,23 @@ export class rectangle {
 			this.geometry.rotateY(-Math.PI / 2);
 		if (this.staticGeometry)
 			this.geometry.translate(this.pos[0], this.yup, this.pos[1]);
-		if (this.prefab.repeat)
-			game.tiler.change_uv(this.geometry, this.bind.wpos, this.prefab.repeat);
+		if (this.prefab.posBasedUv && !pts.same(this.prefab.spriteTuple[0], this.prefab.spriteTuple[1]))
+			game.tiler.position_based_uv(this.geometry, this.bind.wpos, this.prefab.spriteTuple[0]);
 		this.material = new THREE.MeshPhongMaterial({
 			wireframe: false,
 			color: this.bind.chunk?.color || 'white',
-			map: renderer.load_texture(this.tex || this.prefab.tex),
+			map: renderer.load_texture(this.prefab.spriteTuple[3]),
 			transparent: !!this.prefab.transparent,
 			opacity: this.prefab.opacity != undefined ? this.prefab.opacity : 1
 		});
-		this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;
+		if (this.prefab.isAnimated) {
+			this.material.map.matrixAutoUpdate = false;
+			// Clamp to edge wrapping prevents fuzzy borders
+			this.material.map.wrapS = this.material.map.wrapT = THREE.ClampToEdgeWrapping;
+			this.update_cell();
+		}
+		if (this.prefab.posBasedUv)
+			this.material.map.wrapS = this.material.map.wrapT = THREE.RepeatWrapping;
 		if (this.prefab.box) {
 			this.material = new THREE.MeshPhongMaterial({ color: '#333' });
 		}

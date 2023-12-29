@@ -38,10 +38,14 @@ namespace manager {
 		view = new game.view_needs_rename();
 		hook_in_to_the_lod();
 		ply = new game.player();
-		view.follow = ply;
 		ply.wpos = [23, 28];
 		game.lod.add(ply);
 		game.projection.start();
+		view.follow = ply;
+		// Make car
+		let car = new game.car();
+		car.wpos = [10, 22];
+		game.lod.add(car);
 	}
 
 	let wpos = [0, 0] as vec2;

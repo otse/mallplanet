@@ -10,7 +10,7 @@ import time, { timer } from "../util/timer.js";
 namespace denatsu_games {
 	export var next
 
-	let timer: timer
+	let timerr: timer
 
 	export function start() {
 		mall.view = this;
@@ -20,7 +20,7 @@ namespace denatsu_games {
 
 		hooks.register('mall_planet_animate', animate);
 
-		timer = time(2);
+		timerr = new timer(2);
 
 		mall.view = this;
 	}
@@ -32,7 +32,7 @@ namespace denatsu_games {
 	}
 
 	export function animate() {
-		if (mkb.key_state('escape') == 1 || timer.done()) {
+		if (mkb.key_state('escape') == 1 || timerr.done()) {
 			cleanup();
 		}
 	}

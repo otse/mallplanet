@@ -2,16 +2,16 @@
 import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import mall from "../mall.js";
-import time from "../util/timer.js";
+import timer from "../util/timer.js";
 var strelok_game_prerendered;
 (function (strelok_game_prerendered) {
-    let timer;
+    let timerr;
     function start() {
         mall.view = this;
         mall.whole.style.background = 'black';
         mall.whole.innerHTML = `<img src="./img/strelok_game_prerendered.gif" />`;
         hooks.register('mall_planet_animate', animate);
-        timer = time(3);
+        timerr = new timer(3);
     }
     strelok_game_prerendered.start = start;
     function cleanup() {
@@ -21,7 +21,7 @@ var strelok_game_prerendered;
     }
     strelok_game_prerendered.cleanup = cleanup;
     function animate() {
-        if (mkb.key_state('escape') == 1 || timer.done()) {
+        if (mkb.key_state('escape') == 1 || timerr.done()) {
             cleanup();
         }
     }

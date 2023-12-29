@@ -26,10 +26,14 @@ var manager;
         manager.view = new game.view_needs_rename();
         hook_in_to_the_lod();
         manager.ply = new game.player();
-        manager.view.follow = manager.ply;
         manager.ply.wpos = [23, 28];
         game.lod.add(manager.ply);
         game.projection.start();
+        manager.view.follow = manager.ply;
+        // Make car
+        let car = new game.car();
+        car.wpos = [10, 22];
+        game.lod.add(car);
     }
     manager.start_new_game = start_new_game;
     let wpos = [0, 0];

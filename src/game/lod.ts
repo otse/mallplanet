@@ -24,11 +24,9 @@ namespace lod {
 	
 	export const unit = 8
 
-	const random_chunk_coloration = false
-
-	const fog_of_war = false
-
 	const grid_crawl_makes_chunks = true
+	const random_chunk_coloration = false
+	const fog_of_war = false
 
 	export const chunk_span = 16
 
@@ -260,6 +258,8 @@ namespace lod {
 	};
 
 	export class obj extends toggle {
+		static ids = 0
+		id = 0
 		type = 'an obj'
 		wpos: vec2 = [0, 0]
 		rpos: vec2 = [0, 0]
@@ -270,6 +270,7 @@ namespace lod {
 		constructor(
 			public readonly counts: calories = [0, 0]) {
 			super();
+			this.id = obj.ids++;
 			lod.objs[1]++;
 			this.counts[1]++;			
 		}

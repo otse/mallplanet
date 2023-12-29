@@ -1,4 +1,4 @@
-/// View manages the LOD
+/// View manages the LOD and camera controls
 
 import pts from "../util/pts.js"
 import hooks from "../util/hooks.js"
@@ -55,10 +55,11 @@ export class view_needs_rename {
 
 	update_camera() {
 		const snap_to_grid = false;
+		let rpos = pts.clone(this.rpos);
 		if (snap_to_grid)
-			this.rpos = pts.floor(this.rpos);
-		game.projection.roll.position.x = this.rpos[0];
-		game.projection.roll.position.z = this.rpos[1];
+			rpos = pts.round(rpos);
+		game.projection.roll.position.x = rpos[0];
+		game.projection.roll.position.z = rpos[1];
 		game.projection.roll.updateMatrix();
 		renderer.camera.zoom = game.projection.zoom;
 		renderer.camera.rotation.z = Math.PI / 360 * this.rotate;
@@ -78,13 +79,11 @@ export class view_needs_rename {
 			this.begin = pts.clone(game.projection.hit);
 		}
 		if (mkb.mouse_button(1) >= 1) {
+			// Warning glitchy
 			this.now = pts.clone(game.projection.hit);
 			let dif = pts.subtract(this.now, this.begin);
-			//dif = pts.inv(dif);
 			dif = pts.mult(dif, 0.5);
-			//dif = pts.inv(dif);
 			dif = pts.add(dif, this.before);
-			//dif = pts.mult(dif, glob.delta);
 			this.rpos = dif;
 		}
 		else if (mkb.mouse_button(1) == -1) {

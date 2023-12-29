@@ -6,7 +6,7 @@ import hooks from "../util/hooks.js";
 import manager from "../game/manager.js";
 import mall from "../mall.js";
 import mkb from "../mkb.js";
-import time, { timer } from "../util/timer.js";
+import timer from "../util/timer.js";
 
 namespace loading_screen {
 	export var next
@@ -55,7 +55,7 @@ namespace loading_screen {
 		last.innerHTML = `${asset}`;
 		if (things_loaded >= things_to_load) {
 			done = true;
-			delay = time(0.5);
+			delay = new timer(0.5);
 		}
 	}
 

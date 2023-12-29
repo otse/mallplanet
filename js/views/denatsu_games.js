@@ -2,16 +2,16 @@
 import hooks from "../util/hooks.js";
 import mkb from "../mkb.js";
 import mall from "../mall.js";
-import time from "../util/timer.js";
+import { timer } from "../util/timer.js";
 var denatsu_games;
 (function (denatsu_games) {
-    let timer;
+    let timerr;
     function start() {
         mall.view = this;
         mall.whole.style.background = 'black';
         mall.whole.innerHTML = `<img src="./img/denatsu_games.jpg" />`;
         hooks.register('mall_planet_animate', animate);
-        timer = time(2);
+        timerr = new timer(2);
         mall.view = this;
     }
     denatsu_games.start = start;
@@ -22,7 +22,7 @@ var denatsu_games;
     }
     denatsu_games.cleanup = cleanup;
     function animate() {
-        if (mkb.key_state('escape') == 1 || timer.done()) {
+        if (mkb.key_state('escape') == 1 || timerr.done()) {
             cleanup();
         }
     }
